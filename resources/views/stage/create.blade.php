@@ -1,0 +1,91 @@
+@extends('layouts.app')
+@section('title', __("messages.create_stage"))
+@section('css')
+    {!! Html::style('leaflet/dist/leaflet.css') !!}
+    {!! Html::style('leaflet/plugins/areaselect/leaflet-areaselect.css') !!}
+@endsection
+@section('breadCrumb')
+    <li><a href="{{ url('/') }}">@lang('messages.menu_home')</a></li>
+    <li><a href="{{ url('stage') }}">@lang('messages.menu_stage')</a></li>
+    <li>@lang('messages.create_stage')</li>
+@endsection
+
+@section('content')
+    <div class="row">
+            <div class="col-md-12">
+            @include('layouts.message')                
+                <div class="widget">
+                    <div class="head dark">
+                        <div class="icon"><span class="icos-gridview"></span></div>
+                        <h2>@lang('messages.create_stage')</h2>
+                    </div>    
+                    {!! Form::open(['id' => 'validate', 'name' => 'validate','method' => 'post','route' => 'stage.store','autocomplete' =>'off']) !!}
+                        @include('stage.form')
+                    {!!Form::close()!!}                
+                </div>
+            </div>            
+    </div> 
+@endsection
+@section('modal')
+    <!-- Bootrstrap modal form -->
+    <div id="fModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="myModalLabel">Modal</h3>
+                    </div>
+                <div class="modal-body">
+                <div class="row">
+                    <div class="block-fluid">
+                        <form id="form_modal_stage">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <span class="top title">@lang('messages.unit')</span>
+                                    {!! Form::select('unit_ids[]',$units,null,array('class' => 'form-control validate[required] text-input','id' => 'unit_ids','data-prompt-position' => "bottomLeft")) !!}
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="top title">@lang('messages.course')</span>
+                                    {!! Form::number('course',90,array('class' => 'form-control validate[required,min[0],max[360]] text-input','id' => 'course','data-prompt-position' => "bottomLeft")) !!}
+                                    <p class="help-block">@lang('messages.extents')</p>                      
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="top title">@lang('messages.speed')</span>
+                                    {!! Form::number('speed',0,array('class' => 'form-control validate[required,min[0],max[100]] text-input','id' => 'speed','data-prompt-position' => "bottomLeft")) !!}
+                                    <p class="help-block">@lang('messages.knots')</p>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="top title">@lang('messages.altitude')</span>
+                                    {!! Form::number('altitude', 0,array('class' => 'form-control validate[required,min[0],max[5000]] text-input','id' => 'altitude','data-prompt-position' => "bottomLeft")) !!} 
+                                    <p class="help-block">@lang('messages.meters')</p>    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div id="dvMdlMapStage" style="width: 100%; height: 400px; display: inherit;"></div> 
+                                    <p class="help-block">@lang('messages.required_select_point_on_map')</p>
+                                    {!! Form::text('init_position_',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_','placeholder' => __('messages.init_position'),'data-prompt-position' => "bottomLeft",'readonly' => true)) !!}
+
+                                    {!! Form::hidden('init_position',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position','data-prompt-position' => "bottomLeft")) !!}
+                                </div>
+                            </div>
+                        </form>      
+                    </div>
+                </div>                   
+                </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" id="button_config" aria-hidden="true">@lang('messages.save')</button> 
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@lang('messages.close')</button>          
+                    </div>
+            </div>
+        </div>
+    </div>            
+@endsection
+@section('js_footer')
+    {!! Html::script('leaflet/dist/leaflet.js') !!} 
+    {!! Html::script('leaflet/plugins/areaselect/leaflet-areaselect.js') !!}
+    {!! Html::script('leaflet/custom_stage.js') !!}
+@endsection

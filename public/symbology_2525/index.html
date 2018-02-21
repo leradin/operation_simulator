@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Meta line required for IE-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Meta line required for IE-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>single point tester</title>
+    <link rel="stylesheet" href="renderer.css" type="text/css" charset="utf-8" />
+
+    <script src="sm-bc.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        // default
+        RendererSettings.setSymbologyStandard(RendererSettings.Symbology_2525C);
+        RendererSettings.setTextOutlineWidth(1);
+
+
+        var mu = armyc2.c2sd.renderer.utilities.ModifiersUnits
+        var modifiers = {};
+        modifiers[mu.C_QUANTITY] = 10;
+        modifiers[mu.H_ADDITIONAL_INFO_1] = "H";
+        modifiers[mu.H1_ADDITIONAL_INFO_2] = "H1";
+        //or like this for Single Point Tactical Graphics:  
+        modifiers[armyc2.c2sd.renderer.utilities.ModifiersTG.H2_ADDITIONAL_INFO_3] = "H2";
+
+        var ii = armyc2.c2sd.renderer.MilStdIconRenderer.Render("DWJ----", modifiers);
+
+
+
+        var preview = document.getElementById("preview");
+        var ctx = preview.getContext('2d');
+        ctx.drawImage(ii.getImage(), 0, 0);
+    </script>
+</head>
+
+<body>
+    <!--    
+        To display a symbol, canvas elements must contain a valid
+        15-character symbol code in the data-symbol-code attribute.
+
+        The optional data-pixel-size attribute controls the size of
+        the symbol.
+    -->
+    <canvas id="preview" width="650" height="200">a</canvas>
+
+</body>
+
+</html>
