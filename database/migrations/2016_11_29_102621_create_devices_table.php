@@ -18,6 +18,7 @@ class CreateDevicesTable extends Migration
             $table->string('description',100)->nullable();
             $table->ipAddress('ip_address')->nullable();
             $table->char('label')->nullable();
+            $table->integer('switch_port');
             $table->integer('computer_id')->unsigned()->nullable();
             $table->foreign('computer_id')->references('id')->on('computers');
             $table->integer('device_type_id')->unsigned();

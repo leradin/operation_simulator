@@ -7,8 +7,14 @@
             <span class="help-block"><small>@lang('messages.required_max_50')</small></span>
         </div>
 
+        <div class="col-md-2 TAR">@lang('messages.switch_port')</div>
+        <div class="col-md-2">
+            {!! Form::text('switch_port', null, array('placeholder' => __("messages.switch_port"),'class' => 'form-control validate[required,custom[integer],maxSize[2]] text-input','id' => 'switch_port','data-prompt-position' => "bottomLeft")) !!}
+            <span class="help-block"><small>@lang('messages.required_max_2')</small></span>
+        </div>
+
         <div class="col-md-2 TAR">@lang('messages.description')</div>
-        <div class="col-md-6">
+        <div class="col-md-2">
             {!! Form::textarea('description', null, array('placeholder' => __("messages.description"),'class' => 'form-control validate[] text-input','id' => 'description','data-prompt-position' => "bottomLeft")) !!}
             <span class="help-block"><small>@lang('messages.required_max_100')</small></span>
         </div>

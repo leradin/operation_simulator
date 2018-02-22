@@ -32,6 +32,7 @@ class Device extends Model
     						'label',
     						'device_type_id',
                             'computer_id',
+                            'switch_port'
     					  ];
     /**
      * The attributes that aren't mass assignable.

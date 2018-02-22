@@ -31,6 +31,7 @@
                                     <th width="20%">@lang('messages.description')</th>
                                     <th width="10%">@lang('messages.ip_address')</th>
                                     <th width="10%">@lang('messages.label')</th>
+                                    <th width="10%">@lang('messages.switch_port')</th>
                                     <th width="10%">@lang('messages.device_type')</th>
                                     <th width="20%">@lang('messages.computer')</th>
                                     <th width="10%" class="TAC">@lang('messages.tr_actions')</th>
@@ -43,6 +44,7 @@
                                     <td>{{ $device->description }}</td>
                                     <td>{{ $device->ip_address }}</td>
                                     <td>{{ $device->label }}</td>
+                                    <td>{{ $device->switch_port }}</td>
                                     <td>{{ $device->deviceType->full_name }}</td>
                                     <td>
                                         @isset($device->computer)

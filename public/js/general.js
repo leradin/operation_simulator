@@ -74,8 +74,6 @@ $(document).ready(function(){
         var nTds = $('td', this);
         var sBrowser = $(nTds[1]).text();
         var sGrade = $(nTds[-1]).text();
-
-        alert(sGrade);
         if ( $(this).hasClass('row_selected') ) {
             $(this).removeClass('row_selected');
         }

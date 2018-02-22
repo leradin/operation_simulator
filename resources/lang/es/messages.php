@@ -127,6 +127,7 @@ return [
     'computers' => 'Computadoras',
     'computer' => 'Computadora',
     'devices' => 'Dispositivos',
+    'switch_port' => 'Puerto del Switch',
     'unassigned' => 'Sin asignar',
     'optional' => 'Opcional',
     'file' => 'Archivo',
@@ -486,7 +487,8 @@ return [
     'password' => 'Contraseña',
     'confirm_password' => 'Confirmar Contraseña',
     'email' => "Correo Electronico",
-    // Forms Requiredç
+    // Forms Required
+    'required_max_2' => 'Máximo 2 caracteres',
     'required_max_3' => 'Máximo 3 caracteres',
     'required_max_5' => 'Máximo 5 caracteres',
     'required_max_10' => 'Máximo 10 caracteres',

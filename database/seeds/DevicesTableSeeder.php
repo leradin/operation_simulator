@@ -25,6 +25,7 @@ class DevicesTableSeeder extends Seeder
 	                'ip_address' => '192.168.214.'.$i,
 	                'computer_id' => $computer->id,
 	                'label' => 'LABEL',
+	                'switch_port' => 39,
 	                'device_type_id' => $deviceType->id,
 	                'created_at' => $date,
 	                'updated_at' => $date

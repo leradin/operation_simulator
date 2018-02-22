@@ -69,8 +69,9 @@ class DeviceController extends Controller
      */
     public function edit(Device $device)
     {
+        $computers = Computer::get()->pluck('full_name', 'id');
         $deviceTypes = DeviceType::pluck('name', 'id');
-        return view('catalogs.device.edit',['device' => $device,'deviceTypes' => $deviceTypes]);
+        return view('catalogs.device.edit',['device' => $device,'deviceTypes' => $deviceTypes,'computers' => $computers]);
     }
 
     /**
