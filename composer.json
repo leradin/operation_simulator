@@ -11,7 +11,7 @@
         "laravel/passport": "^4.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
-        "laravelcollective/remote": "^5.4.0",
+        "laravelcollective/remote": "5.4.*",
         "league/oauth2-client": "^2.3",
         "nesbot/carbon": "^1.22"
     },
