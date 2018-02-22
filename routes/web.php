@@ -1,5 +1,5 @@
 <?php
-
+ use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -64,6 +64,7 @@ Route::group(['prefix'=>'catalog', 'as'=>'catalog.'],function(){
 
 	// Controller Exercise
 	Route::resource('exercise','ExerciseController');
+
 
 //Route::get('ama',function(){
 	//return \SimulatorOperation\Sensor::getPossibleEnumValues('type_sensor');

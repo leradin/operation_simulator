@@ -21,7 +21,7 @@
     @yield('js') 
 
 </head>
-<body class="{{ Request::is('catalog') ? 'smf' : Request::is('catalog/*') ? 'smf' : '' }}">    
+<body>    
 
     <div class="header">
         @include('layouts.header')

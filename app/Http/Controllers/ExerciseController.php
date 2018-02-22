@@ -38,9 +38,9 @@ class ExerciseController extends Controller
             
         ]);*/
         //echo $res->getStatusCode();
-        $guzzle = new \GuzzleHttp\Client;
+        //$guzzle = new \GuzzleHttp\Client;
 
-        $response = $guzzle->get(env('URI_WEBSERVICE').'users', [
+        /*$response = $guzzle->get(env('URI_WEBSERVICE').'users', [
             'form_params' => [
                 'grant_type' => 'authorization_code', 
                 'client_id' => 4, 
@@ -50,7 +50,19 @@ class ExerciseController extends Controller
         ]);
         //dd($response->getBody()->getContent());
         $content = json_decode((string) $response->getBody(), true);
-        dd($content);
+        dd($content);*/
+        /*$guzzle = new \GuzzleHttp\Client;
+
+        $response = $guzzle->get(env('URI_WEBSERVICE').'users', [
+            'form_params' => [
+                'grant_type' => 'password',
+                'client_id' => '5',
+                'client_secret' => '8ImsMDfsLinjlv6IzEm9AYMXN8mdl8xkZ18XGGkd',
+                'scope' => '*'
+            ],
+        ]);
+
+        dd(json_decode((string) $response->getBody(), true));*/
         //dd($response->getBody());
         return view('exercise.create',['stages' => $stages]);
     }
