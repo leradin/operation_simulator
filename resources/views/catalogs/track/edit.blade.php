@@ -8,7 +8,6 @@
 @endsection
 @section('breadCrumb')
     <li><a href="{{ url('/') }}">@lang('messages.menu_home')</a></li>
-    <li><a href="{{ url('catalog') }}">@lang('messages.menu_catalog')</a></li>
     <li><a href="{{ url('catalog/track') }}">@lang('messages.menu_track')</a></li>
     <li>@lang('messages.edit_track')</li>
 @endsection

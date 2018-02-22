@@ -2,7 +2,6 @@
 @section('title',__("messages.edit_computer_type"))
 @section('breadCrumb')
     <li><a href="{{ url('/') }}">@lang('messages.menu_home')</a></li>
-    <li><a href="{{ url('catalog') }}">@lang('messages.menu_catalog')</a></li>
     <li><a href="{{ url('catalog/computer_type') }}">@lang('messages.menu_computer_type')</a></li>
     <li>@lang('messages.edit_computer_type')</li>
 @endsection

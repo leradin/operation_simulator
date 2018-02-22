@@ -5,7 +5,6 @@
 @endsection
 @section('breadCrumb')
     <li><a href="{{ url('/') }}">@lang('messages.menu_home')</a></li>
-    <li><a href="{{ url('catalog') }}">@lang('messages.menu_catalog')</a></li>
     <li><a href="{{ url('catalog/mathematical_model') }}">@lang('messages.menu_mathematical_model')</a></li>
     <li>@lang('messages.create_mathematical_model')</li>
 @endsection

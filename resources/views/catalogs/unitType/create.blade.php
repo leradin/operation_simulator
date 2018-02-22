@@ -2,7 +2,6 @@
 @section('title', __("messages.create_unit_type"))
 @section('breadCrumb')
     <li><a href="{{ url('/') }}">@lang('messages.menu_home')</a></li>
-    <li><a href="{{ url('catalog') }}">@lang('messages.menu_catalog')</a></li>
     <li><a href="{{ url('catalog/unit_type') }}">@lang('messages.menu_unit_type')</a></li>
     <li>@lang('messages.create_unit_type')</li>
 @endsection
