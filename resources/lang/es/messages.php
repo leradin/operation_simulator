@@ -166,6 +166,7 @@ return [
     'scheduler_date_time' => 'Fecha y Hora',
     'directors' => 'Directores',
     'stage' => 'Escenario',
+    'number_engines' => 'Número de Motores',
     ///////////////////
    
 

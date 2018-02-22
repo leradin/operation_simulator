@@ -52,6 +52,7 @@ class UnitController extends Controller
                 'numeral' => $request->numeral,
                 'name' => $request->name,
                 'serial_number' => $request->serial_number,
+                'number_engines' => $request->number_engines,
                 'country' => $request->country,
                 'unit_type_id' => $request->unit_type_id,
                 'image' => 'unitImage/'.$request->name.'.'.strtolower($request->image->getClientOriginalExtension())
@@ -118,6 +119,7 @@ class UnitController extends Controller
                 'numeral' => $request->numeral,
                 'name' => $request->name,
                 'serial_number' => $request->serial_number,
+                'number_engines' => $request->number_engines,
                 'country' => $request->country,
                 'unit_type_id' => $request->unit_type_id,
                 'image' => 'unitImage/'.$request->name.'.'.strtolower($request->image->getClientOriginalExtension())

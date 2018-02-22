@@ -13,11 +13,18 @@
             <span class="help-block"><small>@lang('messages.required_max_50')</small></span>
         </div>
 
-        <div class="col-md-2 TAR">@lang('messages.numeral')</div>
-        <div class="col-md-2">
+        <div class="col-md-1 TAR">@lang('messages.numeral')</div>
+        <div class="col-md-1">
             {!! Form::text('numeral', null, array('placeholder' => __("messages.numeral"),'class' => 'form-control validate[required,maxSize[10]] text-input','id' => 'numeral','data-prompt-position' => "bottomLeft")) !!}
             <span class="help-block"><small>@lang('messages.required_max_10')</small></span>
         </div>
+
+        <div class="col-md-1 TAR">@lang('messages.number_engines')</div>
+        <div class="col-md-1">
+            {!! Form::number('number_engines', 1, array('placeholder' => __("messages.number_engines"),'class' => 'form-control validate[required,min[1],max[2]] text-input','id' => 'number_engines','data-prompt-position' => "bottomLeft",'min' => '1','max' =>'2')) !!}
+            <span class="help-block"><small>@lang('messages.required_max_10')</small></span>
+        </div>
+        
 
     </div>
 

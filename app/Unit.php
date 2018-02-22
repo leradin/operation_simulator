@@ -32,7 +32,8 @@ class Unit extends Model
     						'serial_number',
                             'image',
                             'unit_type_id',
-                            'sensor_id'
+                            'sensor_id',
+                            'number_engines'
     					  ];
          
     /**

@@ -29,7 +29,8 @@
                                     <th width="10%">@lang('messages.station')</th>
                                     <th width="10%">@lang('messages.name')</th>
                                     <th width="10%">@lang('messages.numeral')</th>
-                                    <th width="10%">@lang('messages.country')</th>
+                                    <th width="5%">@lang('messages.country')</th>
+                                    <th width="5%">@lang('messages.number_engines')</th>
                                     <th width="10%">@lang('messages.serial_number')</th>
                                     <th width="10%">@lang('messages.image')</th>
                                     <th width="10%">@lang('messages.unit_type')</th>
@@ -44,6 +45,7 @@
                                     <td>{{ $unit->name }}</td>
                                     <td>{{ $unit->numeral }}</td>
                                     <td>{{ $unit->country }}</td>
+                                    <td>{{ $unit->number_engines }}</td>
                                     <td>{{ $unit->serial_number }}</td>
                                     <td>
                                         @if($unit->image != 'image/image.jpg')
