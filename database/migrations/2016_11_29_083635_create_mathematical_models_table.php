@@ -17,7 +17,7 @@ class CreateMathematicalModelsTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->string('path', 255);
-            $table->integer('unit_type_id')->unsigned()->nullable();
+            $table->integer('unit_type_id')->unsigned()->unique();
             $table->foreign('unit_type_id')->references('id')->on('unit_types');
             $table->timestamps();
         });

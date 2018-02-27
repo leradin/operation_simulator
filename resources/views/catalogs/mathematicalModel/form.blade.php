@@ -9,14 +9,14 @@
 
         <div class="col-md-2 TAR">@lang('messages.file')</div>
         <div class="col-md-2">
-            {!! Form::file('path',array('placeholder' => __("messages.file"),'class' => 'form-control validate[maxSize[255]] text-input','id' => 'path','data-prompt-position' => "bottomLeft")) !!}
+            {!! Form::file('path',array('placeholder' => __("messages.file"),'class' => 'form-control validate[required,maxSize[255]] text-input','id' => 'path','data-prompt-position' => "bottomLeft")) !!}
             <span class="help-block"><small>{{ isset($mathematicalModel->path) ? "$mathematicalModel->path " : __("messages.required_file") }}</small></span>                    
         </div> 
         
         <div class="col-md-2 TAR">@lang('messages.unit_type')</div>
         <div class="col-md-2">
-            {!! Form::select('unit_type_id',$unitTypes, null, array('placeholder' => __("messages.unit_type"),'class' => 'form-control validate[] text-input','id' => 'unit_type_id','data-prompt-position' => "bottomLeft",'title' => isset($mathematicalModel->unitType) ? $mathematicalModel->unitType->name : '' )) !!}           
-            <span class="help-block"><small>@lang('messages.optional')</small></span>
+            {!! Form::select('unit_type_id',$unitTypes, null, array('placeholder' => __("messages.unit_type"),'class' => 'form-control validate[required] text-input','id' => 'unit_type_id','data-prompt-position' => "bottomLeft",'title' => isset($mathematicalModel->unitType) ? $mathematicalModel->unitType->name : '' )) !!}           
+            <span class="help-block"><small></small></span>
         </div>
 
 

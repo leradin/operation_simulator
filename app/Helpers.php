@@ -31,3 +31,70 @@ function getArray($array){
 	}
 	return $arr;
 }
+
+/**
+* Save file local
+*
+*/
+function savedFileLocal($file,$fileName){
+	$saved = false;
+	try{
+	    \Storage::disk('local')->put($fileName, \File::get($file));
+	    $saved = true;
+	}catch(\Exception $error){
+
+	}
+	return $saved;
+}
+
+/**
+* Delete file local
+*
+*/
+function deletedFileLocal($fileName){
+	$deleted = false;
+	try{
+		\Storage::delete($fileName);
+	    $deleted = true;
+	}catch(\Exception $error){
+
+	}
+	return $deleted;
+}
+
+/**
+* Save file remote throug ssh
+*
+*/
+function savedFileRemoto($connectionName,$fileName,$remotePath){
+	$saved = false;
+    try{
+	    $url = public_path().'/storage/'.$fileName;
+        \SSH::into($connectionName)->put($url,$remotePath.explode("/",$fileName)[1]);
+        $saved = true;
+    }catch(\Exception $error){
+
+    }
+    return $saved;
+}
+
+/**
+* Delete file remote throug ssh
+*
+*/
+function deletedFileRemoto($connectionName,$fileName,$remotePath){
+    \SSH::into($connectionName)->run([
+            'cd '.$remotePath,
+            'rm '.$fileName
+        ]);
+}
+
+/**
+* Download file 
+*
+*/
+function downloadFile($fileName){
+	$public_path = public_path();
+ 	$url = $public_path.'/storage/'.$fileName;
+ 	return response()->download($url);
+}

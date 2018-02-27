@@ -11,6 +11,8 @@ use Validator;
 class MathematicalModelController extends Controller
 {
     private $menu = 'catalog/mathematical_model';
+    private $connectionSshName = 'production';
+    private $folderForModels = 'mathematicalModel/';
     /**
      * Display a listing of the resource.
      *
@@ -44,10 +46,10 @@ class MathematicalModelController extends Controller
         
         $validator = Validator::make([
             'name'      => $request->name,
-            'path' => strtolower($request->path->getClientOriginalExtension())
+            'path' => strtolower($request->path->getClientOriginalExtension()),
             ], [
             'name' => 'required|max:50|regex:/(^[A-Za-z0-9 ]+$)+/|unique:mathematical_models',
-            'path' => 'required|in:js'
+            'path' => 'required|in:js',
         ]);
 
         // 
@@ -56,19 +58,23 @@ class MathematicalModelController extends Controller
                     ->withErrors($validator)
                     ->withInput();
         }
-        if(!$this->isExistFolder('mathematicalModel')){
-            $this->createFolder('mathematicalModel');
-        }
+        
+        $unitTypeAbbreviation = UnitType::find($request->unit_type_id)->abbreviation;
+        $fileName = $unitTypeAbbreviation.'Model.js';
 
-        if($this->savedFileLocal($request->file('path'),$request['name'])){
-            MathematicalModel::create([
-                'name' => $request->name,
-                'unit_type_id' => $request->unit_type_id ? $request->unit_type_id: null,
-                'path' => 'mathematicalModel/'.$request['name'].'Model.js'
-            ]);
-            $message['type'] = 'success';
-            $message['status'] = Lang::get('messages.success_mathematical_model');
-            return redirect($this->menu)->with('message',$message);
+        if(savedFileLocal($request->file('path'),$this->folderForModels.$fileName)){
+            if(savedFileRemoto($this->connectionSshName,$this->folderForModels.$fileName,env('KINECT_PATH_MODELS'))){
+                
+                MathematicalModel::create([
+                    'name' => $request->name,
+                    'unit_type_id' => $request->unit_type_id,
+                    'path' => $this->folderForModels.$fileName
+                ]);
+
+                $message['type'] = 'success';
+                $message['status'] = Lang::get('messages.success_mathematical_model');
+                return redirect($this->menu)->with('message',$message);
+            } 
         } 
     }
 
@@ -79,9 +85,9 @@ class MathematicalModelController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(mathematicalModel $mathematicalModel)
-    {
+    {   
         try{
-            return \Response::Download(storage_path().'/app/'.$mathematicalModel->path);
+            return downloadFile($mathematicalModel->path);
         }catch(\Exception $error){
             return redirect('/mathematical_model')->with('message',$error->getMessage())->with('error',1);
         }
@@ -110,39 +116,37 @@ class MathematicalModelController extends Controller
     {
 
         $validator = Validator::make(['name' => $request->name,
-            'path' => strtolower($request->path->getClientOriginalExtension())
+            'path' => strtolower($request->path->getClientOriginalExtension()),
             ], [
             'name' => 'required|max:50|regex:/(^[A-Za-z0-9 ]+$)+/|unique:mathematical_models,id,'.$mathematicalModel->id,
-            'path' => 'required|in:js'
+            'path' => 'required|in:js',
         ]);
 
         if($validator->fails() ){
             return back()
                     ->withErrors($validator)
                     ->withInput();
-         }
+        }
+
+        $mathematicalModel->fill([
+            'name' => $request['name'],
+            'unit_type_id' => $request->unit_type_id,
+        ]);
 
         if ($request->hasFile('path')) {
-            if(!$this->isExistFolder('mathematicalModel')){
-                $this->createFolder('mathematicalModel');
-            }
+            deletedFileLocal($mathematicalModel->path);
+            deletedFileRemoto($this->connectionSshName,explode("/",$mathematicalModel->path)[1],env('KINECT_PATH_MODELS'));
 
-            if($this->savedFileLocal($request->file('path'),$request['name'])){
-                \File::delete(storage_path().'/app/'.$mathematicalModel->path);
-                
-                $mathematicalModel->fill([
-                    'name' => $request['name'],
-                    'unit_type_id' => $request->unit_type_id ? $request->unit_type_id: null,
-                    'path' => 'mathematicalModel/'.$request['name'].'Model.js'
-                ]);
-               
-            } 
-        }else{
-            $mathematicalModel->fill([
-                'name' => $request['name'],
-                'unit_type_id' => $request->unit_type_id ? $request->unit_type_id: null,
-            ]);
+            $unitTypeAbbreviation = UnitType::find($request->unit_type_id)->abbreviation;
+            $fileName = $unitTypeAbbreviation.'Model.js';
+
+            if(savedFileLocal($request->file('path'),$this->folderForModels.$fileName)){
+                if(savedFileRemoto($this->connectionSshName,$this->folderForModels.$fileName,env('KINECT_PATH_MODELS'))){
+                    $mathematicalModel->path = $this->folderForModels.$fileName;
+                }
+            }
         }
+        
         $mathematicalModel->save();
         $message['type'] = 'success';
         $message['status'] = Lang::get('messages.success_mathematical_model');
@@ -155,20 +159,19 @@ class MathematicalModelController extends Controller
      * @param  \SimulatorOperation\Model  $model
      * @return \Illuminate\Http\Response
      */
-    public function destroy(mathematicalModel $mathematicalModel)
-    {
-        if(\File::delete(storage_path().'/app/'.$mathematicalModel->path)){
-            $mathematicalModel->delete();
-            $message['type'] = 'success';
-            $message['status'] = Lang::get('messages.remove_mathematical_model');
-            return redirect($this->menu)->with('message',$message);
-        }
+    public function destroy(mathematicalModel $mathematicalModel){
+        deletedFileLocal($mathematicalModel->path);
+        deletedFileRemoto($this->connectionSshName,explode("/",$mathematicalModel->path)[1],env('KINECT_PATH_MODELS'));
+        $mathematicalModel->delete();
+        $message['type'] = 'success';
+        $message['status'] = Lang::get('messages.remove_mathematical_model');
+        return redirect($this->menu)->with('message',$message);
     }
 
     /**
     * Download file 
     *
-    */
+   
     public function downloadFile($id){
         $model = MathematicalModel::find($id);
         return \Storage::get($modelo->path.'.js');
@@ -177,11 +180,11 @@ class MathematicalModelController extends Controller
     /**
     * Save file local
     *
-    */
+    
     private function savedFileLocal($file,$name){
         $saved = false;
         try{
-            \Storage::disk('local')->put('mathematicalModel/'.$name.'Model.js', \File::get($file));
+            \Storage::disk('local')->put('mathematicalModel/'.$name, \File::get($file));
             $saved = true;
         }catch(\Exception $error){
             //dd($error);
@@ -189,11 +192,30 @@ class MathematicalModelController extends Controller
        return $saved;
     }
 
+    private function savedFileRemoto($name){
+        $saved = false;
+        try{
+            $url = public_path().'/storage/mathematicalModel/'.$name;
+            \SSH::into('production')->put($url, env('KINECT_PATH_MODELS').$name);
+            $saved = true;
+        }catch(\Exception $error){
+
+        }
+        return $saved;
+    }
+   
+    private function deletedFileRemoto($fileName){
+        \SSH::into('production')->run([
+                'cd '.env('KINECT_PATH_MODELS'),
+                'rm '.$fileName
+            ]);
+    }
+    */
 
     /**
     * Verify exists folder
     *
-    */
+    
     private function isExistFolder($nameFolder){
         $exists = 1;
         if(!\File::exists(storage_path().'/app/'.$nameFolder)) {
@@ -205,9 +227,11 @@ class MathematicalModelController extends Controller
     /**
     * Create folder
     *
-    */
+    
     private function createFolder($name){
         $response = \File::makeDirectory(storage_path().'/app/'.$name, 0775, true);
         return $response;
     }
+    */
+    
 }

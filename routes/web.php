@@ -65,6 +65,31 @@ Route::group(['prefix'=>'catalog', 'as'=>'catalog.'],function(){
 	// Controller Exercise
 	Route::resource('exercise','ExerciseController');
 
+Route::get('aaa',function(){
+	
+	$public_path = public_path();
+	$url = $public_path.'/storage/mathematicalModel/POModel.js';
+	/*if (\Storage::exists('mathematicalModel/POModel.js'))
+     {
+       return response()->download($url);
+     }
+     //si no se encuentra lanzamos un error 404.
+     abort(404);*/
+	//$commands[] = 'ls -l';
+	//echo base_path().'/app'.\Storage::url('unitImage/jaja.jpeg');
+	//\SSH::into('production')->put($url,env('KINECT_PATH_MODELS'));
+    \SSH::into('production')->put($url, env('KINECT_PATH_MODELS').'/index.js');
+	// run a command - only works on SSH connections
+	//\SSH::into('production')->run($url, function( $line ) {
+	  // display output of command, by line
+	//  echo $line;
+	//} );
+	//$contents = \Storage::get('unitImage/jaja.jpeg');
+	//$file = \Storage::url('unitImage/jaja.jpeg');
+	//echo $contents->getClientOriginalName();
+	//\SSH::put($file->getRealPath(), '/var/www/html/uploads/' . $file->getFilename());
+	//echo \Storage::url('unitImage/jaja.jpeg');
+});
 
 //Route::get('ama',function(){
 	//return \SimulatorOperation\Sensor::getPossibleEnumValues('type_sensor');

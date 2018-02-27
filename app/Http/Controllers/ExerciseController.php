@@ -38,19 +38,18 @@ class ExerciseController extends Controller
             
         ]);*/
         //echo $res->getStatusCode();
+        $client = new \GuzzleHttp\Client([
+            // Base URI is used with relative requests
+            'base_uri' => 'https://jsonplaceholder.typicode.com/',
+            // You can set any number of default request options.
+            'timeout'  => 2.0,
+        ]);
         //$guzzle = new \GuzzleHttp\Client;
 
-        /*$response = $guzzle->get(env('URI_WEBSERVICE').'users', [
-            'form_params' => [
-                'grant_type' => 'authorization_code', 
-                'client_id' => 4, 
-                'client_secret' => 'PfkhI38Q49G2sOcg5z1pmJe9oJVKkcY5N11hgqj5', 
-                'scope' => '*'
-            ]
-        ]);
-        //dd($response->getBody()->getContent());
-        $content = json_decode((string) $response->getBody(), true);
-        dd($content);*/
+        $response = $client->request('GET','posts');
+        return json_decode($response->getBody()->getContents());
+        //$content = json_decode((string) $response->getBody()->getContents(), true);
+        //dd($content);
         /*$guzzle = new \GuzzleHttp\Client;
 
         $response = $guzzle->get(env('URI_WEBSERVICE').'users', [
