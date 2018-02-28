@@ -42,7 +42,7 @@ function savedFileLocal($file,$fileName){
 	    \Storage::disk('local')->put($fileName, \File::get($file));
 	    $saved = true;
 	}catch(\Exception $error){
-
+		dd($error);
 	}
 	return $saved;
 }

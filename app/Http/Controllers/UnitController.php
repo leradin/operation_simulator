@@ -6,11 +6,15 @@ use SimulatorOperation\UnitType;
 use SimulatorOperation\Unit;
 use SimulatorOperation\Sensor;
 use Illuminate\Http\Request;
+use SimulatorOperation\Http\Requests\UnitCreateRequest;
+use SimulatorOperation\Http\Requests\UnitEditRequest;
 use Lang;
+use Validator;
 
 class UnitController extends Controller
 {
     private $menu = 'catalog/unit';
+    private $folderForUnits = 'unitImage/';
     /**
      * Display a listing of the resource.
      *
@@ -40,13 +44,10 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UnitCreateRequest $request)
     {
-        if(!$this->isExistFolder('unitImage')){
-            $this->createFolder('unitImage');
-        }
-
-        if($this->savedFileLocal($request->file('image'),$request['name'].'.'.strtolower($request->image->getClientOriginalExtension()))){
+        $fileName = $this->folderForUnits.$request['name'].'.'.strtolower($request->image->getClientOriginalExtension());
+        if(savedFileLocal($request->file('image'),$fileName)){
             $unit = Unit::create([
                 'station' => $request->station,
                 'numeral' => $request->numeral,
@@ -55,7 +56,7 @@ class UnitController extends Controller
                 'number_engines' => $request->number_engines,
                 'country' => $request->country,
                 'unit_type_id' => $request->unit_type_id,
-                'image' => 'unitImage/'.$request->name.'.'.strtolower($request->image->getClientOriginalExtension())
+                'image' => $fileName
             ]);
             $unitType = UnitType::find($request->unit_type_id);
             $unitType->units()->save($unit);
@@ -80,7 +81,7 @@ class UnitController extends Controller
     public function show(Unit $unit)
     {
         try{
-            return \Response::Download(storage_path().'/app/'.$unit->image);
+            return downloadFile($unit->image);
         }catch(\Exception $error){
             return redirect('/unit')->with('message',$error->getMessage())->with('error',1);
 
@@ -107,13 +108,11 @@ class UnitController extends Controller
      * @param  \SimulatorOperation\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unit $unit)
+    public function update(UnitEditRequest $request, Unit $unit)
     {
-        if(!$this->isExistFolder('unitImage')){
-            $this->createFolder('unitImage');
-        }
-
-        if($this->savedFileLocal($request->file('image'),$request['name'].'.'.strtolower($request->image->getClientOriginalExtension()))){
+        deletedFileLocal($unit->image);
+        $fileName = $this->folderForUnits.$request['name'].'.'.strtolower($request->image->getClientOriginalExtension());
+        if(savedFileLocal($request->file('image'),$fileName)){
             $unit->fill([
                 'station' => $request->station,
                 'numeral' => $request->numeral,
@@ -124,6 +123,7 @@ class UnitController extends Controller
                 'unit_type_id' => $request->unit_type_id,
                 'image' => 'unitImage/'.$request->name.'.'.strtolower($request->image->getClientOriginalExtension())
             ]);
+
             $unitType = UnitType::find($request->unit_type_id);
             $unitType->units()->save($unit);
 
@@ -136,7 +136,6 @@ class UnitController extends Controller
             $message['status'] = Lang::get('messages.success_unit');
             return redirect($this->menu)->with('message',$message);
         } 
-
     }
 
     /**
@@ -147,55 +146,10 @@ class UnitController extends Controller
      */
     public function destroy(Unit $unit)
     {
+        deletedFileLocal($unit->image);
         $unit->delete();
         $message['type'] = 'success';
         $message['status'] = Lang::get('messages.remove_unit');
         return redirect($this->menu)->with('message',$message);
-    }
-
-    /**
-    * Download file 
-    *
-    */
-    public function downloadFile($id){
-        $unit = Unit::find($id);
-        return \Storage::get($unit->image);
-    }
-
-    /**
-    * Save file local
-    *
-    */
-    private function savedFileLocal($file,$name){
-        $saved = false;
-        try{
-            \Storage::disk('local')->put('unitImage/'.$name, \File::get($file));
-            $saved = true;
-        }catch(\Exception $error){
-            dd($error);
-        }
-       return $saved;
-    }
-
-
-    /**
-    * Verify exists folder
-    *
-    */
-    private function isExistFolder($nameFolder){
-        $exists = 1;
-        if(!\File::exists(storage_path().'/app/'.$nameFolder)) {
-            $exists = 0;
-        }
-        return $exists; 
-    }
-
-    /**
-    * Create folder
-    *
-    */
-    private function createFolder($name){
-        $response = \File::makeDirectory(storage_path().'/app/'.$name, 0775, true);
-        return $response;
     }
 }

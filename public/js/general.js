@@ -12,16 +12,17 @@ $(document).ready(function(){
 		"bSort": true,
 		"sSearch" : true,
 		"bPaging": false,
+		"bDestroy": true,
 		"oLanguage": {
 		    "sUrl": "http://127.0.0.1:8000/js/plugins/datatables/Spanish.js"
 		},
-		"aoColumnDefs": [
-            { "bVisible": false, "aTargets": [0] }
-        ]
-	});
+		//"aoColumnDefs": [
+        //    { "bVisible": false, "aTargets": [0] }
+        //]
+	}).fnDestroy();
 
 	$(window).bind('resize', function () {
-    	$('#table').fnAdjustColumnSizing();
+    	table.fnAdjustColumnSizing();
   	});
 
 	// Table Tracks

@@ -131,10 +131,10 @@ $(document).ready(function(){
     if($("#ms").length > 0)
         $("#ms").multiSelect({
             afterSelect: function(value, text){
-                notify('Multiselect','Selected: '+text+'['+value+']');
+                notify('Opcion','Seleleccionada: '+text+'['+value+']');
             },
             afterDeselect: function(value, text){
-                notify('Multiselect','Deselected: '+text+'['+value+']');
+                notify('Opcion','Deseleccionada: '+text+'['+value+']');
             }});
 
     if($("#ms_stage").length > 0)

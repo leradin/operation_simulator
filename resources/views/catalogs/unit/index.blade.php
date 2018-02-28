@@ -23,7 +23,7 @@
                     </ul>                         
                 </div>                
                     <div class="block-fluid">
-                        <table  id="table" cellpadding="0" cellspacing="0" width="100%">
+                        <table id="table" class="table" cellpadding="0" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="10%">@lang('messages.station')</th>
@@ -48,13 +48,11 @@
                                     <td>{{ $unit->number_engines }}</td>
                                     <td>{{ $unit->serial_number }}</td>
                                     <td>
-                                        @if($unit->image != 'image/image.jpg')
-                                        <a href="{{url('/')}}{{ Storage::disk('local')->url($unit->image) }}" target="_blank">
-                                            <img src="{{url('/')}}{{ Storage::disk('local')->url($unit->image) }}" height="200" width="200">
+                                        
+                                        <a href="/storage/{{ $unit->image }}" target="_blank">
+                                            <img src="/storage/{{ $unit->image }}" height="200" width="200">
                                         </a>
-                                        @else
-                                          Sin imagén
-                                        @endif    
+                                        
                                     </td>
                                     <td>{{ $unit->unitType->name }}</td>
                                     <td>
