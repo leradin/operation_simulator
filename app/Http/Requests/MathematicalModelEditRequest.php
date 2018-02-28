@@ -5,7 +5,7 @@ namespace SimulatorOperation\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Lang;
 
-class UnitEditRequest extends FormRequest
+class MathematicalModelEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,20 +27,14 @@ class UnitEditRequest extends FormRequest
         return [
             'name' => 'required|max:50|regex:/(^[A-Za-z0-9 ]+$)+/|exists:mathematical_models,name',
             'path' => 'required|file',
-            'unit_type_id' => 'exists:mathematical_models,unit_type_id'
+            //'unit_type_id' => 'required|exists:unit_types,id'
         ];
     }
 
-     public function attributes(){
+    public function messages(){
         return [
-            'station' => Lang::get('messages.station'),
-            'numeral' => Lang::get('messages.numeral'),
-            'name' => Lang::get('messages.country'),
-            'serial_number' => Lang::get('messages.serial_number'),
-            'number_engines' => Lang::get('messages.number_engines'),
-            'country' => Lang::get('messages.country'),
-            'unit_type_id' => Lang::get('messages.unit_type'),
-            'image' => Lang::get('messages.image')
+            'name' => Lang::get('messages.name'),
+            'path' => Lang::get('messages.file'),
         ];
     }
 }

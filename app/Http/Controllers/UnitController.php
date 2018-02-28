@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use SimulatorOperation\Http\Requests\UnitCreateRequest;
 use SimulatorOperation\Http\Requests\UnitEditRequest;
 use Lang;
-use Validator;
 
 class UnitController extends Controller
 {
