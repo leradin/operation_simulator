@@ -53,4 +53,13 @@ class Unit extends Model
     {
         return $this->belongsToMany('SimulatorOperation\Sensor');
     }
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getNameWithNumeralAttribute(){
+        return "{$this->name} ({$this->numeral})";
+    }
 }

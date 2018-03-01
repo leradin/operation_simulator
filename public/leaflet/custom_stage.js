@@ -551,6 +551,7 @@ function onMapModalClickStage(e) {
         .openOn(mapModalStage);
     $('#init_position').val(e.latlng.lat+","+e.latlng.lng);
     $('#init_position_').val(dec2gms(e.latlng.lat,1).valor+" , "+dec2gms(e.latlng.lng,2).valor);
+    latLng = e.latlng;
 }
 
 mapModalStage.dragging.disable();
@@ -565,6 +566,9 @@ setTimeout(function(){
 
 var form = $('#form_modal_stage');
 let isCreate = false;
+var latLng = null;
+var cabinConfigurationTemp = {};
+var unitsSelectedsArray = [];
 
 form.validationEngine('attach', {
     promptPosition : "centerRight", 
@@ -581,6 +585,38 @@ function beforeCall(){
 }
 
 $('#button_config').on('click',function(){
+    
+    try {
+        cabinConfigurationTemp.cabinId = itemLast.key;
+        cabinConfigurationTemp.cabinValue = itemLast.value;
+        cabinConfigurationTemp.unitId = $('#unit_ids option:selected').val();
+        cabinConfigurationTemp.unitName = $('#unit_ids option:selected').text();
+        cabinConfigurationTemp.course = $('#course').val();
+        cabinConfigurationTemp.speed = $('#speed').val();
+        cabinConfigurationTemp.altitud = $('#altitude').val();
+        cabinConfigurationTemp.latLng = latLng;
+
+        var marker = new L.Marker(latLng, {draggable:false});
+        mapStage.addLayer(marker);
+        marker.bindPopup(messageFormat(cabinConfigurationTemp)).openPopup();
+
+        cabinConfigurationTemp.marker = marker;
+
+        $("#unit_ids option:selected").remove();
+
+        var unit = {};
+        unit.cabinId = itemLast.key;
+        unit.cabinName = itemLast.value;
+        unit.unitId = cabinConfigurationTemp.unitId;
+        unit.unitName = cabinConfigurationTemp.unitName;
+        unit.course = cabinConfigurationTemp.course;
+        unit.speed = cabinConfigurationTemp.speed;
+        unit.altitud = cabinConfigurationTemp.altitud;
+        unit.latLng = cabinConfigurationTemp.latLng;
+        unitsSelectedsArray.push(unit);
+        console.log(unitsSelectedsArray);
+    }catch(err) {
+    }
     form.submit();
 });
 
@@ -599,8 +635,42 @@ $('.modal').on('shown.bs.modal',function(){
     mapModalStage.setZoom(9);
 });
 
+/**
+*Devuelve los datos
+*formateados
+*/
+function messageFormat(cabinConfigurationTemp){
+    return "<b><center>"+cabinConfigurationTemp.cabinValue+"</center></b><br />"+
+           "Unidad : <b>"+cabinConfigurationTemp.unitName+"</b><br />"+
+           "Posición : <b>"+cabinConfigurationTemp.latLng+"</b><br />"+
+           "Velocidad : <b>"+cabinConfigurationTemp.speed+unitMeasurement(cabinConfigurationTemp.unitName)+"</b> | Rumbo :  <b>"+cabinConfigurationTemp.course+"º</b><br />";
+}
 
 
+/**
+*Devuelve las unidad de medida en texto
+*
+*/
+function unitMeasurement(unit){
+    var numeral = unit.split("(");
+    numeral = numeral[1].split("_");
+    switch (numeral[0]) {
+        case 'ANX':
+            return " km/h";
+            break;
+
+        case 'IM':
+            return " km/h";
+            break;
+
+        case 'VEH':
+            return " km/h";
+            break;
+
+        default:
+            return " kn/h"
+    }
+}
 
 /**
 *Devuelve los datos 

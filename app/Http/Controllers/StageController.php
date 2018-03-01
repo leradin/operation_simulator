@@ -30,7 +30,7 @@ class StageController extends Controller
     public function create()
     {
         $cabins = Cabin::get()->pluck('name','id');
-        $units = Unit::get()->pluck('name','id');
+        $units = Unit::get()->pluck('name_with_numeral','id');
         return view('stage.create',['cabins' => $cabins,
                                             'units' => $units]);
     }
