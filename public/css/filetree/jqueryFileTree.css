@@ -89,3 +89,5 @@ UL.jqueryFileTree LI:nth-child(2n){background-color: #FFF;}
 .jqueryFileTree LI.ext_xls { background: url(../../img/filetree/xls.png) left top no-repeat; }
 .jqueryFileTree LI.ext_xml { background: url(../../img/filetree/code.png) left top no-repeat; }
 .jqueryFileTree LI.ext_zip { background: url(../../img/filetree/zip.png) left top no-repeat; }
+.jqueryFileTree LI.pc { background: url(../../img/filetree/pc.png) left top no-repeat; }
+.jqueryFileTree LI.devices { background: url(../../img/filetree/devices.png) left top no-repeat; }

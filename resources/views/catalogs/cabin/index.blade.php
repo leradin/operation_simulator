@@ -35,6 +35,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 @foreach($cabins as $cabin)
                                     <tr>
                                     <td>{{ $cabin->id }}</td>
@@ -44,14 +45,12 @@
                                     <td>{{ $cabin->ip_address_camera }}</td>
                                     <td>
                                         @foreach($cabin->computers()->get() as $computer)
-                                            <ul class="jqueryFileTree">
-                                                <li class="directory">
+                                            <ul  class="jqueryFileTree">
+                                                <li class="pc">
                                                     <a>{{ $computer->full_name }}</a>
-                                              
-                                        
                                                 @foreach($computer->devices()->get() as $device)
                                                 <ul class="jqueryFileTree" style="">
-                                                    <li class="file"><a>{!! nl2br(e($device->name_tab)) !!}</a></li>
+                                                    <li class="devices"><a>{!! nl2br(e($device->name_tab)) !!}</a></li>
                                                 </ul>
                                                     
                                                 @endforeach 

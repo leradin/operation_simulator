@@ -63,7 +63,9 @@ class Computer extends Model
      * @return string
      */
     public function getFullNameAttribute(){
-         $fullName = "\n {$this->name} - {$this->ip_address} - {$this->label_arduino} \n";
-         return $fullName.(isset($this->cabin) ? ' -> '.$this->cabin->name : ' -> '.Lang::get('messages.unassigned'));
+         $fullName = "\n ".Lang::get('messages.name')." : {$this->name} | "
+         .Lang::get('messages.ip_address')." : {$this->ip_address} | "
+         .Lang::get('messages.label')." : {$this->label_arduino} \n";
+         return $fullName ? $fullName : Lang::get('messages.unassigned');
     }
 }
