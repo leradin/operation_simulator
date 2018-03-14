@@ -25,7 +25,7 @@
                                 @endforeach                          
                             </tbody>
                         </table>
-            {!! Form::text('stage_id', null, array('class' => 'form-control validate[required,maxSize[50]] text-input','id' => 'stage_id','data-prompt-position' => "bottomLeft")) !!}            
+            {!! Form::hidden('stage_id', null, array('class' => 'form-control validate[required,maxSize[50]] text-input','id' => 'stage_id','data-prompt-position' => "bottomLeft","data-errormessage-value-missing" => __('messages.required_stage') )) !!}            
         </div>
     </div>
     <div class="form-group">
@@ -44,31 +44,19 @@
     <div class="form-group">
         <div class="col-md-2 TAR">@lang('messages.root_date_time')</div>
         <div class="col-md-2">
-            {!! Form::text('root_date_time', null, array('placeholder' => __("messages.root_date_time"),'class' => 'form-control validate[required,maxSize[50]] text-input datetime','id' => 'root_date_time','data-prompt-position' => "bottomLeft")) !!}
+            {!! Form::text('supremed_date_time', null, array('placeholder' => __("messages.root_date_time"),'class' => 'form-control validate[required,maxSize[50]] text-input datetime','id' => 'supremed_date_time','data-prompt-position' => "bottomLeft")) !!}
             <span class="help-block"><small>@lang('messages.required_max_50')</small></span>
         </div>
 
         <div class="col-md-2 TAR">@lang('messages.scheduler_date_time')</div>
         <div class="col-md-2">
-            {!! Form::text('scheduler_date_time', null, array('placeholder' => __("messages.scheduler_date_time"),'class' => 'form-control validate[required,maxSize[50]] text-input datetime' ,'id' => 'scheduler_date_time','data-prompt-position' => "bottomLeft")) !!}
+            {!! Form::text('scheduled_date_time', null, array('placeholder' => __("messages.scheduler_date_time"),'class' => 'form-control validate[required,maxSize[50]] text-input datetime' ,'id' => 'scheduled_date_time','data-prompt-position' => "bottomLeft")) !!}
             <span class="help-block"><small>@lang('messages.required_max_50')</small></span>
         </div>
 
         <div class="col-md-2 TAR">@lang('messages.directors')</div>
         <div class="col-md-2">
-            <select name="s_example" multiple="multiple" class="select" style="width: 100%; display: none;">
-                <option value="0">choose a option...</option>
-                <option value="1">Andorra</option>
-                <option value="2">Antarctica</option>
-                <option value="3">Bulgaria</option>
-                <option value="4">Germany</option>
-                <option value="5">Dominican Republic</option>
-                <option value="6">Micronesia</option>
-                <option value="7">United Kingdom</option>
-                <option value="8">Greece</option>
-                <option value="9">Italy</option>
-                <option value="10" selected="selected">Ukraine</option>                                                                       
-            </select>
+            {!! Form::select('user_id',$users, null, array('placeholder' => __("messages.directors"),'class' => 'form-control validate[] text-input','id' => 'user_id','data-prompt-position' => "bottomLeft",'title' => isset($user) ? $user->name : '' )) !!}      
         </div>
     </div>
 

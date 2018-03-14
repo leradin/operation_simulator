@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCabinStageTable extends Migration
+class CreateComputerStageTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,14 @@ class CreateCabinStageTable extends Migration
      */
     public function up()
     {
-        Schema::create('cabin_stage',function(Blueprint $table){
+        Schema::create('computer_stage',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('cabin_id')->unsigned();
+            $table->integer('computer_id')->unsigned();
             $table->integer('stage_id')->unsigned();
-            $table->foreign('cabin_id')->references('id')->on('cabins')->onDelete('cascade');
+            $table->integer('cabin_id')->unsigned();
+            $table->foreign('computer_id')->references('id')->on('computers')->onDelete('cascade');
             $table->foreign('stage_id')->references('id')->on('stages')->onDelete('cascade');
-            $table->float('course');
-            $table->float('speed');
-            $table->float('altitude');
-            $table->string('init_position',50);
-            $table->integer('lights_type')->unsigned();
-            $table->integer('unit_id')->unsigned();
+            $table->foreign('cabin_id')->references('id')->on('cabins')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -36,6 +32,6 @@ class CreateCabinStageTable extends Migration
      */
     public function down()
     {
-        Schema::drop('cabin_stage');
+        Schema::drop('computer_stage');
     }
 }

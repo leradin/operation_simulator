@@ -16,10 +16,13 @@ class CreateExercisesTable extends Migration
             $table->increments('id');
             $table->string('name',50);
             $table->string('description',255)->nullable();
+            $table->integer('stage_id')->unsigned();
+            $table->dateTime('scheduled_date_time');
+            $table->dateTime('supremed_date_time');
+            $table->integer('user_id')->unsigned();
             $table->boolean('is_played')->default(false);
-            $table->json('configuration_file');
-            $table->dateTime('scheduler_date_time');
-            $table->dateTime('root_date_time');
+            $table->json('configuration_file')->nullable();
+            $table->string('path_configuration_file',50)->nullable();
             $table->timestamps();
         });
     }

@@ -74,7 +74,9 @@ class CabinController extends Controller
      */
     public function show(Cabin $cabin)
     {
-        //
+        $computers = Cabin::with('computers')->find($cabin->id);
+        //dd($computers);
+        return response()->json($computers);
     }
 
     /**

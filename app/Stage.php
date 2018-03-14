@@ -39,6 +39,10 @@ class Stage extends Model
 
 	public function cabins(){
         return $this->belongsToMany('SimulatorOperation\Cabin')
-        ->withPivot('course', 'speed', 'altitude', 'init_position');
+        ->withPivot('unit_id','course', 'speed', 'altitude', 'init_position','lights_type');
+    }
+
+    public function computers(){
+        return $this->belongsToMany('SimulatorOperation\Computer','computer_stage','stage_id','computer_id')->withPivot('cabin_id')->withTimestamps();
     }
 }

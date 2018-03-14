@@ -16,12 +16,7 @@ Auth::routes();
 // Controller Home
 Route::get('/', 'HomeController@index');
 
-
 // Catalogs
-Route::get('catalog',function(){
-	return view('catalogs.index');
-});
-
 Route::group(['prefix'=>'catalog', 'as'=>'catalog.'],function(){
 	// Controller Cabin
 	Route::resource('cabin', 'CabinController');
@@ -56,19 +51,56 @@ Route::group(['prefix'=>'catalog', 'as'=>'catalog.'],function(){
 	// Controller Meteorological Phenomenons
 	Route::resource('meteorological_phenomenon','MeteorologicalPhenomenonController');
 
-	
 });
 
-	// Controller Stage
-	Route::resource('stage','StageController');
+// Controller Stage
+Route::resource('stage','StageController');
 
-	// Controller Exercise
-	Route::resource('exercise','ExerciseController');
+// Controller Exercise
+Route::resource('exercise','ExerciseController');
 
-Route::get('aaa',function(){
+/* Redirect for authentication */
+Route::get('redirect', function () {
+    $query = http_build_query([
+        'client_id' => env('MAINTENANCE_SIMULATOR_CLIENT_ID'),
+        'redirect_uri' => env('APP_URL').'callback',
+        'response_type' => 'code',
+        'scope' => '',
+    ]);
+
+    return redirect(env('MAINTENANCE_SIMULATOR_URL').'oauth/authorize?'.$query);
+})->name('get_token');
+
+/* Approving The Request */
+Route::get('/callback', function (Request $request) {
+    $http = new GuzzleHttp\Client;
+
+    $response = $http->post(env('MAINTENANCE_SIMULATOR_URL').'oauth/token', [
+        'form_params' => [
+            'grant_type' => 'authorization_code',
+            'client_id' => env('MAINTENANCE_SIMULATOR_CLIENT_ID'),
+            'client_secret' => env('MAINTENANCE_SIMULATOR_CLIENT_SECRET'),
+            'redirect_uri' => env('APP_URL').'callback',
+            'code' => $request->code,
+        ],
+    ]);
+    // Specifying a default value...
+    //session('_token',$response->getBody());
+    session(['api_token' => $response->getBody()->getContents()]);
+    return json_decode((string) $response->getBody(), true);
+});
+
+//Web services
+Route::get('executionExercise',function(){
+	return response()->json(SimulatorOperation\Exercise::where('is_played', 1)->first()->path_configuration_file);
+});
+
+
+
+//Route::get('aaa',function(){
 	
-	$public_path = public_path();
-	$url = $public_path.'/storage/mathematicalModel/POModel.js';
+	//$public_path = public_path();
+	//$url = $public_path.'/storage/mathematicalModel/POModel.js';
 	/*if (\Storage::exists('mathematicalModel/POModel.js'))
      {
        return response()->download($url);
@@ -78,7 +110,7 @@ Route::get('aaa',function(){
 	//$commands[] = 'ls -l';
 	//echo base_path().'/app'.\Storage::url('unitImage/jaja.jpeg');
 	//\SSH::into('production')->put($url,env('KINECT_PATH_MODELS'));
-    \SSH::into('production')->put($url, env('KINECT_PATH_MODELS').'/index.js');
+    //\SSH::into('production')->put($url, env('KINECT_PATH_MODELS').'/index.js');
 	// run a command - only works on SSH connections
 	//\SSH::into('production')->run($url, function( $line ) {
 	  // display output of command, by line
@@ -89,7 +121,7 @@ Route::get('aaa',function(){
 	//echo $contents->getClientOriginalName();
 	//\SSH::put($file->getRealPath(), '/var/www/html/uploads/' . $file->getFilename());
 	//echo \Storage::url('unitImage/jaja.jpeg');
-});
+//});
 
 //Route::get('ama',function(){
 	//return \SimulatorOperation\Sensor::getPossibleEnumValues('type_sensor');

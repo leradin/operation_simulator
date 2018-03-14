@@ -53,8 +53,8 @@
 
                                 <div class="col-md-2">
                                     <span class="top title">@lang('messages.speed')</span>
-                                    {!! Form::number('speed',0,array('class' => 'form-control validate[required,min[0],max[100]] text-input','id' => 'speed','data-prompt-position' => "bottomLeft")) !!}
-                                    <p class="help-block">@lang('messages.knots')</p>
+                                    {!! Form::number('speed',0,array('class' => 'form-control validate[required,min[0],max[4096]] text-input','id' => 'speed','data-prompt-position' => "bottomLeft")) !!}
+                                    <p class="help-block">@lang('messages.km/h')</p>
                                 </div>
 
                                 <div class="col-md-2">
@@ -72,6 +72,23 @@
                                     {!! Form::hidden('init_position',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position','data-prompt-position' => "bottomLeft")) !!}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="col-md-2">@lang('messages.computers')</div>
+                                 <div class="col-md-10">
+                                    <div class="btn-group" data-toggle="buttons-checkbox" id="container_computers">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-2">@lang('messages.lights')</div>
+                                <div class="col-md-10">
+                                    <input type="radio"  name="type_lights" checked="checked" value="0" />@lang('messages.daylight') 
+                                    <input type="radio"  name="type_lights" value="1" />@lang('messages.battle_light') 
+                                    <input type="radio"  name="type_lights_" value="3" />@lang('messages.without_lights')
+                                </div>
+                            </div>
                         </form>      
                     </div>
                 </div>                   
@@ -87,5 +104,6 @@
 @section('js_footer')
     {!! Html::script('leaflet/dist/leaflet.js') !!} 
     {!! Html::script('leaflet/plugins/areaselect/leaflet-areaselect.js') !!}
+    {!! Html::script('leaflet/layers.js') !!}
     {!! Html::script('leaflet/custom_stage.js') !!}
 @endsection

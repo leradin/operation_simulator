@@ -18,6 +18,7 @@ class CreateCabinTable extends Migration
             $table->ipAddress('ip_address_arduino');
             $table->macAddress('mac_address_arduino');
             $table->ipAddress('ip_address_camera');
+            $table->integer('port_camera')->unsigned();
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@ $(document).ready(function(){
 		}
 	});
 
-	var table = $('#table').dataTable({
+	table = $('#table').dataTable({
 		"bPaginate": true,
 		"bSort": true,
 		"sSearch" : true,
@@ -16,10 +16,25 @@ $(document).ready(function(){
 		"oLanguage": {
 		    "sUrl": "http://127.0.0.1:8000/js/plugins/datatables/Spanish.js"
 		},
-		//"aoColumnDefs": [
-        //    { "bVisible": false, "aTargets": [0] }
-        //]
-	}).fnDestroy();
+		"aoColumnDefs": [
+            { "bVisible": false, "aTargets": [0] }
+        ],
+        //"bJQueryUI": true,
+		//"sPaginationType": "full_numbers"
+	});
+
+	/* Add a click handler to the rows - this could be used as a callback */
+	$("#table tbody tr").click( function( ) {
+		if ( $(this).hasClass('active') ) {
+			$(this).removeClass('active');			
+		}else{
+			table.$('tr.active').removeClass('active');
+			$(this).addClass('active');
+			var position = table.fnGetPosition(this); // getting the clicked row position
+			var stageId = table.fnGetData(position)[0];
+			$('#stage_id').val(stageId);
+		}
+	});
 
 	$(window).bind('resize', function () {
     	table.fnAdjustColumnSizing();
@@ -55,7 +70,7 @@ $(document).ready(function(){
 	    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
 	    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
 	    weekHeader: 'Sm',
-	    dateFormat: 'dd/mm/yy',
+	    dateFormat: 'yy-mm-dd',
 	    firstDay: 1,
 	    isRTL: false,
 	    showMonthAfterYear: false,

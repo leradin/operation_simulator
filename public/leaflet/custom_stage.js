@@ -1,523 +1,11 @@
-//Direcciones de los servicios de mapas
-var wwserver =  "http://192.168.202.10:2003/wms?";
-var geoserver = "http://192.168.202.10:2000/geoserver/gwc/service/wms?";
-//Inician la declaracion de capas Base
-    var Bmarvel = L.tileLayer.wms(wwserver,  {
-        layers: 'bmng200405',
-        format: 'image/jpeg',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    
-    var wwsesat = L.tileLayer.wms(wwserver, {
-        layers: 'wwsesat',
-        format: 'image/jpeg',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var msvea = L.tileLayer.wms(wwserver, {
-        layers: 'msvea',
-        format: 'image/jpeg',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-      
-    var InegiO = L.tileLayer.wms(wwserver, {
-        layers: 'b50',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    //Inicia la declaracion de Overlayers   
-    var evismar = L.tileLayer.wms(geoserver, {
-        layers: 'SM:evismar',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var waterareas = L.tileLayer.wms(geoserver, {
-        layers: 'SM:waterareas',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var admin_borders = L.tileLayer.wms(geoserver, {
-        layers: 'SM:admin_borders',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var buildings = L.tileLayer.wms(geoserver, {
-        layers: 'SM:buildings',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var hl_roads = L.tileLayer.wms(geoserver, {
-        layers: 'SM:hl_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var residential = L.tileLayer.wms(geoserver, {
-        layers: 'SM:residential',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var tertiary_roads = L.tileLayer.wms(geoserver, {
-        layers: 'SM:tertiary_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var railways = L.tileLayer.wms(geoserver, {
-        layers: 'SM:railways',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var secondary_roads = L.tileLayer.wms(geoserver, {
-        layers: 'SM:secondary_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var primary_roads = L.tileLayer.wms(geoserver, {
-        layers: 'SM:primary_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var motorway = L.tileLayer.wms(geoserver, {
-        layers: 'SM:motorway',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var track = L.tileLayer.wms(geoserver, {
-        layers: 'SM:track',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var direction_arrows = L.tileLayer.wms(geoserver, {
-        layers: 'SM:direction_arrows',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var landuse = L.tileLayer.wms(geoserver, {
-        layers: 'SM:landuse',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var structure = L.tileLayer.wms(geoserver, {
-        layers: 'SM:structure',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var points = L.tileLayer.wms(geoserver, {
-        layers: 'SM:points',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var placenames = L.tileLayer.wms(geoserver, {
-        layers: 'SM:placenames',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var airports = L.tileLayer.wms(geoserver, {
-        layers: 'SM:airports',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var maneuver = L.tileLayer.wms(geoserver, {
-        layers: 'SM:maneuver',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var airways = L.tileLayer.wms(geoserver, {
-        layers: 'SM:airways',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var ground = L.tileLayer.wms(geoserver, {
-        layers: 'SM:ground',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-  
-    var aerial = L.tileLayer.wms(geoserver, {
-        layers: 'SM:aerial' ,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var maritime = L.tileLayer.wms(geoserver, {
-        layers: 'SM:maritime' ,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var terrestrial = L.tileLayer.wms(geoserver, {
-        layers: 'SM:terrestrial' ,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    // Capas para mapa venatana emergente
-     var Bmarvel2 = L.tileLayer.wms(wwserver,  {
-        layers: 'bmng200405',
-        format: 'image/jpeg',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    
-    var wwsesat2 = L.tileLayer.wms(wwserver, {
-        layers: 'wwsesat',
-        format: 'image/jpeg',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var msvea2 = L.tileLayer.wms(wwserver, {
-        layers: 'msvea',
-        format: 'image/jpeg',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-      
-    var InegiO2 = L.tileLayer.wms(wwserver, {
-        layers: 'b50',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    //Inicia la declaracion de Overlayers   
-    var evismar2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:evismar',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var waterareas2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:waterareas',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var admin_borders2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:admin_borders',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var buildings2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:buildings',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var hl_roads2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:hl_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var residential2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:residential',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var tertiary_roads2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:tertiary_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var railways2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:railways',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var secondary_roads2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:secondary_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var primary_roads2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:primary_roads',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var motorway2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:motorway',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var track2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:track',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var direction_arrows2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:direction_arrows',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var landuse2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:landuse',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var structure2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:structure',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var points2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:points',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var placenames2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:placenames',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var airports2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:airports',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var maneuver2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:maneuver',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var airways2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:airways',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var ground2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:ground',
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-  
-    var aerial2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:aerial' ,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var maritime2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:maritime' ,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-    var terrestrial2 = L.tileLayer.wms(geoserver, {
-        layers: 'SM:terrestrial' ,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1',
-        attribution: "OSM,MKZ"
-    });
-
-    var baseLayersMapStage = {
-      "Blue Marvel": Bmarvel,
-      "Landsat i 7": wwsesat,
-      "MS Virtual Earth": msvea,
-      "Inegi Ortofotos": InegiO     
-    };
-  
-    var overlaysMapStage = {
-      "Evismar": evismar,
-      "Agua": waterareas,
-      "Fronteras": admin_borders,
-      "Edifcios": buildings,
-      "Carreteras": hl_roads,
-      "Patios de maniobra": maneuver,
-      "Calles de Colonias": residential,
-      "Caminos de tercer orden": tertiary_roads,
-      "Vias de tren": railways,
-      "Caminos secundarios": secondary_roads,
-      "Caminos primarios": primary_roads,
-      "Caminos en general": motorway,
-      "Caminos peatonales": track,
-      "Sentido de las calles": direction_arrows,
-      "Uso de Suelo": landuse,
-      "Estructuras": structure,
-      "Puntos de interes": points,
-      "Aeropuertos": airports,
-      "Aerovias": airways,            
-      "Nombres de lugares": placenames,
-      "Datos Aereos": aerial,
-      "Datos Maritimos": maritime,
-      "Datos Terrestres": terrestrial,
-      "Datos de Terreno": ground
-      };
-
-      var baseLayersMapModal = {
-        "Blue Marvel": Bmarvel2,
-        "Landsat i 7": wwsesat2,
-        "MS Virtual Earth": msvea2,
-        "Inegi Ortofotos": InegiO2     
-      };
-
-      var overlaysMapModal = {
-      "Evismar": evismar2,
-      "Agua": waterareas2,
-      "Fronteras": admin_borders2,
-      "Edifcios": buildings2,
-      "Carreteras": hl_roads2,
-      "Patios de maniobra": maneuver2,
-      "Calles de Colonias": residential2,
-      "Caminos de tercer orden": tertiary_roads2,
-      "Vias de tren": railways2,
-      "Caminos secundarios": secondary_roads2,
-      "Caminos primarios": primary_roads2,
-      "Caminos en general": motorway2,
-      "Caminos peatonales": track2,
-      "Sentido de las calles": direction_arrows2,
-      "Uso de Suelo": landuse2,
-      "Estructuras": structure2,
-      "Puntos de interes": points2,
-      "Aeropuertos": airports2,
-      "Aerovias": airways2,            
-      "Nombres de lugares": placenames2,
-      "Datos Aereos": aerial2,
-      "Datos Maritimos": maritime2,
-      "Datos Terrestres": terrestrial2,
-      "Datos de Terreno": ground2
-      };
     
 var mapStage = new L.Map('mapStage', 
     { layers: [Bmarvel],
       crs: L.CRS.EPSG4326, 
       center: [19.2, -96.1], 
       zoom: 6,
-      attribution: 'Cesedam'
+      attribution: 'Cesedam',
+      attributionControl: false,
     });
 L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);
 
@@ -536,7 +24,8 @@ var mapModalStage = L.map('dvMdlMapStage',
 {layers: [Bmarvel2],
   crs: L.CRS.EPSG4326,
   center: [19.2, -96.1],
-  zoom: 6
+  zoom: 6,
+  attributionControl: false,
 });
 
 L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);
@@ -569,6 +58,9 @@ let isCreate = false;
 var latLng = null;
 var cabinConfigurationTemp = {};
 var unitsSelectedsArray = [];
+var computers = [];
+var LIGHTS = ['LUZ DE DIA','LUZ DE BATALLA','SIN LUCES'];
+
 
 form.validationEngine('attach', {
     promptPosition : "centerRight", 
@@ -579,13 +71,20 @@ form.validationEngine('attach', {
 
 function beforeCall(){
     isCreate = true;
-    $('#div_for_inputs').append('<input type=hidden name='+itemLast.key+' id='+itemLast.key+' value='+form.serialize()+' />');
+    $('#div_for_inputs').append('<input type=hidden name='+itemLast.key+' id='+itemLast.key+' value='+form.serialize()+'&computers='+computers+'&unit_id='+cabinConfigurationTemp.unitId+' />');
     $("#fModal").modal('hide');
-    
 }
 
 $('#button_config').on('click',function(){
-    
+    var computersTemp = [];   
+    $.each($("button[name*='computers']"),function(index,button){
+        if($(button).hasClass("active")){
+            computers.push($(button).val());
+            console.log(button.textContent);
+            computersTemp.push(button.textContent); 
+        }
+    });
+
     try {
         cabinConfigurationTemp.cabinId = itemLast.key;
         cabinConfigurationTemp.cabinValue = itemLast.value;
@@ -594,7 +93,9 @@ $('#button_config').on('click',function(){
         cabinConfigurationTemp.course = $('#course').val();
         cabinConfigurationTemp.speed = $('#speed').val();
         cabinConfigurationTemp.altitud = $('#altitude').val();
+        cabinConfigurationTemp.lights = LIGHTS[$('input[name*=type_lights').val()];
         cabinConfigurationTemp.latLng = latLng;
+        cabinConfigurationTemp.computers = computersTemp;
 
         var marker = new L.Marker(latLng, {draggable:false});
         mapStage.addLayer(marker);
@@ -613,8 +114,8 @@ $('#button_config').on('click',function(){
         unit.speed = cabinConfigurationTemp.speed;
         unit.altitud = cabinConfigurationTemp.altitud;
         unit.latLng = cabinConfigurationTemp.latLng;
+        unit.marker = marker;
         unitsSelectedsArray.push(unit);
-        console.log(unitsSelectedsArray);
     }catch(err) {
     }
     form.submit();
@@ -627,23 +128,69 @@ $('.modal').on('hidden.bs.modal',function(){
     form[0].reset();
 });
 
-$('.modal').on('shown.bs.modal',function(){
+$('.modal').on('show.bs.modal',function(){
     isCreate = false;
-    mapModalStage.invalidateSize(); 
+    computers = [];
+   
     var group = L.latLngBounds([[$("#northeast").val().split(",")[0], $("#northeast").val().split(",")[1]], [$("#southwest").val().split(",")[0], $("#southwest").val().split(",")[1]]]);
     mapModalStage.fitBounds(group);
-    mapModalStage.setZoom(9);
+    mapModalStage.setZoom(6);
+    setTimeout(function(){  
+        mapModalStage.invalidateSize();
+    }, 1000); 
+    //mapModalStage.setZoom(9);
 });
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+
+
+/**
+* Get computers and devices
+*
+*/
+function getComputers(cabinId){
+    $.ajax({
+        type    : "GET",
+        url     : "http://127.0.0.1:8000/catalog/cabin/"+cabinId,
+        dataType: "json",
+        data    : { id:cabinId },
+        success : function(response) {
+            $.each(response.computers,function(index,computer){
+                var button = $("<button name='computers[]' id='computers' value="+computer.id+" class='btn btn-default active' title='Dirección IP :"+computer.ip_address+"\n Etiqueta : "+computer.label_arduino+"'><span class='icosg-screen'></span> "+computer.name+"</button>");
+                $('#container_computers').append(button);
+            });
+        },
+        error: function(e) {
+            console.log(e.responseText);
+        },
+        beforeSend(jqXHR,settings){
+            $('#container_computers').empty();
+        }
+    });
+}
 
 /**
 *Devuelve los datos
 *formateados
 */
 function messageFormat(cabinConfigurationTemp){
-    return "<b><center>"+cabinConfigurationTemp.cabinValue+"</center></b><br />"+
+    var message = "<b><center>"+cabinConfigurationTemp.cabinValue+"</center></b><br />"+
            "Unidad : <b>"+cabinConfigurationTemp.unitName+"</b><br />"+
            "Posición : <b>"+cabinConfigurationTemp.latLng+"</b><br />"+
-           "Velocidad : <b>"+cabinConfigurationTemp.speed+unitMeasurement(cabinConfigurationTemp.unitName)+"</b> | Rumbo :  <b>"+cabinConfigurationTemp.course+"º</b><br />";
+           "Velocidad : <b>"+cabinConfigurationTemp.speed+unitMeasurement(cabinConfigurationTemp.unitName)+
+           "</b> | Rumbo :  <b>"+cabinConfigurationTemp.course+"º</b><br />"+
+           "Luces : <b>"+cabinConfigurationTemp.lights+"</b><br /><br />"+
+           "<b><center>COMPUTADORAS</center></b><br />";
+           var computer = "";
+           $.each(cabinConfigurationTemp.computers,function(index,computerName){
+                computer+= "<b>"+(index+1)+".-"+computerName+"</b><br />";
+           });
+    return message+computer;
 }
 
 

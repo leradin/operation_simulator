@@ -124,6 +124,7 @@ return [
     'mac_address_arduino' =>'Dirección Fisíca  de Arduino',
     'label_arduino' => 'Etiqueta Arduino',
     'ip_address_camera' => 'Dirección IP Cámara',
+    'port_camera' => 'Puerto de Switch Cámara',
     'computers' => 'Computadoras',
     'computer' => 'Computadora',
     'devices' => 'Dispositivos',
@@ -167,6 +168,19 @@ return [
     'directors' => 'Directores',
     'stage' => 'Escenario',
     'number_engines' => 'Número de Motores',
+    'lights' => 'Luces',
+    'daylight' => 'Luz de Día',
+    'battle_light' => 'Luz de Combate',
+    'without_lights' => 'Sin Luces',
+    'bounding_box' => 'Delimitador de Área',
+    'area' => 'Área',
+    'open_map' => 'Abrir Mapa',
+    'directors' => 'Directores',
+    'km/h' => 'Km/Hora',
+    'scheduled_date_time' => 'Fecha y Hora Programada',
+    'supremed_date_time' => 'Fecha y Hora Suprema (Ejercicio)',
+    'execute_exercise' => 'Ejecutar Ejercicio',
+    'execution_exercise' => 'Ejercicio en ejecución',
     ///////////////////
    
 
@@ -513,6 +527,7 @@ return [
     'required_at_least_1_device' => 'Seleccione al menos 1 dispositivo',
     'required_at_least_1_cabin' => 'Seleccione al menos 1 cabina',
     'required_select_point_on_map' => 'De click sobre el mapa para dar la posición inicial',
+    'required_stage' => 'Seleccione un Escenario',
     // Buttons
     'submit' => 'Enviar',
     'cancel' => 'Cancelar',

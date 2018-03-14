@@ -1,4 +1,8 @@
 <?php
+use SimulatorOperation\Computer;
+use SimulatorOperation\Stage;
+use Illuminate\Http\Request;
+
 /**
 * change plain number to formatted currency
 *
@@ -31,15 +35,28 @@ function getArray($array){
 	}
 	return $arr;
 }
+/**
+* 
+* get only computer relation cabins
+*/
+function getComputersByCabin(Stage $stage, $cabinId){
+    $computers = array();
+    foreach($stage->computers as $computer){
+	    if(Computer::find($computer->id)->cabin->id == $cabinId){
+            array_push($computers,$computer);
+        }            
+    }
+    return $computers;
+}
 
 /**
 * Save file local
 *
 */
-function savedFileLocal($file,$fileName){
+function savedFileLocal($file,$fileName,$isFile = false){
 	$saved = false;
 	try{
-	    \Storage::disk('local')->put($fileName, \File::get($file));
+	    \Storage::disk('local')->put($fileName, (!$isFile) ? \File::get($file) : $file);
 	    $saved = true;
 	}catch(\Exception $error){
 		dd($error);
@@ -97,4 +114,21 @@ function downloadFile($fileName){
 	$public_path = public_path();
  	$url = $public_path.'/storage/'.$fileName;
  	return response()->download($url);
+}
+
+/**
+* Generate datetime
+*
+*/
+function getDateTimeNow(){
+	$carbon = new \Carbon\Carbon();
+	return $date = $carbon->now();
+}
+
+/**
+* Generate format Json
+*
+*/
+function getFormatJson($array){
+	return json_encode($array,JSON_PRETTY_PRINT);
 }

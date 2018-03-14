@@ -4,11 +4,18 @@ namespace SimulatorOperation\Http\Controllers;
 
 use SimulatorOperation\Exercise;
 use SimulatorOperation\Stage;
+use SimulatorOperation\Unit;
 use Illuminate\Http\Request;
+use Lang;
 
 class ExerciseController extends Controller
 {
     private $menu = 'exercise';
+    
+    const TYPES_UNIT = array('superficie' => 1,
+                            'aereo' => 2,
+                            'terrestre_vehiculo' => 3,
+                            'terrestre_pie' => 4);
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +24,9 @@ class ExerciseController extends Controller
     public function index()
     {
         $exercises = Exercise::All();
-        return view('exercise.index',['exercises' => $exercises]);
+        $executeExercise = Exercise::where('is_played',true)->first();
+        return view('exercise.index',['exercises' => $exercises,
+                                      'executeExercise' => $executeExercise]);
     }
 
     /**
@@ -28,42 +37,20 @@ class ExerciseController extends Controller
     public function create()
     {
         $stages = Stage::All();
-        //$client = new \GuzzleHttp\Client(['base_uri' => env('URI_WEBSERVICE')]);
-        /*$request = $client->get('users');
-        $response = $request->getBody();*/
-        //$client->request('POST', 'login', ['auth' => ['enrollment' =>'A-12345678',
-        //    'password' => '123456']]);
-        /*$res = $client->post(env('URI_WEBSERVICE').'users', [
-            'auth' => ['A-12345678', '123456']
-            
-        ]);*/
-        //echo $res->getStatusCode();
+        $token = json_decode(session('api_token'),true);
+        $headers = [
+            'Authorization' => 'Bearer ' . $token['access_token'],        
+            'Accept'        => 'application/json',
+        ];
         $client = new \GuzzleHttp\Client([
-            // Base URI is used with relative requests
-            'base_uri' => 'https://jsonplaceholder.typicode.com/',
-            // You can set any number of default request options.
+            'base_uri' => env('MAINTENANCE_SIMULATOR_URL').'api/',
             'timeout'  => 2.0,
+            'headers' => $headers
         ]);
-        //$guzzle = new \GuzzleHttp\Client;
-
-        $response = $client->request('GET','posts');
-        return json_decode($response->getBody()->getContents());
-        //$content = json_decode((string) $response->getBody()->getContents(), true);
-        //dd($content);
-        /*$guzzle = new \GuzzleHttp\Client;
-
-        $response = $guzzle->get(env('URI_WEBSERVICE').'users', [
-            'form_params' => [
-                'grant_type' => 'password',
-                'client_id' => '5',
-                'client_secret' => '8ImsMDfsLinjlv6IzEm9AYMXN8mdl8xkZ18XGGkd',
-                'scope' => '*'
-            ],
-        ]);
-
-        dd(json_decode((string) $response->getBody(), true));*/
-        //dd($response->getBody());
-        return view('exercise.create',['stages' => $stages]);
+        $response = $client->request('GET','users');
+        $users = json_decode($response->getBody()->getContents(),true); 
+        return view('exercise.create',['stages' => $stages,
+                                        'users' => $users]);
     }
 
     /**
@@ -74,7 +61,126 @@ class ExerciseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request->all());
+        $exercise = Exercise::create([
+            'name'              => $request->name,
+            'description'       => $request->description,
+            'stage_id'          => $request->stage_id,
+            'scheduled_date_time' => $request->scheduled_date_time,
+            'supremed_date_time'=> $request->supremed_date_time,
+            'user_id'         => $request->user_id,
+            'is_played' => false
+        ]);
+
+        
+        //$computers = $stage->computers()->wherePivot('cabin_id',$cabin->id)->get();
+        //$computers = getComputersByCabin($stage,$cabin->id);
+
+
+        //Exercise
+        $exerciseJson = array(
+                'id' => $exercise->id,
+                'name' => $exercise->name,
+                'datetime_root' => $exercise->supremed_date_time,
+                'director_first_id' => $exercise->user_id
+        );
+
+        // Stage 
+        $stageJson = array();
+
+        // Search Stage
+        $stage = Stage::find($request->stage_id);
+        foreach ($stage->cabins as $cabin) {
+
+            // Get lat and lon position 
+            $initPosition = explode(',',$cabin->pivot->init_position);
+            
+            // Add properties for each cabin
+            $dataCabin['init_position']['lat'] =  $initPosition[0];
+            $dataCabin['init_position']['lon'] =  $initPosition[1];
+
+            // Create and add properties for each cabin
+            $dataCabin['course'] = $cabin->pivot->course;
+            $dataCabin['speed'] = $cabin->pivot->speed;
+            $dataCabin['altitude'] = $cabin->pivot->altitude;
+            $dataCabin['lights_type'] = $cabin->pivot->lights_type;
+            $dataCabin['unit_id'] = $cabin->pivot->unit_id;
+            $dataCabin['cabin_id'] = $cabin->id;
+
+            // Add object data cabin to stage
+            $stageJson['cabins'][$cabin->id] = $dataCabin;
+
+            // Find unit
+            $unit = Unit::find($cabin->pivot->unit_id);
+
+
+            // Add object data unit
+            $unitJson = array('id' => $unit->id,
+                                'name' => $unit->name,
+                                'numeral' => $unit->numeral,
+                                'kinect_model' => $unit->unitType->mathematicalModel->name,
+                                'properties' => $this->getPropertiesUnit($unit,$cabin->pivot->speed));
+
+            // Add object unit to cabin
+            $stageJson['cabins'][$cabin->id]['unit'] = $unitJson;
+
+            // Add object info cabin
+            $stageJson['cabins'][$cabin->id]['cabin'] = (object) array('id' => $cabin->id,
+                                                                       'name' => $cabin->name);
+
+            // Add object sensors to cabin
+            foreach ($unit->sensors as $sensor) {
+                // Add object sensor
+                $stageJson['cabins'][$cabin->id]['sensors'][$sensor->name] = (object) array('model' => $sensor->model,
+                                                                        'brand' => $sensor->brand);
+            }
+
+            // Add object sensor
+            $stageJson['cabins'][$cabin->id]['domotic'] =  array('ubicacion' => $cabin->name,
+                                                                 'direccion_ip_camara' => $cabin->ip_address_camera,
+                                                                 'puerto_camara' => $cabin->port_camera,
+                                                                 'dispositivos' =>  array());
+            
+            // Add Lights Type to enable
+            array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA': ($cabin->pivot->lights_type == 1) ? 'LUZ COMBATE':'',
+                    'ACCION' => 'DIGITAL'));
+
+            // Get computers  
+            $computers = $stage->computers()->wherePivot('cabin_id',$cabin->id)->get();
+            foreach ($computers as $computer) {
+                
+                array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'],array('nombre' => $computer->label_arduino,
+                    'accion' => 'ENCENDER'));
+               
+                foreach ($computer->devices as $device) {
+                    if(strpos($device->deviceType->abbreviation,'TV') !== false){
+                        $array['nombre'] = $device->label;
+                        $array['accion'] = 'ENCENDER';
+                        array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], $array);
+                    }
+                    
+                }
+            }
+        }
+
+
+        $configurationFileJson = array();
+        $configurationFileJson['exercise'] =  (object) $exerciseJson;
+        $configurationFileJson['stage'] =  (object) $stageJson;
+
+        // Update data exercise
+        $configurationFile =  getFormatJson($configurationFileJson);
+        $exercise->configuration_file = $configurationFile;
+        $pathConfigurationFile = 'configurationFile/'.$exercise->id.'_'.$exercise->name.'_'.getDateTimeNow().'json';
+        $exercise->path_configuration_file = $pathConfigurationFile;
+        $exercise->save();
+
+        // Save file json
+        savedFileLocal($configurationFile,$pathConfigurationFile,true);
+
+        $message['type'] = 'success';
+        $message['status'] = Lang::get('messages.success_exercise');
+        return redirect($this->menu)->with('message',$message);
     }
 
     /**
@@ -84,8 +190,12 @@ class ExerciseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Exercise $exercise)
-    {
-        //
+    {  
+        try{
+            return downloadFile($exercise->path_configuration_file);
+        }catch(\Exception $error){
+            return redirect($this->menu)->with('message',$error->getMessage())->with('error',1);
+        }
     }
 
     /**
@@ -107,8 +217,13 @@ class ExerciseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Exercise $exercise)
-    {
-        //
+    {   
+        Exercise::where('is_played', 1)->update(['is_played' => 0]);
+        $exercise->fill($request->all());
+        $exercise->save();
+        $message['type'] = 'success';
+        $message['status'] = Lang::get('messages.execute_exercise');
+        return redirect($this->menu)->with('message',$message);
     }
 
     /**
@@ -121,4 +236,97 @@ class ExerciseController extends Controller
     {
         //
     }
+
+    /**
+     * Get properties of Unit.
+     *
+     * @param  \SimulatorOperation\Unit  $unit
+     * @return Array 
+     */
+    private function getPropertiesUnit(Unit $unit,$speed){
+        //Declare array's
+        $properties = array();
+        $timon = array();
+        $motors = array();
+
+        // Get number engines of unit
+        $numberEngines = $unit->number_engines;
+
+        // Verify number engines
+        if($numberEngines == 1){
+            $motors['type'] = $this->getTypeControlUnit($unit->numeral)[1];
+            $motors['position'] = 'center';
+            $motors['health'] = 1;
+            $motors['maxSpeed'] = $this->getTypeControlUnit($unit->numeral,$speed)[2];
+            //$motors['power'] = $this->getTypeControlUnit($unit->numeral)[2] 
+            $timon['type'] = $this->getTypeControlUnit($unit->numeral)[0];
+            $timon['value'] = (object) array('rotation' => 0);
+
+        }else{
+            for($i = 0; $i<$numberEngines; $i++){
+                $motors[$i]['type'] = $this->getTypeControlUnit($unit->numeral)[1];
+                $motors[$i]['position'] = ($i) ? 'left' : 'right';
+                $motors[$i]['health'] = 1;
+                $motors[$i]['maxSpeed'] = $this->getTypeControlUnit($unit->numeral,$speed)[2];
+                //$motors['power'] =  $this->getTypeControlUnit($unit->numeral)[2];
+            }
+            $timon['type'] = $this->getTypeControlUnit($unit->numeral)[0];
+            $timon['value'] = (object) array('rotation' => 0);
+        }
+
+        $properties['motors'] = $motors;
+        $properties['timon'] = $timon;
+        
+        return $properties; 
+    }
+
+    /**
+     * Get type control unit (GUI).
+     *
+     * @param  $numeral
+     * @return Array[2] 
+     */
+    private function getTypeControlUnit($numeral,$speedKmH = 0){
+        if(strpos($numeral,'ANX') !== false || strpos($numeral,'AMP') !== false || strpos($numeral,'AMPH') !== false){
+            return array('volante','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']));
+        }
+        if(strpos($numeral,'PO') !== false || strpos($numeral,'PC') !== false || strpos($numeral,'PI') !== false){
+            return array('aguja','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']));
+        }
+        if(strpos($numeral,'BASE_IM') !== false || strpos($numeral,'VEHICUL') !== false || strpos($numeral,'MOVIL') !== false){
+            return array('control','control',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']));
+        }
+    }
+
+     /**
+     * Convert km/h to knots.
+     *
+     * @param  $speedKmH
+     * @return $speedKnot
+     */
+    private function convertKmHToKnot($speedKmH,$unitType){
+        $speedKnot = null;
+        switch ($unitType) {
+            case ExerciseController::TYPES_UNIT['superficie']:
+                $speedKnot = (($speedKmH) * 25) / (46.30);
+                $speedKnot =  round($speedKnot/5); 
+                break;
+
+            case ExerciseController::TYPES_UNIT['aereo']:
+                $speedKnot = (($speedKmH) * 2211) / (4096);
+                $speedKnot =  round($speedKnot/211); 
+                break;
+
+            case ExerciseController::TYPES_UNIT['terrestre_vehiculo']:
+                $speedKnot = (($speedKmH) * 161) / (300);
+                break;
+
+            case ExerciseController::TYPES_UNIT['terrestre_pie']:
+                $speedKnot = (($speedKmH) * 27) / (50);
+                break;
+        }
+        return $speedKnot;
+    }
+
+
 }

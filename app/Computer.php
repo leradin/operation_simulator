@@ -58,6 +58,13 @@ class Computer extends Model
     }
 
     /**
+    * Get the stages record associated with many computer.
+    */
+    public function stages(){
+        return $this->belongsToMany('SimulatorOperation\Stage')->withPivot('cabin_id')->withTimestamps();
+    }
+
+    /**
      * Get the user's full name.
      *
      * @return string

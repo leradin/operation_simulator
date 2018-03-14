@@ -24,7 +24,7 @@ class ComputersTableSeeder extends Seeder
 	                'ip_address' => '192.168.214.'.$i,
 	                'mac_address' => 'FF:FC:E3:33:FF:5'.$i,
 	                'cabin_id' => $cabin->id,
-	                'label_arduino' => 'LABEL',
+	                'label_arduino' => 'PC'.$i,
 	                'computer_type_id' => $computerType->id,
 	                'created_at' => $date,
 	                'updated_at' => $date

@@ -54,7 +54,7 @@
                                     <td>
                                         @foreach($computer->devices()->get() as $device)
                                             <ul class="jqueryFileTree">
-                                                <li class="directory">
+                                                <li class="devices">
                                                     <a>{{ $device->full_name }}</a>
                                                 </li>
                                         </ul>

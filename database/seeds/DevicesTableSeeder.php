@@ -14,7 +14,7 @@ class DevicesTableSeeder extends Seeder
     {
         $computers = \SimulatorOperation\Computer::all();
         $deviceTypes = \SimulatorOperation\DeviceType::all();
-
+    	
         foreach ($computers as $computer) {
         	$i = 1;
 			foreach ($deviceTypes as $deviceType) {
@@ -24,14 +24,15 @@ class DevicesTableSeeder extends Seeder
 	                'description' => 'BLABLABLA',
 	                'ip_address' => '192.168.214.'.$i,
 	                'computer_id' => $computer->id,
-	                'label' => 'LABEL',
-	                'switch_port' => 39,
+	                'label' => ($deviceType->abbreviation == 'TV' ? 'TV'.$i : 'LABEL'),
+	                'switch_port' => 15,
 	                'device_type_id' => $deviceType->id,
 	                'created_at' => $date,
 	                'updated_at' => $date
 	            ));
-	            $i++;
+	           $i = $i+1;
 	        }
+        	
 	    }
     }
 }

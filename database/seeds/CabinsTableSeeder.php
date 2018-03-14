@@ -38,6 +38,7 @@ class CabinsTableSeeder extends Seeder
                 'ip_address_arduino' => $ipArduinos[$i-1],
                 'mac_address_arduino' => 'FF:FC:E3:33:FF:5'.$i,
                 'ip_address_camera' => $ipCameras[$i-1],
+                'port_camera' => 16+$i,
                 'created_at' => $date,
                 'updated_at' => $date
             ));
@@ -49,6 +50,7 @@ class CabinsTableSeeder extends Seeder
                 'ip_address_arduino' => '172.16.197.59:90',
                 'mac_address_arduino' => 'FF:FC:E3:33:FF:50',
                 'ip_address_camera' => '172.16.196.110',
+                'port_camera' => 25,
                 'created_at' => $date,
                 'updated_at' => $date
             ));
@@ -59,6 +61,7 @@ class CabinsTableSeeder extends Seeder
                 'ip_address_arduino' => '172.16.197.50:80',
                 'mac_address_arduino' => 'FF:FC:E3:33:FF:50',
                 'ip_address_camera' => '172.16.196.109',
+                'port_camera' => 16,
                 'created_at' => $date,
                 'updated_at' => $date
             ));

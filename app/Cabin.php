@@ -36,7 +36,8 @@ class Cabin extends Model
     						'name',
     						'ip_address_arduino',
     						'mac_address_arduino',
-							'ip_address_camera'];
+							'ip_address_camera',
+                            'port_camera'];
                             
 	public function computers()
     {

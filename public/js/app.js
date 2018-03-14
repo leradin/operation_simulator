@@ -30102,25 +30102,21 @@ $(document).ready(function(){
                 itemLast.key = value;
                 itemLast.value = text;
                 $(".modal-title").text("Configuración de la cabina "+itemLast.value);
+                getComputers(itemLast.key);
 
             },
             afterDeselect: function(value, text){
                 if(isCreate){
                     notify('Cabinas','Deseleccionada: '+text+'['+value+']');
                     $('#'+value).remove();
-                    mapStage.removeLayer(cabinConfigurationTemp.marker);
+                   
                     var getIndex = unitsSelectedsArray.map(function(item) { return item.cabinId; }).indexOf(value);
-                    console.log(unitsSelectedsArray[getIndex]);
+                     mapStage.removeLayer(unitsSelectedsArray[getIndex].marker);
                     $("#unit_ids").append(new Option(unitsSelectedsArray[getIndex].unitName, unitsSelectedsArray[getIndex].unitId));
                     mapStage.invalidateSize();
-                    console.log("sssdfdf");
-                    // get index of object with id:37
                     var removeIndex = unitsSelectedsArray.map(function(item) { return item.cabinId; }).indexOf(value);
-                    // remove object
                     unitsSelectedsArray.splice(removeIndex, 1);
-                    console.log(unitsSelectedsArray);
                 }
-                //$('#ms_stage').multiSelect('deselect', value);
             }});
 
 

@@ -27,11 +27,13 @@ class Exercise extends Model
      */
     protected $fillable = [	'name',
     						'description',
-    						'is_played',
-    						'configuration_file',
-    						'scheduler',
-    						'datetime_root'];
-
+    						'stage_id',
+    						'scheduled_date_time',
+    						'supremed_date_time',
+    						'user_id',
+                            'is_played',
+                            'configuration_file',
+                            'path_configuration_file'];
    	/**
     * The attributes that aren't mass assignable.
     *
@@ -39,8 +41,7 @@ class Exercise extends Model
  	*/
 	protected $guarded = ['id'];
 
-	/*public function cabins(){
-        return $this->belongsToMany('SimulatorOperation\Cabin')
-        ->withPivot('course', 'speed', 'altitude', 'init_position');
-    }*/
+	public function stage(){
+        return $this->belongsTo('SimulatorOperation\Stage');
+    }
 }

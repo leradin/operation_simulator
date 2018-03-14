@@ -26,11 +26,12 @@
                             <thead>
                                 <tr>
                                     <th width="10%">@lang('messages.id')</th>
-                                    <th width="15%">@lang('messages.name')</th>
+                                    <th width="10%">@lang('messages.name')</th>
                                     <th width="10%">@lang('messages.ip_address_arduino')</th>
                                     <th width="10%">@lang('messages.mac_address_arduino')</th>
                                     <th width="10%">@lang('messages.ip_address_camera')</th>
-                                    <th width="35%">@lang('messages.computers')</th>
+                                    <th width="10%">@lang('messages.port_camera')</th>
+                                    <th width="30%">@lang('messages.computers')</th>
                                     <th width="10%" class="TAC">@lang('messages.tr_actions')</th>
                                 </tr>
                             </thead>
@@ -43,6 +44,7 @@
                                     <td>{{ $cabin->ip_address_arduino }}</td>
                                     <td>{{ $cabin->mac_address_arduino }}</td>
                                     <td>{{ $cabin->ip_address_camera }}</td>
+                                    <td>{{ $cabin->port_camera }}</td>
                                     <td>
                                         @foreach($cabin->computers()->get() as $computer)
                                             <ul  class="jqueryFileTree">
