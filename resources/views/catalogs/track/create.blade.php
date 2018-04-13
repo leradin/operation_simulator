@@ -4,9 +4,6 @@
     {!! Html::style('symbology_2525/renderer.css') !!}
 @endsection
 
-@section('js')
-    <script src="{{ asset('js/general.js') }}"></script>
-@endsection
 @section('breadCrumb')
     <li><a href="{{ url('/') }}">@lang('messages.menu_home')</a></li>
     <li><a href="{{ url('catalog/track') }}">@lang('messages.menu_track')</a></li>
@@ -31,6 +28,8 @@
 @endsection
 @section('js_footer')
     {!! Html::script('symbology_2525/sm-bc.min.js') !!}
+    {!! Html::script('js/track.js') !!}
     {!! Html::script('symbology_2525/custom_track.js') !!}
+    
 @endsection
  

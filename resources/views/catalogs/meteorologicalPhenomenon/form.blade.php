@@ -3,7 +3,7 @@
 
         <div class="col-md-1 TAR">@lang('messages.name')</div>
         <div class="col-md-2">
-            {!! Form::text('name', null, array('placeholder' => __("messages.name"),'class' => 'form-control validate[required,maxSize[50]] text-input','id' => 'name','data-prompt-position' => "bottomLeft")) !!}
+            {!! Form::text('name', null, array('placeholder' => __("messages.name"),'class' => 'form-control validate[required,maxSize[50],custom[onlyLetterNumber]] text-input','id' => 'name','data-prompt-position' => "bottomLeft")) !!}
             <span class="help-block"><small>@lang('messages.required_max_50')</small></span>
         </div>
  
@@ -21,7 +21,7 @@
 
         <div class="col-md-1 TAR">@lang('messages.temperature')</div>
         <div class="col-md-2">
-            {!! Form::text('temperature', null, array('placeholder' => __("messages.temperature"),'class' => 'form-control validate[required,maxSize[5]] text-input','id' => 'temperature','data-prompt-position' => "bottomLeft")) !!}
+            {!! Form::text('temperature', null, array('placeholder' => __("messages.temperature"),'class' => 'form-control validate[required,maxSize[5],custom[integer]] text-input','id' => 'temperature','data-prompt-position' => "bottomLeft")) !!}
             <span class="help-block"><small>@lang('messages.required_max_5')</small></span>
         </div>
     </div>

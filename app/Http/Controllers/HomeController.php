@@ -22,7 +22,7 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('home');
+    {   $user = callWs('user');
+        return view('home',['user' => $user]);
     }
 }

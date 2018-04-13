@@ -22,7 +22,7 @@ class CreateExercisesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->boolean('is_played')->default(false);
             $table->json('configuration_file')->nullable();
-            $table->string('path_configuration_file',50)->nullable();
+            $table->string('path_configuration_file',100)->nullable();
             $table->timestamps();
         });
     }

@@ -5,8 +5,12 @@ namespace SimulatorOperation\Http\Controllers;
 use SimulatorOperation\Exercise;
 use SimulatorOperation\Stage;
 use SimulatorOperation\Unit;
+use SimulatorOperation\MeteorologicalPhenomenon;
+use SimulatorOperation\User;
+use SimulatorOperation\Track;
 use Illuminate\Http\Request;
 use Lang;
+use Validator;
 
 class ExerciseController extends Controller
 {
@@ -37,20 +41,14 @@ class ExerciseController extends Controller
     public function create()
     {
         $stages = Stage::All();
-        $token = json_decode(session('api_token'),true);
-        $headers = [
-            'Authorization' => 'Bearer ' . $token['access_token'],        
-            'Accept'        => 'application/json',
-        ];
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => env('MAINTENANCE_SIMULATOR_URL').'api/',
-            'timeout'  => 2.0,
-            'headers' => $headers
-        ]);
-        $response = $client->request('GET','users');
-        $users = json_decode($response->getBody()->getContents(),true); 
+        $users = callWs('users');
+        $meteorologicalPhenomenons = MeteorologicalPhenomenon::all();
+        $track = new TrackController();
+        $tracks = $track->getTracks();
         return view('exercise.create',['stages' => $stages,
-                                        'users' => $users]);
+                                        'users' => $users,
+                                        'meteorologicalPhenomenons' => $meteorologicalPhenomenons,
+                                        'tracks' => $tracks]);
     }
 
     /**
@@ -61,7 +59,19 @@ class ExerciseController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+      //dd($request->all());
+      $validator = Validator::make(
+        $request->all(), 
+        [  'stage_id' => 'required'],
+        ['stage_id.required' => Lang::get('messages.required_stage')]
+      );
+
+      if ($validator->fails()) {
+        return redirect('exercise/create')
+              ->withErrors($validator)
+              ->withInput();
+      }
+
         $exercise = Exercise::create([
             'name'              => $request->name,
             'description'       => $request->description,
@@ -75,7 +85,7 @@ class ExerciseController extends Controller
         
         //$computers = $stage->computers()->wherePivot('cabin_id',$cabin->id)->get();
         //$computers = getComputersByCabin($stage,$cabin->id);
-
+        $exercise->stages()->attach($request->stage_id);
 
         //Exercise
         $exerciseJson = array(
@@ -84,14 +94,81 @@ class ExerciseController extends Controller
                 'datetime_root' => $exercise->supremed_date_time,
                 'director_first_id' => $exercise->user_id
         );
+        
+
+        // Search Stage
+        $stage = Stage::find($request->stage_id);
+
+        /*$computersId = array();*/
+
+        foreach ($request->student as $string) {
+          $studentId = explode("_",$string)[0];
+          $computerId = explode("_",$string)[1];
+
+          // create users-computers relation 
+          $user = new User([
+            'user_id' => $studentId,
+            'computer_id' => $computerId,
+            'exercise_id' => $exercise->id
+          ]);
+
+          $exercise->users()->save($user);
+          //$computersId[$computerId] = ['user_id' => $studentId];
+        }
+        /*$stage->computers()->sync($computersId,false);*/
+       
+
 
         // Stage 
         $stageJson = array();
 
-        // Search Stage
-        $stage = Stage::find($request->stage_id);
-        foreach ($stage->cabins as $cabin) {
+        // Tracks
+        $tracksJson = array();
 
+        //Constant properties motors
+        $properties['motors'] = [
+                                  array(
+                                    'type' => 'telegrafo',
+                                    'model' => 'modelo A',
+                                    'maxSpeed' => 20,
+                                    'health' => 1,
+                                    'position' => 'left'),
+                                  array(
+                                    'type' => 'telegrafo',
+                                    'model' => 'modelo A',
+                                    'maxSpeed' => 20,
+                                    'health' => 1,
+                                    'position' => 'right')
+                                ];
+
+        foreach ($stage->tracks()->get() as $track) {
+
+          $initPosition = explode(',',$track->pivot->init_position);
+          $temp = array('id' => $track->id,
+                        'name' => $track->name,
+                        'nav_status' => 1, // constant for next version
+                        'mmsi' => random_int (1000 , 1000000),
+                        'position' => array('lat' => $initPosition[0],
+                                            'lon' => $initPosition[1]
+                                          ),
+                        'course' => $track->pivot->course,
+                        'speed' => $track->pivot->speed,
+                        'altitude' => $track->pivot->altitude,
+                        'SIDC' => $track->sidc,
+                        'object_type' => $track->pivot->object_type,
+                        'kinect_model'=> 'standar',
+                        'battle_dimension' => getDataSidc($track->battle_dimension,1),
+                        'identity' => getDataSidc($track->identity,0),
+                        'properties' => $properties,
+                          'timon' => array('type' => 'aguja')
+                      );
+          array_push($tracksJson, $temp);
+        }
+
+
+
+     
+        foreach ($stage->cabins as $cabin) {
             // Get lat and lon position 
             $initPosition = explode(',',$cabin->pivot->init_position);
             
@@ -111,8 +188,7 @@ class ExerciseController extends Controller
             $stageJson['cabins'][$cabin->id] = $dataCabin;
 
             // Find unit
-            $unit = Unit::find($cabin->pivot->unit_id);
-
+            $unit = Unit::with('unitType.mathematicalModel')->find($cabin->pivot->unit_id);
 
             // Add object data unit
             $unitJson = array('id' => $unit->id,
@@ -166,12 +242,13 @@ class ExerciseController extends Controller
 
         $configurationFileJson = array();
         $configurationFileJson['exercise'] =  (object) $exerciseJson;
+        $configurationFileJson['tracks'] =  $tracksJson;
         $configurationFileJson['stage'] =  (object) $stageJson;
 
         // Update data exercise
         $configurationFile =  getFormatJson($configurationFileJson);
         $exercise->configuration_file = $configurationFile;
-        $pathConfigurationFile = 'configurationFile/'.$exercise->id.'_'.$exercise->name.'_'.getDateTimeNow().'json';
+        $pathConfigurationFile = 'configurationFile/'.$exercise->id.'_'.$exercise->name.'_'.getDateTimeNow().'.json';
         $exercise->path_configuration_file = $pathConfigurationFile;
         $exercise->save();
 
@@ -191,6 +268,10 @@ class ExerciseController extends Controller
      */
     public function show(Exercise $exercise)
     {  
+      return view('exercise.show',['exercise' => $exercise]);
+    }
+
+    public function downloadFileConfiguration(Exercise $exercise){
         try{
             return downloadFile($exercise->path_configuration_file);
         }catch(\Exception $error){
@@ -234,7 +315,12 @@ class ExerciseController extends Controller
      */
     public function destroy(Exercise $exercise)
     {
-        //
+        $exercise->stages()->detach();
+        deletedFileLocal($exercise->path_configuration_file);
+        $exercise->delete();
+        $message['type'] = 'success';
+        $message['status'] = Lang::get('messages.remove_exercise');
+        return redirect($this->menu)->with('message',$message);
     }
 
     /**

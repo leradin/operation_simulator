@@ -27,7 +27,7 @@
     </div> 
 @endsection
 @section('modal')
-    <!-- Bootrstrap modal form -->
+    <!-- Bootrstrap modal form cabin -->
     <div id="fModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
                 <div class="modal-content">
@@ -100,10 +100,108 @@
             </div>
         </div>
     </div>            
+    <!-- Bootrstrap modal form track -->
+    <div id="tModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="myModalLabel">Modal</h3>
+                    </div>
+                <div class="modal-body">
+                <div class="row">
+                    <div class="block-fluid">
+                        <form id="form_modal_track">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <span class="top title">@lang('messages.type')</span>
+                                    {!! Form::select('types[]',[1 => 'PI',2 => 'PO',3 => 'KING_AIR',4 => 'BOAT(GO FAST)'], null, ['class' => 'form-control validate[required]','data-prompt-position' => "bottomLeft",'id' => 'types']) !!}
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="top title">@lang('messages.course')</span>
+                                    {!! Form::number('course-track[]',90,array('class' => 'form-control validate[required,min[0],max[360]] text-input','id' => 'course-track','data-prompt-position' => "bottomLeft")) !!}
+                                    <p class="help-block">@lang('messages.extents')</p>                      
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="top title">@lang('messages.speed')</span>
+                                    {!! Form::number('speed-track[]',0,array('class' => 'form-control validate[required,min[0],max[4096]] text-input','id' => 'speed-track','data-prompt-position' => "bottomLeft")) !!}
+                                    <p class="help-block">@lang('messages.km/h')</p>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="top title">@lang('messages.altitude')</span>
+                                    {!! Form::number('altitude-track[]', 0,array('class' => 'form-control validate[required,min[0],max[5000]] text-input','id' => 'altitude-track','data-prompt-position' => "bottomLeft")) !!} 
+                                    <p class="help-block">@lang('messages.meters')</p>    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div id="map-tracks" style="width: 100%; height: 400px; display: inherit;"></div> 
+                                    <p class="help-block">@lang('messages.required_select_point_on_map')</p>
+                                    {!! Form::text('init_position_track_',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_track_','placeholder' => __('messages.init_position'),'data-prompt-position' => "bottomLeft",'readonly' => true)) !!}
+
+                                    {!! Form::hidden('init_position_track',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_track','data-prompt-position' => "bottomLeft")) !!}
+                                </div>
+                            </div>
+                        </form>      
+                    </div>
+                </div>                   
+                </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" id="button_config_track" aria-hidden="true">@lang('messages.save')</button> 
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@lang('messages.close')</button>          
+                    </div>
+            </div>
+        </div>
+    </div>  
+
+    <!-- Bootrstrap modal form meterological phenomenon -->
+    <div id="mModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="myModalLabel">Modal</h3>
+                    </div>
+                <div class="modal-body">
+                <div class="row">
+                    <div class="block-fluid">
+                        <form id="form_modal_meterological_phenomenon">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div id="map-meterological-phenomenon" style="width: 100%; height: 400px; display: inherit;"></div> 
+                                    <p class="help-block">@lang('messages.required_select_point_on_map')</p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        {!! Form::text('init_position_meterological_phenomenon_',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_meterological_phenomenon_','placeholder' => __('messages.init_position'),'data-prompt-position' => "bottomLeft",'readonly' => true)) !!}
+
+                                        {!! Form::hidden('init_position_meterological_phenomenon',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_meterological_phenomenon','data-prompt-position' => "bottomLeft")) !!}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {!! Form::number('radio',0,array('class' => 'form-control validate[required,min[0],max[1000]] text-input','id' => 'radio','data-prompt-position' => "bottomLeft")) !!}
+                                        <p class="help-block">@lang('messages.radio')</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>      
+                    </div>
+                </div>                   
+                </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" id="button_config_meterological_phenomenon" aria-hidden="true">@lang('messages.save')</button> 
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@lang('messages.close')</button>          
+                    </div>
+            </div>
+        </div>
+    </div>            
 @endsection
 @section('js_footer')
     {!! Html::script('leaflet/dist/leaflet.js') !!} 
     {!! Html::script('leaflet/plugins/areaselect/leaflet-areaselect.js') !!}
     {!! Html::script('leaflet/layers.js') !!}
     {!! Html::script('leaflet/custom_stage.js') !!}
+    {!! Html::script('js/stage.js') !!}
 @endsection

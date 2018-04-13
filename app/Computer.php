@@ -64,6 +64,8 @@ class Computer extends Model
         return $this->belongsToMany('SimulatorOperation\Stage')->withPivot('cabin_id')->withTimestamps();
     }
 
+    
+
     /**
      * Get the user's full name.
      *

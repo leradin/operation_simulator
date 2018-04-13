@@ -6,7 +6,6 @@ $(document).ready(function(){
 		    delay: 250
 		}
 	});
-
 	table = $('#table').dataTable({
 		"bPaginate": true,
 		"bSort": true,
@@ -14,15 +13,13 @@ $(document).ready(function(){
 		"bPaging": false,
 		"bDestroy": true,
 		"oLanguage": {
-		    "sUrl": "http://127.0.0.1:8000/js/plugins/datatables/Spanish.js"
+		    "sUrl": appUrl+"js/plugins/datatables/Spanish.js"
 		},
 		"aoColumnDefs": [
-            { "bVisible": false, "aTargets": [0] }
-        ],
-        //"bJQueryUI": true,
-		//"sPaginationType": "full_numbers"
+            { "bVisible": true, "aTargets": [0] }
+        ]
 	});
-
+ 
 	/* Add a click handler to the rows - this could be used as a callback */
 	$("#table tbody tr").click( function( ) {
 		if ( $(this).hasClass('active') ) {
@@ -33,31 +30,13 @@ $(document).ready(function(){
 			var position = table.fnGetPosition(this); // getting the clicked row position
 			var stageId = table.fnGetData(position)[0];
 			$('#stage_id').val(stageId);
+			processData(getStage(stageId));
 		}
 	});
 
 	$(window).bind('resize', function () {
     	table.fnAdjustColumnSizing();
   	});
-
-	// Table Tracks
-	$('#table_tracks').dataTable({
-		"bPaginate": true,
-		"bSort": true,
-		"sSearch" : true,
-		"bPaging":         false,
-		"oLanguage": {
-		    "sUrl": "http://127.0.0.1:8000/js/plugins/datatables/Spanish.js"
-		},
-		"aoColumnDefs": [
-    	{
-    	    "mRender": function ( data, type, row ) {
-                return testRender2(data);
-            },
-            "aTargets": [4]
-        }
-        ]
-	});
 
 	$.datepicker.regional['es'] = {
 	    closeText: 'Cerrar',
@@ -82,21 +61,5 @@ $(document).ready(function(){
 	$.timepicker.setDefaults($.timepicker.regional['es']);
 	$('.datetime').datetimepicker({
 		timeFormat: 'HH:mm:ss'
-	});  
-
-
-	$("#table tbody tr").click( function( e ) {
-		var sTitle;
-        var nTds = $('td', this);
-        var sBrowser = $(nTds[1]).text();
-        var sGrade = $(nTds[-1]).text();
-        if ( $(this).hasClass('row_selected') ) {
-            $(this).removeClass('row_selected');
-        }
-        else {
-            $('#table tr.row_selected').removeClass('row_selected');
-            $(this).addClass('row_selected');
-            
-        }
-    });
+	});
 });

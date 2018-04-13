@@ -7,7 +7,7 @@
             <li><a href="{{ url('catalog/cabin') }}" class="{{ (Request::is('catalog/cabin*')) ? 'active' : '' }}"><span class="icom-delicious"></span><span class="text">@lang('messages.menu_cabin')</span></a></li>
             <li><a href="{{ url('catalog/computer_type') }}" class="{{ (Request::is('catalog/computer_type*')) ? 'active' : '' }}"><span class="icom-archive1"></span><span class="text">@lang('messages.menu_computer_type')</span></a></li>
             <li><a href="{{ url('catalog/computer') }}" class="{{ (Request::is('catalog/computer*')) ? 'active' : '' }}"><span class="icom-screen1"></span><span class="text">@lang('messages.menu_computer')</span></a></li>
-            <li><a href="{{ url('catalog/device_type') }}" class="{{ (Request::is('catalog/device_type/*')) ? 'active' : '' }}"><span class="icom-drawer"></span><span class="text">@lang('messages.menu_device_type')</span></a></li>
+            <li><a href="{{ url('catalog/device_type') }}" class="{{ (Request::is('catalog/device_type*')) ? 'active' : '' }}"><span class="icom-drawer"></span><span class="text">@lang('messages.menu_device_type')</span></a></li>
             <li><a href="{{ url('catalog/device') }}" class="{{ (Request::is('catalog/device*')) ? 'active' : '' }}"><span class="icom-mouse"></span><span class="text">@lang('messages.menu_device')</span></a></li>
             <div class="dr"><span></span></div>
 
@@ -19,13 +19,12 @@
             <li><a href="{{ url('catalog/track') }}" class="{{ (Request::is('catalog/track*')) ? 'active' : '' }}"><span class="icom-target1"></span><span class="text">@lang('messages.menu_track')</span></a></li>
             <li><a href="{{ url('catalog/meteorological_phenomenon') }}" class="{{ (Request::is('catalog/meteorological_phenomenon*')) ? 'active' : '' }}"><span class="icom-cloud"></span><span class="text">@lang('messages.menu_meteorological_phenomenon')</span></a></li>
         </ul>
-        @if (Request::is('catalog') || Request::is('catalog/*'))
-        <div class="control"></div>        
-        
+        <!--@ if (Request::is('catalog') || Request::is('catalog/*'))
+        <!--div class="control"></div-->        
         
         <div class="submain">
             @include('layouts.submenu')            
         </div>
-        @endif
+        <!--@ endif-->
 
    

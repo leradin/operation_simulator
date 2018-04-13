@@ -180,7 +180,21 @@ return [
     'scheduled_date_time' => 'Fecha y Hora Programada',
     'supremed_date_time' => 'Fecha y Hora Suprema (Ejercicio)',
     'execute_exercise' => 'Ejecutar Ejercicio',
+    'finish_exercise' => 'Finalizar Ejercicio',
+    'see_exercise' => 'Ver Datos del Ejercicio',
     'execution_exercise' => 'Ejercicio en ejecución',
+    'relationship_students_computers' => 'Relación estudiantes y computadoras',
+    'effects_metheology' => 'Efectos Meteorológicos',
+    'tracks' => 'Blancos',
+    'add_track' => 'Agregar Blanco',
+    'track_1' => 'Blanco 1',
+    'course_1' => 'Rumbo 1',
+    'speed_1' => 'Velocidad 1',
+    'position_1' => 'Posición 1',
+    'track_type' => 'Tipo de Blanco',
+    'object_type' => 'Tipo de Objeto',
+    'radio' => 'Radio en Kilometros',
+    'bounding_box' => 'Área de escenario',
     ///////////////////
    
 
@@ -531,9 +545,11 @@ return [
     // Buttons
     'submit' => 'Enviar',
     'cancel' => 'Cancelar',
+    'enable' => 'Activar',
     'hide_prompts' => 'Ocultar indicaciones',
     // Errors
     'error_enrollment_duplicate' => 'Matrícula ya existe',
     'error_table_duplicate' => 'No se puede repetir números de mesa en el ejercicio',
-    'error_user_duplicate' => 'No se puede repetir estudiantes en el ejercicio'   
+    'error_user_duplicate' => 'No se puede repetir estudiantes en el ejercicio', 
+    'error_delete_stage' => 'No se puede eliminar un escenario que se encuentre relacionado con algún ejercicio'   
 ];

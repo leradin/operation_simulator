@@ -28,10 +28,10 @@ class MeteorologicalPhenomenonController extends Controller
     public function create()
     {
         $types = getEnumValues('meteorological_phenomenons','type');
-        $windDirections = (getEnumValues('meteorological_phenomenons','wind_direction'));
-        $seaStates = (getEnumValues('meteorological_phenomenons','sea_state'));
-        $cloudTypes = (getEnumValues('meteorological_phenomenons','cloud_type'));
-        $windVelocities = (getEnumValues('meteorological_phenomenons','wind_velocity'));
+        $windDirections = $this->formatedArray((getEnumValues('meteorological_phenomenons','wind_direction')));
+        $seaStates = $this->formatedArray((getEnumValues('meteorological_phenomenons','sea_state')));
+        $cloudTypes = $this->formatedArray((getEnumValues('meteorological_phenomenons','cloud_type')));
+        $windVelocities = $this->formatedArray((getEnumValues('meteorological_phenomenons','wind_velocity')));
         return view('catalogs.meteorologicalPhenomenon.create',['types' => $types,
                                                                 'windDirections' => $windDirections,
                                                                 'seaStates' => $seaStates,
@@ -47,6 +47,7 @@ class MeteorologicalPhenomenonController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
         MeteorologicalPhenomenon::create($request->except('_token'));
         $message['type'] = 'success';
         $message['status'] = Lang::get('messages.success_meteorological_phenomenon');
@@ -73,10 +74,10 @@ class MeteorologicalPhenomenonController extends Controller
     public function edit(MeteorologicalPhenomenon $meteorologicalPhenomenon)
     {
         $types = getEnumValues('meteorological_phenomenons','type');
-        $windDirections = (getEnumValues('meteorological_phenomenons','wind_direction'));
-        $seaStates = (getEnumValues('meteorological_phenomenons','sea_state'));
-        $cloudTypes = (getEnumValues('meteorological_phenomenons','cloud_type'));
-        $windVelocities = (getEnumValues('meteorological_phenomenons','wind_velocity'));
+        $windDirections = $this->formatedArray((getEnumValues('meteorological_phenomenons','wind_direction')));
+        $seaStates = $this->formatedArray((getEnumValues('meteorological_phenomenons','sea_state')));
+        $cloudTypes = $this->formatedArray((getEnumValues('meteorological_phenomenons','cloud_type')));
+        $windVelocities = $this->formatedArray((getEnumValues('meteorological_phenomenons','wind_velocity')));
         return view('catalogs.meteorologicalPhenomenon.edit',['meteorologicalPhenomenon' => $meteorologicalPhenomenon,'types' => $types,'windDirections' => $windDirections,'seaStates' => $seaStates,'cloudTypes' => $cloudTypes,'windVelocities' => $windVelocities]);
     }
 
@@ -108,5 +109,16 @@ class MeteorologicalPhenomenonController extends Controller
         $message['type'] = 'success';
         $message['status'] = Lang::get('messages.remove_meteorological_phenomenon');
         return redirect($this->menu)->with('message',$message);
+    }
+
+    private function formatedArray($array){
+        foreach ($array as $key => $value) {
+            $parameters = explode("?", $key);
+            $forKey = str_replace(' ', '',implode("", $parameters));
+            $forValue = str_replace('_', ' ',implode(" ", $parameters));
+            unset($array[$key]);
+            $array[preg_replace("[\s+]","", $key)] = $forValue;
+        }
+        return $array;
     }
 }

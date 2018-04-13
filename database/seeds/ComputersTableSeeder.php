@@ -29,7 +29,7 @@ class ComputersTableSeeder extends Seeder
 	                'created_at' => $date,
 	                'updated_at' => $date
 	            ));
-	            $i++;
+	            $i = $i+2;
 	        }
 	    }
     }

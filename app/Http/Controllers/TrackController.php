@@ -3,12 +3,14 @@
 namespace SimulatorOperation\Http\Controllers;
 
 use SimulatorOperation\Track;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+use Request;
 use Lang;
 
 class TrackController extends Controller
 {
     private $menu = 'catalog/track';
+    private $folderForSymbology = 'symbology2525c/';
     /**
      * Display a listing of the resource.
      *
@@ -105,5 +107,34 @@ class TrackController extends Controller
         $message['type'] = 'success';
         $message['status'] = Lang::get('messages.remove_track');
         return redirect($this->menu)->with('message',$message);
+    }
+
+    public function saveImageSymbology(Request $request){
+        $imgBase64 = $request->imgBase64;
+        $sidc = $request->sidc;
+
+        $imgBase64 = str_replace('data:image/png;base64,', '', $imgBase64);
+        $imgBase64 = str_replace(' ', '+', $imgBase64);
+        $file = base64_decode($imgBase64);
+        //saving
+        $fileName = $sidc.'.png';
+        savedFileLocal($file,$this->folderForSymbology.$fileName,true);
+    }
+
+    public function getTracks(){
+        $tracks = array();
+
+        foreach (Track::all() as $track) {
+            $trackJson ['text'] = $track->name;
+            $trackJson ['value'] = $track->id;
+            $trackJson ['selected'] = false;
+            $trackJson ['imageSrc'] = env('APP_URL').'getImage/'.$track->sidc;
+            array_push($tracks,$trackJson);
+        }
+        if(Request::ajax()){
+            return response()->json($tracks);
+        }
+        return $tracks;
+        
     }
 }

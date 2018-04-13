@@ -41,7 +41,14 @@ class Exercise extends Model
  	*/
 	protected $guarded = ['id'];
 
-	public function stage(){
+	/*public function stage(){
         return $this->belongsTo('SimulatorOperation\Stage');
+    }*/
+    public function stages(){
+        return $this->belongsToMany('SimulatorOperation\Stage');
+    }
+
+    public function users(){
+        return $this->hasMany('SimulatorOperation\User');
     }
 }

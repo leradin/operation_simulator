@@ -127,6 +127,7 @@ $(document).ready(function(){
                                               }});                                          
     }
     itemLast = {};
+
     // Multiselect    
     if($("#ms").length > 0)
         $("#ms").multiSelect({
@@ -139,6 +140,8 @@ $(document).ready(function(){
 
     if($("#ms_stage").length > 0)
         $("#ms_stage").multiSelect({
+            selectableHeader: "<div class='multipleselect-header'>Seleccionar</div>",
+            selectedHeader: "<div class='multipleselect-header'>Seleccionado</div>",
             afterSelect: function(value, text){
                 notify('Cabinas','Seleccionada: '+text+'['+value+']');
                 $("#fModal").modal('show');
@@ -146,6 +149,7 @@ $(document).ready(function(){
                 itemLast.value = text;
                 $(".modal-title").text("Configuración de la cabina "+itemLast.value);
                 getComputers(itemLast.key);
+                isMeterologicalPhenomenon = true;
 
             },
             afterDeselect: function(value, text){
@@ -159,6 +163,35 @@ $(document).ready(function(){
                     mapStage.invalidateSize();
                     var removeIndex = unitsSelectedsArray.map(function(item) { return item.cabinId; }).indexOf(value);
                     unitsSelectedsArray.splice(removeIndex, 1);
+                }
+            }});
+
+    itemTrackLast = {};
+    if($("#ms_track").length > 0)
+        $("#ms_track").multiSelect({
+            selectableHeader: "<div class='multipleselect-header'>Seleccionar</div>",
+            selectedHeader: "<div class='multipleselect-header'>Seleccionado</div>",
+            afterSelect: function(value, text){
+                notify('Blanco','Seleccionado: '+text+'['+value+']');
+                $("#tModal").modal('show');
+                itemTrackLast.key = value;
+                itemTrackLast.value = text;
+                $(".modal-title").text("Configuración del blanco "+itemTrackLast.value);
+                //getComputers(itemLast.key);
+                isMeterologicalPhenomenon = true;
+
+            },
+            afterDeselect: function(value, text){
+                if(isCreate){
+                    notify('Blanco','Deseleccionada: '+text+'['+value+']');
+                    $('#'+value).remove();
+                   
+                    var getIndex = tracksSelectedsArray.map(function(item) { return item.trackId; }).indexOf(value);
+                    mapStage.removeLayer(tracksSelectedsArray[getIndex].marker);
+                    //$("#unit_ids").append(new Option(unitsSelectedsArray[getIndex].unitName, unitsSelectedsArray[getIndex].unitId));
+                    mapStage.invalidateSize();
+                    var removeIndex = tracksSelectedsArray.map(function(item) { return item.trackId; }).indexOf(value);
+                    tracksSelectedsArray.splice(removeIndex, 1);
                 }
             }});
 
@@ -701,7 +734,7 @@ $(window).load(function(){
 });
 
 $('.wrapper').resize(function(){
-
+    
     if($("#wysiwyg").length > 0) editor.refresh();
     if($("#mail_wysiwyg").length > 0) m_editor.refresh();
     

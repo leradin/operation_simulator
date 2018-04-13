@@ -2,6 +2,7 @@
 <html lang="en">
 <head>        
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     
     <!--[if gt IE 8]>
@@ -19,6 +20,9 @@
     <script src="{{ mix('js/app.js')}}"></script>
     @yield('css')
     @yield('js') 
+    <script>
+    window.appUrl = '{{ env('APP_URL') }}';
+    </script>
 
 </head>
 <body>    
@@ -26,11 +30,10 @@
     <div class="header">
         @include('layouts.header')
     </div>
-
+    
     <div class="navigation">
         @include('layouts.menu')
     </div>
-    
 
     @if(!Request::is('/'))
         <div class="breadCrumb clearfix">    
@@ -50,6 +53,7 @@
 
     @yield('modal')
     @yield('js_footer')
-
+    
+    <script src="http://localhost:35729/livereload.js"></script>
 </body>
 </html>

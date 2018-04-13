@@ -25,8 +25,8 @@ class UnitEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:50|regex:/(^[A-Za-z0-9 ]+$)+/|exists:mathematical_models,name',
-            'path' => 'required|file',
+            'name' => 'required|max:50',//exists:mathematical_models,name',
+            //'path' => 'required|file',
             'unit_type_id' => 'exists:mathematical_models,unit_type_id'
         ];
     }
@@ -35,7 +35,7 @@ class UnitEditRequest extends FormRequest
         return [
             'station' => Lang::get('messages.station'),
             'numeral' => Lang::get('messages.numeral'),
-            'name' => Lang::get('messages.country'),
+            'name' => Lang::get('messages.name'),
             'serial_number' => Lang::get('messages.serial_number'),
             'number_engines' => Lang::get('messages.number_engines'),
             'country' => Lang::get('messages.country'),

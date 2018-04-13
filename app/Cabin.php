@@ -48,6 +48,10 @@ class Cabin extends Model
         return $this->belongsToMany('SimulatorOperation\Stage');
     }
 
+    public function units(){
+        return $this->belongsToMany('SimulatorOperation\Unit');
+    }
+
     public function getNumComputersAttribute(){
         return count($this->computers);
     }

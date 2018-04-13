@@ -14,10 +14,10 @@
 Auth::routes();
 
 // Controller Home
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home')->middleware('oauth');
 
 // Catalogs
-Route::group(['prefix'=>'catalog', 'as'=>'catalog.'],function(){
+Route::group(['prefix'=>'catalog', 'as'=>'catalog.','middleware' => 'oauth'],function(){
 	// Controller Cabin
 	Route::resource('cabin', 'CabinController');
 
@@ -52,13 +52,24 @@ Route::group(['prefix'=>'catalog', 'as'=>'catalog.'],function(){
 	Route::resource('meteorological_phenomenon','MeteorologicalPhenomenonController');
 
 });
+// Get all mathematical models
+Route::get('kinect_models',function(){
+	return SimulatorOperation\MathematicalModel::select('name')->get();
+});
 
-// Controller Stage
-Route::resource('stage','StageController');
+// Save Image Symbology
+Route::get('saveImageSymbology','TrackController@saveImageSymbology')->name('saveImageSymbology');
+Route::get('getTracks','TrackController@getTracks');
 
-// Controller Exercise
-Route::resource('exercise','ExerciseController');
+Route::middleware(['oauth'])->group(function () {
+	// Controller Stage
+	Route::resource('stage','StageController');
+		Route::get('getStage/{stage_id}','StageController@getStage');
+		Route::get('getStudents','StageController@getStudents');
 
+	// Controller Exercise
+	Route::resource('exercise','ExerciseController');
+});
 /* Redirect for authentication */
 Route::get('redirect', function () {
     $query = http_build_query([
@@ -87,137 +98,19 @@ Route::get('/callback', function (Request $request) {
     // Specifying a default value...
     //session('_token',$response->getBody());
     session(['api_token' => $response->getBody()->getContents()]);
-    return json_decode((string) $response->getBody(), true);
+    return redirect()->route('home');//json_decode((string) $response->getBody(), true);
 });
 
 //Web services
 Route::get('executionExercise',function(){
-	return response()->json(SimulatorOperation\Exercise::where('is_played', 1)->first()->path_configuration_file);
-});
-
-
-
-//Route::get('aaa',function(){
-	
-	//$public_path = public_path();
-	//$url = $public_path.'/storage/mathematicalModel/POModel.js';
-	/*if (\Storage::exists('mathematicalModel/POModel.js'))
-     {
-       return response()->download($url);
-     }
-     //si no se encuentra lanzamos un error 404.
-     abort(404);*/
-	//$commands[] = 'ls -l';
-	//echo base_path().'/app'.\Storage::url('unitImage/jaja.jpeg');
-	//\SSH::into('production')->put($url,env('KINECT_PATH_MODELS'));
-    //\SSH::into('production')->put($url, env('KINECT_PATH_MODELS').'/index.js');
-	// run a command - only works on SSH connections
-	//\SSH::into('production')->run($url, function( $line ) {
-	  // display output of command, by line
-	//  echo $line;
-	//} );
-	//$contents = \Storage::get('unitImage/jaja.jpeg');
-	//$file = \Storage::url('unitImage/jaja.jpeg');
-	//echo $contents->getClientOriginalName();
-	//\SSH::put($file->getRealPath(), '/var/www/html/uploads/' . $file->getFilename());
-	//echo \Storage::url('unitImage/jaja.jpeg');
-//});
-
-//Route::get('ama',function(){
-	//return \SimulatorOperation\Sensor::getPossibleEnumValues('type_sensor');
-	//echo $price = formatNumber(1890199, 'IDR');
-	//dd(getEnumValues('sensors','type_sensor'));
-//});
-
-/*
-Route::prefix('catalog')->group(function () {
-    Route::get('catalog', function () {
-    	return view('catalogs.index');
-    });
-});
-
-/*Route::get('/',[
-	'uses' => 'HomeController@index',
-	'as' => 'home']);
-
-// Controller Exercise
-/*Route::resource('exercise','ExerciseController');
-Route::get('setExerciseByPlayed/{idExercise}',function($idExercise){
-	$exercises = \Cesedam\Exercise::All();
-	foreach ($exercises as $exercise) {
-		$exercise->is_played = "0";
-		$exercise->save();
+	try{
+	return response()->file(public_path().'/storage/'.SimulatorOperation\Exercise::where('is_played', 1)->first()->path_configuration_file);
+	}catch(\Exception $error){
+		return response()->json(0);
 	}
-	$exercise = \Cesedam\Exercise::find($idExercise);
-	$exercise->is_played = "1";
-	$exercise->save();
-	// Redirect to main exercise
-	return redirect('/exercise')->with('message','Ejercicio almacenado correctamente');
-});
-// Controller Stage
-Route::resource('stage', 'StageController');
-// Controller Cabin
-Route::resource('cabin', 'CabinController');
-// Controller Computer
-Route::resource('computer', 'ComputerController');
-// Controller Device
-Route::resource('device', 'DeviceController');
-// Controller User
-Route::resource('user', 'UserController');
-	Route::get('getAllUsers',function(){
-		$users = \Cesedam\User::All();
-		$objects = [];
-		foreach($users as $user){
-			$object = array(
-    			"id" => $user->id,
-    			"text" =>  $user->name." ".$user->lastname." ".$user->thirdname); 
-			array_push($objects,$object);
-		}
-		echo json_encode($objects);
-	});
-// Controller Unit
-Route::resource('unit', 'UnitController');
-// ControllerSensor
-Route::resource('sensor','SensorController');
-// Controller Model 
-Route::resource('modelo','ModeloController');
-// Controller UnitType 
-Route::resource('tipo_unidad','TipoUnidadController');
-// Controller Track
-Route::resource('track','TrackController');
-// Controller SupportMobile
-Route::resource('support_mobile','SupportMobileController');
-// Controller WeatherEffect
-Route::resource('weather_effect','WeatherEffectController');
-
-// Ajax
-Route::get('stageDetail','AjaxController@stageDetail');
-Route::get('cabinDetail','AjaxController@cabinDetail');
-Route::get('getAllTracks',function(){
-	if (Request::ajax())
-	{
-	    $tracks = DB::table('track_catalog')->select('id','name','identity','battle_dimension','sidc')->get();
-	    return Response::json($tracks);
-	} 
 });
 
-//Web services
-Route::get('getFileJson/{path}',function($path){
-	return Response::json(Storage::disk('local')->get('/files_configuration_exercise/'.$path),200);
+Route::get('getImage/{sidc}',function($sidc){
+	$url = public_path().'/storage/symbology2525c/'.$sidc.'.png';
+       return response()->file($url);
 });
-
-Route::get('validateLogin/{email}',function($email){
-	$validate;
-	try {
-	  $user = Cesedam\User::where('email', $email)->first();
-	  if(!$user){
-	  	return response()->json(['response' => '']);
-	  }else{
-	  	return response()->json(['response' => $user]);
-	  }
-	} catch(\Exception $e) {
-	  return response()->json(['response' => '']);
-	}
-})->middleware('cors');
-
-

@@ -1,4 +1,4 @@
-var fontCheckTimer = null,
+    var fontCheckTimer = null,
         retries = 15,
         attempts = 0,
         refreshCount = 0,
@@ -6,14 +6,18 @@ var fontCheckTimer = null,
         battle_dimension = ["P", "A", "G", "S", "U"];
 
         function createSymbology() {
-            var aff = document.getElementById('identity');
-            var value_affiliation = aff.options[aff.selectedIndex].value;
-            var batt = document.getElementById('battle_dimension');
-            var value_battle_dimention = batt.options[batt.selectedIndex].value;
-            var sta = document.getElementById('status');
-            var value_status = sta.options[sta.selectedIndex].value;
-            var value_modifier = "--";
-            testRender(value_affiliation, value_battle_dimention, value_modifier, value_status);
+            try{
+                var aff = document.getElementById('identity');
+                var value_affiliation = aff.options[aff.selectedIndex].value;
+                var batt = document.getElementById('battle_dimension');
+                var value_battle_dimention = batt.options[batt.selectedIndex].value;
+                var sta = document.getElementById('status');
+                var value_status = sta.options[sta.selectedIndex].value;
+                var value_modifier = "--";
+                testRender(value_affiliation, value_battle_dimention, value_modifier, value_status);
+            }catch(err){
+                console.log(err);
+            }
         }
 
         function testRender(affi, batt, modi, stat) {
@@ -82,7 +86,7 @@ var fontCheckTimer = null,
             ctx.lineTo(0, 0);
             ctx.stroke(); //*/
 
-            modifiers = new Object();
+            /*modifiers = new Object();
             modifiers[msa.PixelSize] = 60; 
             var iiTGMP = armyc2.c2sd.renderer.MilStdIconRenderer.Render("WA-DPFCU---L---", modifiers);
             ctx.drawImage(iiTGMP.getImage(), Math.ceil(ii.getImageBounds().getWidth() + iiTG.getImageBounds().getWidth() + 20), 0);
@@ -92,7 +96,7 @@ var fontCheckTimer = null,
                 ctx.strokeStyle = "#0000FF";
                 ctx.lineWidth = 1;
                 symbolBoundsTGMP.stroke(ctx);
-            }
+            }*/
 
             modifiers = new Object();
             modifiers[msa.PixelSize] = 60;
@@ -100,6 +104,8 @@ var fontCheckTimer = null,
             var width = ii.getImageBounds().getWidth();
             var height = ii.getImageBounds().getHeight();
             var dataUri = ii.toDataUrl();
+            saveImageSymbology(dataUri,"S" + affi + batt + stat + "------" + modi + "---");
+            console.log("S" + affi + batt + stat + "------" + modi + "---");
             document.getElementById('sidc').value = "S" + affi + batt + stat + "------" + modi + "---", modifiers;
             var divSymbology = document.getElementById("divSymbology");
             var imgTxt = [];

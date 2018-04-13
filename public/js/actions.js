@@ -216,7 +216,7 @@ $(document).ready(function(){
 
     /* Submain navigation */
 
-    /*var subNav = $.cookies.get('submainNavigation');
+    var subNav = $.cookies.get('submainNavigation');
     var navigation = $.cookies.get('navigation');
     
     var subNavigation = '';
@@ -424,12 +424,12 @@ $(function(){
 
 $(window).load(function(){    
     fix();
+    $(window).trigger('resize');
 });
 
 $(window).resize(function(){
-    fix();    
+    fix();
     $(".navigation").css("height","").height($(document).height()-40);
-    
     if($("body").width() <= 1152 && $("body").width() > 320){
         subNavigation = 'collapsible'; 
         $("body").removeClass('smf smw');
@@ -439,6 +439,7 @@ $(window).resize(function(){
         $("body").removeClass('smf').addClass('smw');
     }
 });
+
 
 function fix(){
     

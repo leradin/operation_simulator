@@ -20,7 +20,7 @@
                 <div class="widget">
                     <div class="head dark">
                         <div class="icon"><span class="icos-gridview"></span></div>
-                        <h2>@lang('messages.create_track')</h2>
+                        <h2>@lang('messages.create_meteorological_phenomenon')</h2>
                     </div>    
                     {!! Form::open(['id' => 'validate', 'name' => 'validate','method' => 'post','route' => 'catalog.meteorological_phenomenon.store','autocomplete' =>'off']) !!}
                         @include('catalogs.meteorologicalPhenomenon.form')

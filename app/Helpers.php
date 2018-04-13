@@ -132,3 +132,66 @@ function getDateTimeNow(){
 function getFormatJson($array){
 	return json_encode($array,JSON_PRETTY_PRINT);
 }
+
+function callWs($endPoint){
+	$token = json_decode(session('api_token'),true);
+    $headers = [
+        'Authorization' => 'Bearer ' . $token['access_token'],        
+        'Accept'        => 'application/json',
+    ];
+    $client = new \GuzzleHttp\Client([
+        'base_uri' => env('MAINTENANCE_SIMULATOR_URL').'api/',
+        'timeout'  => 2.0,
+        'headers' => $headers
+    ]);
+    $response = $client->request('GET',$endPoint);
+    $data = json_decode($response->getBody()->getContents(),true);
+    return $data; 
+}
+
+/* 
+	Identity = 0
+	Battel dimension = 1
+	Status = 2
+*/
+function getDataSidc($char,$parameter){
+	if($parameter == 0){
+	$identity = ['P' => 'pending',
+				'U' => 'unknown',
+				'A' => 'assumed friend',
+				'F' => 'friend',
+				'N' => 'neutral',
+				'S' => 'suspect',
+				'H' => 'hostile',
+				'G' => 'exercise pending',
+				'W' => 'exercise unknown',
+				'M' => 'exercise assumed friend',
+				'D' => 'exercise friend',
+				'L' => 'exercise neutral',
+				'J' => 'joker',
+				'K' => 'faker'];
+		return $identity[$char];
+	}
+
+	if($parameter == 1){
+    	$battleDimension = ['P' => 'space',
+    					'A' => 'air',
+						'G' => 'ground',
+						'S' => 'sea surface',
+						'U' => 'sea subsurface',
+						'F' => 'sof',
+						'X' => 'other',
+						'Z' => 'unknown'];
+		return $battleDimension[$char];
+	}
+
+	if($parameter == 2){
+		$status = ['A' => 'anticipated/planned',
+					'P' => 'present ',
+					'C' => 'present/fully capable',
+					'D' => 'present/damaged',
+					'X' => 'present/destroyed',
+					'F' => 'present/full to capacity'];
+		return $status[$char];
+	}
+}
