@@ -40,5 +40,64 @@ class MeteorologicalPhenomenon extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    /**
+     * Get the meteorological_phenomenon's wind direction.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getWindDirectionAttribute($value)
+    {
+        return str_replace("_"," ",implode(" ",explode("?",$value)));
+    }
+
+    /**
+     * Get the meteorological_phenomenon's sea_state.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getSeaStateAttribute($value)
+    {
+        return str_replace("_"," ",implode(" ",explode("?",$value)));
+    }
+
+    /**
+     * Get the meteorological_phenomenon's cloud_type.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getCloudTypeAttribute($value)
+    {
+        return str_replace("_"," ",implode(" ",explode("?",$value)));
+    }
+
+    /**
+     * Get the meteorological_phenomenon's wind velocity.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getWindVelocityAttribute($value)
+    {
+        return str_replace("_"," ",implode(" ",explode("?",$value)));
+    }
+
+    /**
+     * Get the meteorological_phenomenon's type.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getTypeAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    
+
+
     
 }

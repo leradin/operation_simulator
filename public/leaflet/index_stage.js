@@ -1,5 +1,5 @@
 var map = new L.Map('map', { 
-		layers: [Bmarvel],
+		//layers: [Bmarvel],
 		crs: L.CRS.EPSG4326, 
 	    center: [19.2, -96.1], 
 	    zoom: 9,
@@ -7,7 +7,9 @@ var map = new L.Map('map', {
 	    attributionControl: false,
 	    attribution: 'Cesedam'
 	});
-L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(map);
+//L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
 	/*map.dragging.disable();
 	map.touchZoom.disable();
 	map.doubleClickZoom.disable();

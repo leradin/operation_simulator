@@ -1,5 +1,19 @@
 let mix = require('laravel-mix');
 
+// Live Reload
+var LiveReloadPlugin = require('webpack-livereload-plugin');
+mix.webpackConfig({
+    plugins: [
+        new LiveReloadPlugin()
+    ]
+});
+
+//Read env in JS
+require('dotenv').config();
+let app_url = process.env.APP_URL;
+console.log("aaa"+app_url);
+
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -67,8 +81,11 @@ mix.combine([
     'public/js/plugins/moment/moment-with-locales.js',
     'public/js/plugins/timepicker/dist/jquery-ui-timepicker-addon.min.js',
     'public/js/plugins/timepicker/dist/i18n/jquery-ui-timepicker-addon-i18n.js',
+    'public/js/plugins/rxjs/dist/rx.lite.js',
+    'public/js/plugins/ddSlick/ddSlick.js',
     'public/js/plugins.js',
     'public/js/charts.js',
-    'public/js/actions.js'
+    'public/js/actions.js',
+    'public/js/general.js'
 ], 'public/js/app.js');
 

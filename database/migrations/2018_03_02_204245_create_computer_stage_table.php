@@ -18,6 +18,7 @@ class CreateComputerStageTable extends Migration
             $table->integer('computer_id')->unsigned();
             $table->integer('stage_id')->unsigned();
             $table->integer('cabin_id')->unsigned();
+            //$table->integer('user_id')->unsigned()->nullable();
             $table->foreign('computer_id')->references('id')->on('computers')->onDelete('cascade');
             $table->foreign('stage_id')->references('id')->on('stages')->onDelete('cascade');
             $table->foreign('cabin_id')->references('id')->on('cabins')->onDelete('cascade');

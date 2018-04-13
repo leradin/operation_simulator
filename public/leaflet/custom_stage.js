@@ -1,13 +1,16 @@
     
 var mapStage = new L.Map('mapStage', 
-    { layers: [Bmarvel],
+    { //layers: [Bmarvel],
       crs: L.CRS.EPSG4326, 
       center: [19.2, -96.1], 
       zoom: 6,
       attribution: 'Cesedam',
       attributionControl: false,
     });
-L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);
+
+//L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapStage);
+
 
 // Select area map
 var areaSelect = L.areaSelect({width:200, height:250});
@@ -19,16 +22,17 @@ areaSelect.on("change", function() {
   //$("#northeastP").val(dec2gms(boundsMapStage.getNorthEast().lat,1).valor + ", " + dec2gms(boundsMapStage.getNorthEast().lng,0).valor);
 });
 areaSelect.addTo(mapStage);
-
+/* Map Stage */
 var mapModalStage = L.map('dvMdlMapStage',
-{layers: [Bmarvel2],
+{ //layers: [Bmarvel2],
   crs: L.CRS.EPSG4326,
   center: [19.2, -96.1],
   zoom: 6,
   attributionControl: false,
 });
 
-L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);
+//L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalStage);
 
 var popupMapModalStage = L.popup();
 mapModalStage.on('click', onMapModalClickStage);
@@ -48,18 +52,86 @@ mapModalStage.touchZoom.disable();
 mapModalStage.doubleClickZoom.disable();
 mapModalStage.scrollWheelZoom.disable();
 
+/* Map Track */
+var mapModalTracks = L.map('map-tracks',
+{ //layers: [Bmarvel3],
+  crs: L.CRS.EPSG4326,
+  center: [19.2, -96.1],
+  zoom: 6,
+  attributionControl: false,
+});
+
+//L.control.layers(baseLayersMapModal2, overlaysMapModal2).addTo(mapModalTracks);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalTracks);
+
+var popupMapModalTrack = L.popup();
+mapModalTracks.on('click', onMapModalClickTrack);
+
+function onMapModalClickTrack(e) {
+    popupMapModalTrack
+        .setLatLng(e.latlng)
+        .setContent(e.latlng.toString())
+        .openOn(mapModalTracks);
+    $('#init_position_track').val(e.latlng.lat+","+e.latlng.lng);
+    $('#init_position_track_').val(dec2gms(e.latlng.lat,1).valor+" , "+dec2gms(e.latlng.lng,2).valor);
+    latLng = e.latlng;
+}
+
+mapModalTracks.dragging.disable();
+mapModalTracks.touchZoom.disable();
+mapModalTracks.doubleClickZoom.disable();
+mapModalTracks.scrollWheelZoom.disable();
+
+/* Map Meterological Phenomenon */
+var mapModalMeterologicalPhenomenon = L.map('map-meterological-phenomenon',
+{ //layers: [Bmarvel4],
+  crs: L.CRS.EPSG4326,
+  center: [19.2, -96.1],
+  zoom: 6,
+  attributionControl: false,
+});
+
+//L.control.layers(baseLayersMapModal3, overlaysMapModal3).addTo(mapModalMeterologicalPhenomenon);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalMeterologicalPhenomenon);
+
+
+var popupMapModalMeterologicalPhenomenon = L.popup();
+mapModalMeterologicalPhenomenon.on('click', onMapModalClickMeterologicalPhenomenon);
+
+function onMapModalClickMeterologicalPhenomenon(e) {
+    popupMapModalMeterologicalPhenomenon
+        .setLatLng(e.latlng)
+        .setContent(e.latlng.toString())
+        .openOn(mapModalMeterologicalPhenomenon);
+    $('#init_position_meterological_phenomenon').val(e.latlng.lat+","+e.latlng.lng);
+    $('#init_position_meterological_phenomenon_').val(dec2gms(e.latlng.lat,1).valor+" , "+dec2gms(e.latlng.lng,2).valor);
+    latLng = e.latlng;
+}
+
+mapModalMeterologicalPhenomenon.dragging.disable();
+mapModalMeterologicalPhenomenon.touchZoom.disable();
+mapModalMeterologicalPhenomenon.doubleClickZoom.disable();
+mapModalMeterologicalPhenomenon.scrollWheelZoom.disable();
+
 setTimeout(function(){  
     mapStage.invalidateSize();
     mapModalStage.invalidateSize();
+    mapModalTracks.invalidateSize();
+    mapModalMeterologicalPhenomenon.invalidateSize();
 }, 3000);
 
 var form = $('#form_modal_stage');
+var formTrack = $('#form_modal_track');
+var formMeterologicalPhenomenon = $('#form_modal_meterological_phenomenon');
 let isCreate = false;
 var latLng = null;
 var cabinConfigurationTemp = {};
+var temp = {};
 var unitsSelectedsArray = [];
+var tracksSelectedsArray = [];
 var computers = [];
 var LIGHTS = ['LUZ DE DIA','LUZ DE BATALLA','SIN LUCES'];
+var isMeterologicalPhenomenon  = false;
 
 
 form.validationEngine('attach', {
@@ -69,10 +141,35 @@ form.validationEngine('attach', {
     onBeforeAjaxFormValidation: beforeCall
 });
 
+formTrack.validationEngine('attach', {
+    promptPosition : "centerRight", 
+    scroll: false,
+    ajaxFormValidation: true,
+    onBeforeAjaxFormValidation: beforeCallTrack
+});
+
+formMeterologicalPhenomenon.validationEngine('attach', {
+    promptPosition : "centerRight", 
+    scroll: false,
+    ajaxFormValidation: true,
+    onBeforeAjaxFormValidation: beforeCallMeterologicalPhenomenon
+});
+
 function beforeCall(){
     isCreate = true;
     $('#div_for_inputs').append('<input type=hidden name='+itemLast.key+' id='+itemLast.key+' value='+form.serialize()+'&computers='+computers+'&unit_id='+cabinConfigurationTemp.unitId+' />');
     $("#fModal").modal('hide');
+}
+
+function beforeCallTrack(){
+    isCreate = true;
+    $('#div_for_inputs').append('<input type=hidden name=t'+itemTrackLast.key+' id=t'+itemTrackLast.key+' value='+formTrack.serialize()+'&type='+temp.typeId+' />');
+    $("#tModal").modal('hide');
+}
+
+function beforeCallMeterologicalPhenomenon(){
+    $('#div_for_inputs').append('<input type=hidden name=meterological_phenomenon id=meterological_phenomenon value='+formMeterologicalPhenomenon.serialize()+' />');
+    $("#mModal").modal('hide');
 }
 
 $('#button_config').on('click',function(){
@@ -121,11 +218,66 @@ $('#button_config').on('click',function(){
     form.submit();
 });
 
-$('.modal').on('hidden.bs.modal',function(){
-    if(!isCreate){
-        $('#ms_stage').multiSelect('deselect', itemLast.key);
+$('#button_config_track').on('click',function(){
+    try {
+        temp.trackId = itemTrackLast.key;
+        temp.trackValue = itemTrackLast.value;
+        temp.typeId = $('#types option:selected').val();
+        temp.typeName = $('#types option:selected').text();
+        temp.course = $('#course').val();
+        temp.speed = $('#speed').val();
+        temp.altitud = $('#altitude').val();
+        temp.latLng = latLng;
+
+        var greenIcon = L.icon({
+            iconUrl: '/leaflet/dist/images/marker_track.png',
+            iconSize:     [36, 36], // size of the icon
+            shadowSize:   [50, 64], // size of the shadow
+            iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        var marker = new L.Marker(latLng, {draggable:false, icon: greenIcon });
+        mapStage.addLayer(marker);
+        marker.bindPopup(messageFormatTrack(temp)).openPopup();
+
+        temp.marker = marker;
+
+        $('#types').find('option:first').attr('selected', 'selected').parent('select');
+
+        var track = {};
+        track.trackId = itemTrackLast.key;
+        track.trackName = itemTrackLast.value;
+        track.course = temp.course;
+        track.speed = temp.speed;
+        track.altitud = temp.altitud;
+        track.latLng = temp.latLng;
+        track.marker = marker;
+        tracksSelectedsArray.push(track);
+    }catch(err){
+
     }
-    form[0].reset();
+    formTrack.submit();
+});
+
+$('#button_config_meterological_phenomenon').on('click',function(){
+    formMeterologicalPhenomenon.submit();
+});
+
+$('.modal').on('hidden.bs.modal',function(){
+    try{
+        if(!isCreate){
+            if(isMeterologicalPhenomenon){
+                $('#ms_stage').multiSelect('deselect', itemLast.key);
+                $('#ms_track').multiSelect('deselect', itemTrackLast.key);
+            }
+            form[0].reset();
+            formTrack[0].reset();
+        }
+        formMeterologicalPhenomenon[0].reset();
+    }catch(err){
+
+    }
 });
 
 $('.modal').on('show.bs.modal',function(){
@@ -135,10 +287,15 @@ $('.modal').on('show.bs.modal',function(){
     var group = L.latLngBounds([[$("#northeast").val().split(",")[0], $("#northeast").val().split(",")[1]], [$("#southwest").val().split(",")[0], $("#southwest").val().split(",")[1]]]);
     mapModalStage.fitBounds(group);
     mapModalStage.setZoom(6);
+    mapModalTracks.fitBounds(group);
+    mapModalTracks.setZoom(6);
+    mapModalMeterologicalPhenomenon.fitBounds(group);
+    mapModalMeterologicalPhenomenon.setZoom(6);
     setTimeout(function(){  
         mapModalStage.invalidateSize();
+        mapModalTracks.invalidateSize();
+        mapModalMeterologicalPhenomenon.invalidateSize();
     }, 1000); 
-    //mapModalStage.setZoom(9);
 });
 
 $.ajaxSetup({
@@ -156,7 +313,7 @@ $.ajaxSetup({
 function getComputers(cabinId){
     $.ajax({
         type    : "GET",
-        url     : "http://127.0.0.1:8000/catalog/cabin/"+cabinId,
+        url     : appUrl+"catalog/cabin/"+cabinId,
         dataType: "json",
         data    : { id:cabinId },
         success : function(response) {
@@ -191,6 +348,18 @@ function messageFormat(cabinConfigurationTemp){
                 computer+= "<b>"+(index+1)+".-"+computerName+"</b><br />";
            });
     return message+computer;
+}
+
+/**
+*Devuelve los datos
+*formateados track
+*/
+function messageFormatTrack(temp){
+    var message = "<b><center>"+temp.trackValue+"</center></b><br />"+
+           "Posición : <b>"+temp.latLng+"</b><br />"+
+           "Velocidad : <b>"+temp.speed+" kts"+
+           "</b> | Rumbo :  <b>"+temp.course+"º</b><br />";
+    return message;
 }
 
 

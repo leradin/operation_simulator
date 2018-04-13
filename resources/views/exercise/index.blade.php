@@ -24,7 +24,7 @@
             </div>
             <div class="block">
                 <p>@lang('messages.description') : <b>{{ $executeExercise->description }} </b></p>
-                <p>@lang('messages.stage') : <b>{{ $executeExercise->stage->name }} </b></p>
+                <p>@lang('messages.stage') : <b>{{ $executeExercise->stages()->first()->name }} </b></p>
                 <p>@lang('messages.scheduled_date_time') : <b>{{ $executeExercise->scheduled_date_time }} </b></p>
                 <p>@lang('messages.supremed_date_time') : <b>{{ $executeExercise->supremed_date_time }} </b></p>
             </div>
@@ -62,16 +62,17 @@
                                     <td>{{ $exercise->id }}</td>
                                     <td>{{ $exercise->name }}</td>
                                     <td>{{ $exercise->description }}</td>
-                                    <td>{{ $exercise->stage->name }}</td>
+                                    <td>{{ $exercise->stages()->first()->name }}</td>
                                     <td>{{ $exercise->scheduled_date_time }}</td>
                                     <td>{{ $exercise->supremed_date_time }}</td>
                                     <td class="TAC">
                                         {!! Form::open(['route' => ['exercise.destroy',$exercise],'method' => 'DELETE','onsubmit' => "return confirm('¿Deseas eliminar este ejercicio?');" ]) !!}
-                                            <a class="icon-button" title="@lang('messages.download_file')" href="{{ action('ExerciseController@show',$exercise) }}"><span class="glyphicon glyphicon-file"></span></a>
+                                            <a class="icon-button" title="@lang('messages.see_exercise')" href="{{ action('ExerciseController@show',$exercise) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                            <a class="icon-button" title="@lang('messages.download_file')" href="{{ url('downloadFileConfiguration',$exercise) }}"><span class="glyphicon glyphicon-file"></span></a>
                                             <button class="icon-button btn btn-link" title="Eliminar" type="submit"><span class="glyphicon glyphicon-trash"></span></button> 
                                         {!! Form::close() !!}
                                         {!! Form::open(['route' => ['exercise.update', $exercise,'is_played' => true],'method' => 'PUT']) !!}
-                                            <button class="icon-button btn btn-link" title="@lang('messages.execute_exercise')" type="submit"><span class="glyphicon glyphicon-play"></span></button> 
+                                            <button class="icon-button btn btn-link" title="{{ ($exercise->is_played) ? __("messages.finish_exercise") : __("messages.execute_exercise") }}" type="submit"><span class="glyphicon {{ ($exercise->is_played) ? 'glyphicon-stop' : 'glyphicon-play' }}"></span></button> 
                                         {!! Form::close() !!}
                                     </td>
                                 </tr>   

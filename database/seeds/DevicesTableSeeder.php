@@ -16,22 +16,24 @@ class DevicesTableSeeder extends Seeder
         $deviceTypes = \SimulatorOperation\DeviceType::all();
     	
         foreach ($computers as $computer) {
-        	$i = 1;
+    		$i = 1;
 			foreach ($deviceTypes as $deviceType) {
+
 	        	$date = Carbon::now();
 	            \DB::table('devices')->insert(array(
-	                'name' => 'PC_'.$deviceType->abbreviation,
-	                'description' => 'BLABLABLA',
+	                'name' => $computer->name."_".$computer->id."_".$deviceType->abbreviation,
+	                'description' => $deviceType->abbreviation,
 	                'ip_address' => '192.168.214.'.$i,
 	                'computer_id' => $computer->id,
-	                'label' => ($deviceType->abbreviation == 'TV' ? 'TV'.$i : 'LABEL'),
+	                'label' => ($deviceType->abbreviation == 'TV' ? ("TV".$i) : 'LABEL'),
 	                'switch_port' => 15,
 	                'device_type_id' => $deviceType->id,
 	                'created_at' => $date,
 	                'updated_at' => $date
 	            ));
-	           $i = $i+1;
+	           $i++;
 	        }
+	        
         	
 	    }
     }

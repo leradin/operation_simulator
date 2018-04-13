@@ -13,27 +13,33 @@ class ComputerTypesTableSeeder extends Seeder
     {
     	$date = Carbon\Carbon::now();
 		$data = array(
-    	    array(
-            'name' => 'SISTEMA DE ENLACE DE DATOS DE LA ARMADA DE MEXICO',
-            'abbreviation' => 'SEDAM',
-            'created_at' => $date,
-            'updated_at' => $date
-            ),
 			array(
             'name' => 'COMUNICACION INTERNO CESISCCAM',
             'abbreviation' => 'COICE',
             'created_at' => $date,
             'updated_at' => $date
             ),
-			array(
-            'name' => 'SISTEMA DE RECONOCIMIENTO INTELEGENTE',
-            'abbreviation' => 'ISR',
+            array(
+            'name' => 'MANIOBRAS',
+            'abbreviation' => 'MAN',
             'created_at' => $date,
             'updated_at' => $date
             ),
             array(
-            'name' => 'MANIOBRAS',
-            'abbreviation' => 'MAN',
+            'name' => 'SISTEMA DE ENLACE DE DATOS DE LA ARMADA DE MEXICO',
+            'abbreviation' => 'SEDAM',
+            'created_at' => $date,
+            'updated_at' => $date
+            ),
+            array(
+            'name' => 'RADAR',
+            'abbreviation' => 'RAD',
+            'created_at' => $date,
+            'updated_at' => $date
+            ),
+            array(
+            'name' => 'SISTEMA DE RECONOCIMIENTO INTELEGENTE',
+            'abbreviation' => 'ISR',
             'created_at' => $date,
             'updated_at' => $date
             )

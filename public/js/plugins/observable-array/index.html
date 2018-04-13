@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Observable Array</title>
+		<style>
+			.visible-scripts script {
+				display: block;
+				white-space: pre-wrap;
+			}
+		</style>
+	</head>
+	<body>
+
+		<ul></ul>
+
+<!-- observable-array depends on subscribable.js -->
+<script src="bower_components/subscribable.js/subscribable.js"></script>
+<script src="observable-array.js"></script>
+
+<!-- load DOM Array for adding DOM observers to observable arrays -->
+<script src="bower_components/dom-array/dom-array.js"></script>
+
+<div class="visible-scripts">
+<h3>Create an observable array</h3>
+<script>var nums = new ObservableArray([1, 2, 3]);</script>
+
+<h3>Get notified when it changes</h3>
+<script>nums.on('push', function() {
+	console.log('this: ', this, '\narguments: ', arguments);
+});</script>
+
+<h3>Use all the native Array methods to make changes, loop, etc.</h3>
+<script>
+
+// add 4
+nums.push(4, 5, 6, 7);
+
+
+// remove last 2
+nums.splice(-2);
+
+// try these in the console:
+// .shift() .pop() .unshift() .push() .splice() .reverse() .sort()
+
+// as well as these which don't modify the array:
+// slice, concat, join, some, every, forEach, map, filter, reduce, reduceRight, indexOf, lastIndexOf, toString, toLocaleString</script>
+
+<h3>Add a DOM observer which will get live updates</h3>
+<script>var ul = document.querySelector('ul');
+var listView = new DomArray(nums, ul, function(num) {
+	var li = document.createElement('li');
+	li.textContent = 'number: ' + num;
+	return li;
+});</script>
+
+<h3>Stop observing when you're done</h3>
+<script>// domObserver.stop();</script>
+</div>
+	</body>
+</html>

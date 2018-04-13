@@ -15,11 +15,11 @@
 	                <img src="{{ asset('img/backgrounds/background.png') }}" class="img-thumbnail">
 	            </div>                        
 	            <div class="info">
-	                <h2>{ {  Auth::user()->names } } { {  Auth::user()->lastnames } }</h2>
-	                <p><strong>@lang('messages.enrollment'):</strong> { {  Auth::user()->enrollment }}</p>
-	                <p><strong>@lang('messages.degree'):</strong> { {  Auth::user()->degree->name }}</p>
-	                <p><strong>@lang('messages.ascription'):</strong> { {  Auth::user()->ascription->name }}</p>
-	                <div class="status">{ { Auth::user()->user ? 'Usuario' : 'Estudiante' }}</div>
+	                <h2>{{  $user['names'] }} {{ $user['lastnames'] }}</h2>
+	                <p><strong>@lang('messages.enrollment'):</strong> {{ $user['enrollment'] }}</p>
+	                <p><strong>@lang('messages.degree'):</strong> {{ $user['degree']['name'] }}</p>
+	                <p><strong>@lang('messages.ascription'):</strong> {{ $user['ascription']['name'] }}</p>
+	                <div class="status">{{ $user['user'] ? 'Usuario' : 'Estudiante' }}</div>
 	            </div>
 	        </div>
 	    </div>     

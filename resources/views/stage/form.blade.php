@@ -32,10 +32,56 @@
             <span class="help-block"><small>@lang('messages.required_at_least_1_cabin')</small></span>                   
         </div>
     </div>
+    <!-- Tracks -->
+    <div class="form-group">
+        <div class="col-md-2 TAR">@lang('messages.tracks')</div>
+        <div class="col-md-10">
+            <select id="ms_track" name="track_ids[]" class="form-control text-input" data-prompt-position="bottomLeft" multiple="multiple">
+            @foreach ($tracks as $track)
+                <option value="{{ $track->id }}" data-sidc="{{ $track->sidc }}">{{ $track->name }}</option>
+            @endforeach
+            </select> 
+            <span class="help-block"><small>@lang('messages.optional')</small></span>
+        </div>
+    </div>
 
     <div id="div_for_inputs">
         
-    </div>  
+    </div> 
+
+     <!-- Meteorogical Phenomenons -->
+    <div class="form-group">
+        <div class="col-md-2 TAR">@lang('messages.menu_meteorological_phenomenon')</div>
+        <div class="col-md-10">
+            <table  id="table_meteorological_phenomenons" cellpadding="0" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="5%">@lang('messages.id')</th>
+                        <th width="20%">@lang('messages.name')</th>
+                        <th width="10%">@lang('messages.temperature')</th>
+                        <th width="10%">@lang('messages.type')</th>
+                        <th width="10%">@lang('messages.wind_direction')</th>
+                        <th width="20%">@lang('messages.cloud_type')</th>
+                        <th width="25%">@lang('messages.wind_velocity')</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($meteorologicalPhenomenons as $meteorologicalPhenomenon)
+                        <tr>
+                            <td>{{ $meteorologicalPhenomenon->id }}</td>
+                            <td>{{ $meteorologicalPhenomenon->name }}</td>
+                            <td>{{ $meteorologicalPhenomenon->temperature }}</td>
+                            <td>{{ $meteorologicalPhenomenon->type }}</td>
+                            <td>{{ $meteorologicalPhenomenon->wind_direction }} </td>
+                            <td>{{ $meteorologicalPhenomenon->cloud_type }} </td>
+                            <td>{{ $meteorologicalPhenomenon->wind_velocity }} </td>
+                        </tr>   
+                    @endforeach                          
+                </tbody>
+            </table>
+            {!! Form::hidden('meteorological_phenomenon_id', null, array('class' => 'form-control validate[required] text-input','id' => 'meteorological_phenomenon_id','data-prompt-position' => "bottomLeft")) !!}
+        </div>
+    </div> 
 
     <div class="toolbar bottom TAR">
         <div class="btn-group">

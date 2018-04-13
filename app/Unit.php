@@ -43,6 +43,13 @@ class Unit extends Model
      */
     protected $guarded = ['id'];
 
+    public function stages(){
+        return $this->belongsToMany('SimulatorOperation\Stage');
+    }
+
+    public function cabins(){
+        return $this->belongsToMany('SimulatorOperation\Cabin');
+    }
 
     public function unitType()
     {

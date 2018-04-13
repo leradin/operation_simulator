@@ -7,12 +7,12 @@
             <div class="dropdown">
                 <div class="label"><span class="icos-user2"></span></div>
                 <div class="body" style="width: 160px;">
-                    <div class="itemLink">
+                    <!--div class="itemLink">
                         <a href="#"><span class="glyphicon glyphicon-cog"></span> @ lang('messages.settings')</a>
                     </div>
                     <div class="itemLink">
                         <a href="#"><span class="glyphicon glyphicon-comment"></span> @ lang('messages.messages')</a>
-                    </div>                    
+                    </div-->                    
                     <div class="itemLink">
                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -81,14 +81,14 @@
                                 </div>
                             </div>          
                         </div>
-                        <div class="form-group">
+                        <!--div class="form-group">
                             <div class="col-md-12">
                                 <span class="help-block">Navigation:</span>
                                 <input type="radio" name="navigation" id="fixedNav"/> Fixed 
                                 <input type="radio" name="navigation" id="collapsedNav"/> Collapsible
                                 <input type="radio" name="navigation" id="hiddenNav"/> Hidden
                             </div>                                
-                        </div>
+                        </div-->
                     </div>
                 </div>
             </div>
