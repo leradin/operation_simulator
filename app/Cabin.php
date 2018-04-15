@@ -49,7 +49,8 @@ class Cabin extends Model
     }
 
     public function units(){
-        return $this->belongsToMany('SimulatorOperation\Unit');
+        return $this->belongsToMany('SimulatorOperation\Unit')
+        ->withPivot('unit_id','course', 'speed', 'altitude', 'init_position','lights_type','stage_id');
     }
 
     public function getNumComputersAttribute(){

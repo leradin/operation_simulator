@@ -8,6 +8,7 @@ use SimulatorOperation\Unit;
 use SimulatorOperation\MeteorologicalPhenomenon;
 use SimulatorOperation\User;
 use SimulatorOperation\Track;
+use SimulatorOperation\Cabin;
 use Illuminate\Http\Request;
 use Lang;
 use Validator;
@@ -59,7 +60,6 @@ class ExerciseController extends Controller
      */
     public function store(Request $request)
     {
-      //dd($request->all());
       $validator = Validator::make(
         $request->all(), 
         [  'stage_id' => 'required'],
@@ -268,15 +268,38 @@ class ExerciseController extends Controller
      */
     public function show(Exercise $exercise)
     {  
-      return view('exercise.show',['exercise' => $exercise]);
-    }
+      //dd($exercise
+      //$exercise = Exercise::with('stages.units')->find($exercise->id);
+      $stage = $exercise->stages()->first();
+      $cabins = \DB::table('cabin_stage_unit as A')
+            ->where('A.stage_id',$stage->id)
+            ->join('cabins as C', 'A.cabin_id', '=', 'C.id')
+            ->join('units as U', 'A.unit_id', '=', 'U.id')
+            ->select('C.id','C.name as cabin', 'U.name as unit',
+                    'A.course','A.speed','A.altitude',
+                    'A.init_position','A.lights_type')
+            ->get();
 
-    public function downloadFileConfiguration(Exercise $exercise){
-        try{
-            return downloadFile($exercise->path_configuration_file);
-        }catch(\Exception $error){
-            return redirect($this->menu)->with('message',$error->getMessage())->with('error',1);
-        }
+      $computers = \DB::table('exercises as E')
+            ->where('E.id',$exercise->id)
+            ->join('users as U', 'E.id', '=', 'U.exercise_id')
+            ->join('computers as C', 'U.computer_id', '=', 'C.id')
+            ->select('C.id','C.name as computer','U.user_id')
+            ->get();
+      foreach ($cabins as $key => &$cabin) {
+        $cabin_ = Cabin::with('computers')->find($cabin->id);
+        foreach ($computers as  $key2 => &$computer) {
+          foreach ($cabin_->computers()->get() as $computer_) {
+            if($computer->id == $computer_->id){
+              $cabins[$key]->computers []= (object) array('user' => callWs('user/'.$computer->user_id),
+                          'computer' => $computer_);
+            }
+          }          
+        }        
+      }
+      //dd($cabins);
+      return view('exercise.show',['exercise' => $exercise,
+                                   'cabins' => $cabins]);
     }
 
     /**

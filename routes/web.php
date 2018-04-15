@@ -110,6 +110,14 @@ Route::get('executionExercise',function(){
 	}
 });
 
+Route::get('download_file/{exercise}',function(\SimulatorOperation\Exercise $exercise){
+	try{
+        return downloadFile($exercise->path_configuration_file);
+    }catch(\Exception $error){
+        return redirect('/exercise')->with('message',$error->getMessage())->with('error',1);
+    }
+})->name('download');
+
 Route::get('getImage/{sidc}',function($sidc){
 	$url = public_path().'/storage/symbology2525c/'.$sidc.'.png';
        return response()->file($url);

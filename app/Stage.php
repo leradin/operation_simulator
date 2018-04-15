@@ -52,7 +52,7 @@ class Stage extends Model
     }
 
     public function units(){
-        return $this->belongsToMany('SimulatorOperation\Unit')
+        return $this->belongsToMany('SimulatorOperation\Unit','cabin_stage_unit','stage_id','unit_id')
         ->withPivot('unit_id','course', 'speed', 'altitude', 'init_position','lights_type','stage_id');
     }
 

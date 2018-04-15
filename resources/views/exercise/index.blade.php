@@ -68,7 +68,7 @@
                                     <td class="TAC">
                                         {!! Form::open(['route' => ['exercise.destroy',$exercise],'method' => 'DELETE','onsubmit' => "return confirm('¿Deseas eliminar este ejercicio?');" ]) !!}
                                             <a class="icon-button" title="@lang('messages.see_exercise')" href="{{ action('ExerciseController@show',$exercise) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                            <a class="icon-button" title="@lang('messages.download_file')" href="{{ url('downloadFileConfiguration',$exercise) }}"><span class="glyphicon glyphicon-file"></span></a>
+                                            <a class="icon-button" title="@lang('messages.download_file')" href="{{ route('download',$exercise) }}"><span class="glyphicon glyphicon-file"></span></a>
                                             <button class="icon-button btn btn-link" title="Eliminar" type="submit"><span class="glyphicon glyphicon-trash"></span></button> 
                                         {!! Form::close() !!}
                                         {!! Form::open(['route' => ['exercise.update', $exercise,'is_played' => true],'method' => 'PUT']) !!}

@@ -49,7 +49,7 @@
                                     <td><a href="#modal_map" role="button" class="btn btn-default" data-toggle="modal">@lang('messages.open_map')</a></td>
                                     <td class="TAC">
                                         {!! Form::open(['route' => ['stage.destroy',$stage],'method' => 'DELETE','onsubmit' => "return confirm('¿Deseas eliminar este escenario?');" ]) !!}
-                                            <a href="{{ route('stage.edit',$stage) }}" title="@lang('messages.button_edit')" class="icon-button"><span class="glyphicon glyphicon-pencil"></span></a>
+                                            <!--a href="{ { route('stage.edit',$stage) }}" title="@ lang('messages.button_edit')" class="icon-button"><span class="glyphicon glyphicon-pencil"></span></a-->
                                             <button class="icon-button btn btn-link" title="Eliminar" type="submit"><span class="glyphicon glyphicon-trash"></span></button> 
                                         {!! Form::close() !!}
                                     </td>
