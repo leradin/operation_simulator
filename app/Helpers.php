@@ -133,6 +133,13 @@ function getFormatJson($array){
 	return json_encode($array,JSON_PRETTY_PRINT);
 }
 
+function callWsReport($endPoint){
+	$client = new \GuzzleHttp\Client(['base_uri' => env('REPORT_URL')]);
+	$response = $client->request('GET',$endPoint);
+	$data = json_decode($response->getBody()->getContents(),true);
+    return $data; 
+}
+
 function callWs($endPoint){
 	$token = json_decode(session('api_token'),true);
     $headers = [

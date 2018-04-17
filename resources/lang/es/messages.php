@@ -33,6 +33,7 @@ return [
     'menu_complement' => 'Complementos',
     'menu_track' => 'Blancos',
     'menu_meteorological_phenomenon' => 'Fénomenos Meteorológicos',
+    'menu_report' => 'Reportes',
     ///////////////////////////////////
     //Cabin Message confirmation of action// 
     'create_cabin' => 'Crear Cabina',
@@ -195,6 +196,13 @@ return [
     'object_type' => 'Tipo de Objeto',
     'radio' => 'Radio en Kilometros',
     'bounding_box' => 'Área de escenario',
+    'map_comments' => 'Comentarios Mapa',
+    'video_comments' => 'Comentarios Video',
+    'cabins_number' => 'Número de cabinas',
+    'on_map_events' => 'Eventos de Mapa',
+    'on_video_events' => 'Eventos de Video',
+    'extra_data' => 'Información adicional',
+    'audios_videos' => 'Audios y Videos',
     ///////////////////
    
 
@@ -232,6 +240,13 @@ return [
     'title_edit_exercise' => 'Editar Ejercicio',
     'title_delete_exercise' => 'Eliminar Ejercicio',
     'title_detail_exercise' => 'Detalle Ejercicio',
+    // Columns Report
+    'tr_target' => 'Objetivo',
+    'tr_source' => 'Origen',
+    'tr_commentary' => 'Comentario',
+    'tr_lat_lon' => 'Posición',
+    'tr_course' => 'Rumbo',
+    'tr_date' => 'Fecha y hora',
     // Columns Student
     'tr_enrollment' => 'Matrícula',
     'tr_names'  => 'Nombre(s)',
@@ -250,6 +265,9 @@ return [
     // Columns Exercise
     'tr_assignment' => 'Asignación',
     'tr_table_number' => 'Número de Mesa',
+    //Column Report
+    'tr_audio_video' => 'Audio/Video',
+    'tr_download' => 'Descargar',
     // Degrees
     'title_degree' => 'Grados',
     'title_edit_degree' => 'Editar Grado',

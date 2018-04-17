@@ -323,6 +323,7 @@ class ExerciseController extends Controller
     public function update(Request $request, Exercise $exercise)
     {   
         Exercise::where('is_played', 1)->update(['is_played' => 0]);
+        ($exercise->is_played) ? $exercise->number_of_times_played++ : '';
         $exercise->fill($request->all());
         $exercise->save();
         $message['type'] = 'success';

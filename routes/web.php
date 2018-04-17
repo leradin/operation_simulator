@@ -1,5 +1,6 @@
 <?php
  use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -121,4 +122,33 @@ Route::get('download_file/{exercise}',function(\SimulatorOperation\Exercise $exe
 Route::get('getImage/{sidc}',function($sidc){
 	$url = public_path().'/storage/symbology2525c/'.$sidc.'.png';
        return response()->file($url);
+});
+
+// Report
+Route::get('report','ReportController@index');
+Route::get('mapComments/{idExercise}','ReportController@showMapComments');
+Route::get('videoComments/{idExercise}','ReportController@showVideoComments');
+Route::get('audioVideo/{idExercise}','ReportController@showAudioVideo');
+Route::get('download_file_ftp/{path}','ReportController@download')->name('downloadFTP');
+
+Route::get('/aaa', function() {
+	//$files = Storage::disk('nas')::allFiles("/SO/");
+	$files = Storage::disk('nas')->files(env('FTP_PATH_MULTIMEDIA'), true);
+	//$file = \Storage::disk('nas')->get($files[0]);
+	//$exists = Storage::disk('nas')->exists('vlc-2.0.10-3a.el6.x86_64.rpm');
+	
+	//$file = \Storage::disk('nas')->exists('vlc-2.0.10-3.el6.x86_64.rpm');
+	//return Storage::disk('nas')->download('vlc-2.0.10-3.el6.x86_64.rpm');
+	dd($files);
+
+	//return \Storage::download('vlc-2.0.10-3.el6.x86_64.rpm', 'aaa.wav', []);
+	//return $files[0];
+	/*$file_path = storage_path('nas') . "SO/audios/2/20180403-163430-1001-1103.wav";*/
+    
+    //return response()->download($url);
+
+    //return Response::download($file);
+	//return response()->download($file);
+
+
 });
