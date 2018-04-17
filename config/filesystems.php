@@ -62,6 +62,21 @@ return [
             'region' => env('AWS_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
+        'nas' => [
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST'),
+            'username' => env('FTP_USER'),
+            'password' => env('FTP_PASSWORD'),
+
+            // Settings for SSH key based authentication...
+            // 'privateKey' => '/path/to/privateKey',
+            // 'password' => 'encryption-password',
+
+            // Optional SFTP Settings...
+            'port' => 21,
+            // 'root' => '',
+            'timeout' => 120,
+        ],
 
     ],
 
