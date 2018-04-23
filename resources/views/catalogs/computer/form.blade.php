@@ -31,7 +31,7 @@
 
         <div class="col-md-2 TAR">@lang('messages.cabin')</div>
         <div class="col-md-2">
-            {!! Form::select('cabin_id',$cabins, null, array('placeholder' => __("messages.cabin"),'class' => 'form-control validate[] text-input','id' => 'cabin_id','data-prompt-position' => "bottomLeft",'title' => isset($computer) ? $computer->cabin->name : '' )) !!}           
+            {!! Form::select('cabin_id',$cabins, null, array('placeholder' => __("messages.cabin"),'class' => 'form-control validate[] text-input','id' => 'cabin_id','data-prompt-position' => "bottomLeft",'title' => isset($computer->cabin) ? $computer->cabin->name : '' )) !!}           
             <span class="help-block"><small>@lang('messages.optional')</small></span>
         </div>
 

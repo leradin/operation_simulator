@@ -22,7 +22,9 @@ $(document).ready(function(){
 			$(this).addClass('active');
 			var position = table.fnGetPosition(this); // getting the clicked row position
 			var meteorologicalPhenomenonId = table.fnGetData(position)[0];
+			var meteorologicalPhenomenonName = table.fnGetData(position)[1];
 			$('#meteorological_phenomenon_id').val(meteorologicalPhenomenonId);
+			$("#mModal .modal-title").text("Configuración del Fenomeno Meteorólogico "+meteorologicalPhenomenonName);
 			$("#mModal").modal('show');
 			isMeterologicalPhenomenon = false;
 			//processData(getStage(stageId));

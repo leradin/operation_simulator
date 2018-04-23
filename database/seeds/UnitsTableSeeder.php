@@ -20,7 +20,7 @@ class UnitsTableSeeder extends Seeder
                  'serial_number' => '001',
                  'country' => 'MX',
                  'number_engines' => 1,
-                 'unit_type_id' => 1,
+                 'unit_type_id' => 3,
                  'sensor_id' => 1,
                  'image' => 'image/image.jpg',
                  'created_at' => $date,
@@ -208,7 +208,7 @@ class UnitsTableSeeder extends Seeder
                  'serial_number' => '001',
                  'number_engines' => 1,
                  'country' => 'MX',
-                 'unit_type_id' => 1,
+                 'unit_type_id' => 2,
                  'image' => 'image/image.jpg',
                  'created_at' => $date,
                  'updated_at' => $date
@@ -219,7 +219,7 @@ class UnitsTableSeeder extends Seeder
                  'serial_number' => '001',
                  'number_engines' => 1,
                  'country' => 'MX',
-                 'unit_type_id' => 1,
+                 'unit_type_id' => 2,
                  'image' => 'image/image.jpg',
                  'created_at' => $date,
                  'updated_at' => $date
@@ -230,7 +230,7 @@ class UnitsTableSeeder extends Seeder
                  'serial_number' => '001',
                  'number_engines' => 1,
                  'country' => 'MX',
-                 'unit_type_id' => 1,
+                 'unit_type_id' => 2,
                  'image' => 'image/image.jpg',
                  'created_at' => $date,
                  'updated_at' => $date

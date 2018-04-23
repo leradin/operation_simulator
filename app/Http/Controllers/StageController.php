@@ -6,6 +6,7 @@ use SimulatorOperation\Stage;
 use SimulatorOperation\Cabin;
 use SimulatorOperation\Computer;
 use SimulatorOperation\Unit;
+use SimulatorOperation\UnitType;
 use SimulatorOperation\Track;
 use SimulatorOperation\MeteorologicalPhenomenon;
 use Illuminate\Http\Request;
@@ -33,11 +34,11 @@ class StageController extends Controller
     public function create()
     {
         $cabins = Cabin::get()->pluck('name','id');
-        $units = Unit::get()->pluck('name_with_numeral','id');
+        $unitsTypes = UnitType::with('units')->get();//get()->pluck('name_with_numeral','id');
         $tracks = Track::select('name','id','sidc')->get();
         $meteorologicalPhenomenons = MeteorologicalPhenomenon::all();
         return view('stage.create',['cabins' => $cabins,
-                                    'units' => $units,
+                                    'unitsTypes' => $unitsTypes,
                                     'tracks' => $tracks,
                                     'meteorologicalPhenomenons' => $meteorologicalPhenomenons]);
     }
@@ -53,13 +54,13 @@ class StageController extends Controller
         $stage = Stage::create($request->except('_token','cabin_ids'));
         foreach ($request->cabin_ids as $cabinId) {
             $parameters = explode("&", $request->$cabinId);
-            $unitId = explode('=',$parameters[8])[1];
+            $unitId = explode('=',$parameters[9])[1];
             $course = explode('=',$parameters[1])[1];
             $speed = explode('=',$parameters[2])[1];
             $altitude = explode('=',$parameters[3])[1];
             $initPosition = str_replace("%2C", ",",explode('=',$parameters[5])[1]);
-            $lightsType = explode('=',$parameters[6])[1];
-            $computers = explode('=',$parameters[7])[1];
+            $lightsType = explode('=',$parameters[7])[1];
+            $computers = explode('=',$parameters[8])[1];
             $computers = explode(',', $computers);
             $stage->cabins()->attach($cabinId,['unit_id' => $unitId,
                                                 'course' => $course, 
@@ -110,7 +111,8 @@ class StageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Stage $stage)
-    {
+    { 
+        $data = array();
         $geojson = array('type' => 'FeatureCollection', 'features' => array()) ;
         foreach($stage->cabins as $cabin)
         {
@@ -121,40 +123,61 @@ class StageController extends Controller
             $positionInit = explode(',',$cabin->pivot->init_position);
             $feature = array( 'type' => 'Feature', 
                               'geometry' => array(
-                                            'type' => 'Point',
-                                            'coordinates' => array( (float)$positionInit[1], (float)$positionInit[0])),
-                                            'properties' => array(
-                                                        'name' => $cabin['name'],
-                                                        'show_on_map'=>'true',
-                                                        //'comment' => 'aaaa',
-                                                        'unitName' => Unit::find($cabin->pivot->unit_id),
-                                                        'course' => $cabin->pivot->course,
-                                                        'speed' => $cabin->pivot->speed,
-                                                        'lights' => $cabin->pivot->lights_type,
-                                                        'computers' => $computers
-                                                ));
+                              'type' => 'Point',
+                              'coordinates' => array( (float)$positionInit[1], (float)$positionInit[0])),
+                              'properties' => array(
+                                  'name' => $cabin['name'],
+                                  'show_on_map'=>'true',
+                                  //'comment' => 'aaaa',
+                                  'unitName' => Unit::find($cabin->pivot->unit_id),
+                                  'course' => $cabin->pivot->course,
+                                  'speed' => $cabin->pivot->speed,
+                                  'lights' => $cabin->pivot->lights_type,
+                                  'computers' => $computers,
+                                  'type' => 0,
+            ));
             array_push($geojson['features'], $feature);
         }
 
-        foreach ($stage->tracks() as $track) {
-            dd($track);
-            /*$positionInit = explode(',',$cabin->pivot->init_position);
-            $feature = array( 'type' => 'Feature', 
+        $data['units'] = $geojson;
+
+        $geojsonTrack = array('type' => 'FeatureCollection', 'features' => array()) ;
+        foreach ($stage->tracks()->get() as $track) {
+            $positionInit = explode(',',$track->pivot->init_position);
+            $featureTrack = array( 'type' => 'Feature', 
                               'geometry' => array(
                                             'type' => 'Point',
                                             'coordinates' => array( (float)$positionInit[1], (float)$positionInit[0])),
                                             'properties' => array(
-                                                        'name' => $cabin['name'],
+                                                        'name' => $track['name'],
                                                         'show_on_map'=>'true',
-                                                        //'comment' => 'aaaa',
-                                                        'unitName' => Unit::find($cabin->pivot->unit_id),
-                                                        'course' => $cabin->pivot->course,
-                                                        'speed' => $cabin->pivot->speed,
-                                                        'lights' => $cabin->pivot->lights_type,
-                                                        'computers' => $computers
-                                                ));*/
+                                                        'course' => $track->pivot->course,
+                                                        'speed' => $track->pivot->speed,
+                                                        'altitude' => $track->pivot->altitude,
+                                                        'type' => 1
+                                                ));
+            array_push($geojsonTrack['features'], $featureTrack);
         }
-        return response()->json($geojson);
+        $data['tracks'] = $geojsonTrack;
+
+        $geojsonMeteorologicalPhenomenon = array('type' => 'FeatureCollection', 'features' => array()) ;
+        foreach ($stage->meteorologicalPhenomenons()->get() as $meteorologicalPhenomenon) {
+          $positionInit = explode(',',$meteorologicalPhenomenon->pivot->init_position);
+          $featureMeteorologicalPhenomenon = array( 'type' => 'Feature', 
+                                  'geometry' => array(
+                                    'type' => 'Point',
+                                    'coordinates' => array((float)$positionInit[1], (float)$positionInit[0]),
+                                  ),
+                                  'properties' => array(
+                                    'name' => $meteorologicalPhenomenon['name'],
+                                    'show_on_map'=>'true',
+                                    'radius' => $meteorologicalPhenomenon->pivot->radio*1000,
+                                    'type' => 2
+                                  ));
+          array_push($geojsonMeteorologicalPhenomenon['features'], $featureMeteorologicalPhenomenon);
+        }
+        $data['meteorologicalPhenomenons'] = $geojsonMeteorologicalPhenomenon;
+        return response()->json($data);
     }
 
     /**

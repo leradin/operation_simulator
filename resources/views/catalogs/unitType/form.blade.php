@@ -15,7 +15,7 @@
 
         <div class="col-md-2 TAR">@lang('messages.mathematical_model')</div>
         <div class="col-md-2">
-            {!! Form::select('mathematical_model_id',$mathematicalModels, isset($unitType) ? $unitType->mathematicalModel->id : null, array('placeholder' => __("messages.mathematical_model"),'class' => 'form-control validate[] text-input','id' => 'mathematical_model_id','data-prompt-position' => "bottomLeft")) !!}           
+            {!! Form::select('mathematical_model_id',$mathematicalModels, isset($unitType->mathematicalModel->id) ? $unitType->mathematicalModel->id : null, array('placeholder' => __("messages.mathematical_model"),'class' => 'form-control validate[] text-input','id' => 'mathematical_model_id','data-prompt-position' => "bottomLeft")) !!}           
             <span class="help-block"><small>@lang('messages.optional')</small></span>
         </div> 
     </div>

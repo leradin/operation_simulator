@@ -44,14 +44,12 @@ class ComputerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-
+    public function store(Request $request){
         $computer = Computer::create($request->except('_token'));
         $computerType = ComputerType::find($request->computer_type_id);
         $computerType->computers()->save($computer);
         foreach ($request->device_ids as $deviceId) {
-            $device = Device::find($computerId);
+            $device = Device::find($deviceId);
             $computer->devices()->save($device);
         }
         $message['type'] = 'success';
@@ -95,6 +93,19 @@ class ComputerController extends Controller
     {
         $computer->fill($request->except(['_token']));
         $computer->save();
+
+        $devices = [];
+        foreach ($computer->devices()->get(['id'])->toArray() as &$device) {
+            array_push($devices, $device['id']); 
+        }
+        $result=array_diff($devices,$request->device_ids);
+
+        foreach ($result as $value) {
+            $device = Device::find($value);
+            $device->computer_id = null;
+            $device->save();
+        }
+        
         foreach ($request->device_ids as $deviceId) {
             $device = Device::find($deviceId);
             $computer->devices()->save($device);

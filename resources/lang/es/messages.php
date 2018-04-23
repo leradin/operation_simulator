@@ -203,6 +203,20 @@ return [
     'on_video_events' => 'Eventos de Video',
     'extra_data' => 'Información adicional',
     'audios_videos' => 'Audios y Videos',
+    'dd' => 'Grados Decimales',
+    'ddm' => 'Grados Minutos',
+    'dms' => 'Grados Minutos Segundos',
+    'latitude' => 'Latitud',
+    'longitude' => 'Longitud',
+    'grades' => 'Grados',
+    'minutes' => 'Minutos',
+    'seconds' => 'Segundos',
+    'north' => 'N',
+    'south' => 'S',
+    'east' => 'E',
+    'west' => 'W',
+    'orientation' => 'Orientación',
+
     ///////////////////
    
 

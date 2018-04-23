@@ -42,6 +42,36 @@ class ComputerTypesTableSeeder extends Seeder
             'abbreviation' => 'ISR',
             'created_at' => $date,
             'updated_at' => $date
+            ),
+            array(
+            'name' => 'APOYO INTERNET',
+            'abbreviation' => 'AIN',
+            'created_at' => $date,
+            'updated_at' => $date
+            ),
+            array(
+            'name' => 'SISTEMA DE COMUNICACION DE LA ARMADA DE MEXICO ',
+            'abbreviation' => 'SICCAM',
+            'created_at' => $date,
+            'updated_at' => $date
+            ),
+            array(
+            'name' => 'CRONOLOGIA',
+            'abbreviation' => 'CRO',
+            'created_at' => $date,
+            'updated_at' => $date
+            ),
+            array(
+            'name' => 'ESCENOGRAFIA',
+            'abbreviation' => 'ESC',
+            'created_at' => $date,
+            'updated_at' => $date
+            ),
+            array(
+            'name' => 'ANALISIS DE IMAGEN',
+            'abbreviation' => 'AIM',
+            'created_at' => $date,
+            'updated_at' => $date
             )
         );
         

@@ -1,7 +1,7 @@
     
 var mapStage = new L.Map('mapStage', 
     { //layers: [Bmarvel],
-      crs: L.CRS.EPSG4326, 
+      //crs: L.CRS.EPSG4326, 
       center: [19.2, -96.1], 
       zoom: 6,
       attribution: 'Cesedam',
@@ -25,15 +25,13 @@ areaSelect.addTo(mapStage);
 /* Map Stage */
 var mapModalStage = L.map('dvMdlMapStage',
 { //layers: [Bmarvel2],
-  crs: L.CRS.EPSG4326,
+  //crs: L.CRS.EPSG4326,
   center: [19.2, -96.1],
-  zoom: 6,
   attributionControl: false,
 });
 
 //L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalStage);
-
 var popupMapModalStage = L.popup();
 mapModalStage.on('click', onMapModalClickStage);
 
@@ -45,12 +43,84 @@ function onMapModalClickStage(e) {
     $('#init_position').val(e.latlng.lat+","+e.latlng.lng);
     $('#init_position_').val(dec2gms(e.latlng.lat,1).valor+" , "+dec2gms(e.latlng.lng,2).valor);
     latLng = e.latlng;
+    if(markerCabin != null){
+        mapModalStage.removeLayer(markerCabin);
+        mapModalStage.invalidateSize();
+    }
+    markerCabin = L.marker(e.latlng).addTo(mapModalStage);
+    mapModalStage.invalidateSize();
+    /*var point = new GeoPoint(e.latlng.lng, e.latlng.lat);
+    $('#grade-phi').val(Math.abs(parseInt(point.getLatDeg().split(" ")[0])));
+    $('#minute-phi').val(parseInt(point.getLatDeg().split(" ")[1]));
+    $('#second-phi').val(parseInt(point.getLatDeg().split(" ")[2]));
+    $('#orientation-phi').val((point.getLatDeg().split(" ")[0].startsWith("-")) ? 'S' : 'N').change();
+
+    $('#grade-lambda').val(Math.abs(parseInt(point.getLonDeg().split(" ")[0])));
+    $('#minute-lambda').val(parseInt(point.getLonDeg().split(" ")[1]));
+    $('#second-lambda').val(parseInt(point.getLonDeg().split(" ")[2]));
+    $('#orientation-lambda').val((point.getLonDeg().split(" ")[0].startsWith("-")) ? 'W' : 'E').change();*/
 }
 
-mapModalStage.dragging.disable();
+$("#init_position").on("keyup",function(){
+    $("#init_position_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+});
+
+$("#init_position_track").on("keyup",function(){
+    $("#init_position_track_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+});
+
+$("#init_position_meterological_phenomenon").on("keyup",function(){
+    $("#init_position_meterological_phenomenon_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+});
+
+$(".geopoint").on("change",function(){
+    buildCoordinate();    
+});
+var markerCabin = null;
+var markerTrack = null;
+function buildCoordinate(){
+    if(markerCabin != null){
+        mapModalStage.removeLayer(markerCabin);
+    }
+    var gradePhi = $('#grade-phi').val();
+    var minutePhi = $('#minute-phi').val();
+    var secondPhi = $('#second-phi').val();
+    var orientationPhi = $('#orientation-phi').val();
+    var latitude = /*(orientationPhi == "s" ? "-":"")+*/gradePhi+"° "+minutePhi+"' "+secondPhi+"\" "+orientationPhi;
+
+    var gradeLambda = $('#grade-lambda').val();
+    var minuteLambda = $('#minute-lambda').val();
+    var secondLambda = $('#second-lambda').val();
+    var orientationLambda = $('#orientation-lambda').val();
+    var longitude = /*(orientationLambda == "w" ? "-":"")+*/gradeLambda+"° "+minuteLambda+"' "+secondLambda+"\" "+orientationLambda;
+    var point = new GeoPoint(longitude, latitude);
+ 
+    var latlng;
+    if($('input[name=format_coordinates]:checked').val() == 2){
+        $('#init_position').val(convertDMSToDD(latitude)+","+convertDMSToDD(longitude));//(point.getLatDec()+","+point.getLonDec());
+        $('#init_position_').val(
+            dec2gms(convertDMSToDD(latitude),1).valor+" , "+
+            dec2gms(convertDMSToDD(longitude),2).valor
+        );
+        latlng = L.latLng(convertDMSToDD(latitude),convertDMSToDD(longitude));
+    }else{
+
+        $('#init_position').val(($('#orientation-phi2').val() == "s" ? "-":"")+$('#grade-phi2').val()+","+($('#orientation-lambda2').val() == "w" ? "-":"")+$('#grade-lambda2').val());//(point.getLatDec()+","+point.getLonDec());
+        $('#init_position_').val(
+            dec2gms((($('#orientation-phi2').val() == "s" ? "-":"")+$('#grade-phi2').val()),1).valor+" , "+
+            dec2gms(($('#orientation-lambda2').val() == "w" ? "-":"")+$('#grade-lambda2').val(),2).valor
+        );
+        latlng = L.latLng(($('#orientation-phi2').val() == "s" ? "-":"")+$('#grade-phi2').val(),($('#orientation-lambda2').val() == "w" ? "-":"")+$('#grade-lambda2').val());
+    }
+    markerCabin = L.marker(latlng).addTo(mapModalStage);
+    
+}
+
+
+/*mapModalStage.dragging.disable();
 mapModalStage.touchZoom.disable();
 mapModalStage.doubleClickZoom.disable();
-mapModalStage.scrollWheelZoom.disable();
+mapModalStage.scrollWheelZoom.disable();*/
 
 /* Map Track */
 var mapModalTracks = L.map('map-tracks',
@@ -75,12 +145,62 @@ function onMapModalClickTrack(e) {
     $('#init_position_track').val(e.latlng.lat+","+e.latlng.lng);
     $('#init_position_track_').val(dec2gms(e.latlng.lat,1).valor+" , "+dec2gms(e.latlng.lng,2).valor);
     latLng = e.latlng;
+    if(markerTrack != null){
+        mapModalTracks.removeLayer(markerTrack);
+        mapModalTracks.invalidateSize();
+    }
+    markerTrack = L.marker(e.latlng).addTo(mapModalTracks);
+    mapModalTracks.invalidateSize();
 }
 
-mapModalTracks.dragging.disable();
+$(".geopoint_track").on("change",function(){
+    buildCoordinateTrack();  
+});
+function buildCoordinateTrack(){
+    if(markerTrack != null){
+        mapModalTracks.removeLayer(markerTrack);
+    }
+    var gradePhi = $('#grade-phi_track').val();
+    var minutePhi = $('#minute-phi_track').val();
+    var secondPhi = $('#second-phi_track').val();
+    var orientationPhi = $('#orientation-phi_track').val();
+    var latitude = /*(orientationPhi == "s" ? "-":"")+*/gradePhi+"° "+minutePhi+"' "+secondPhi+"\" "+orientationPhi;
+
+    var gradeLambda = $('#grade-lambda_track').val();
+    var minuteLambda = $('#minute-lambda_track').val();
+    var secondLambda = $('#second-lambda_track').val();
+    var orientationLambda = $('#orientation-lambda_track').val();
+    var longitude = /*(orientationLambda == "w" ? "-":"")+*/gradeLambda+"° "+minuteLambda+"' "+secondLambda+"\" "+orientationLambda;
+    var point = new GeoPoint(longitude, latitude);
+    
+ 
+    var latlng;
+    if($('input[name=format_coordinates_track]:checked').val() == 2){
+        $('#init_position_track').val(convertDMSToDD(latitude)+","+convertDMSToDD(longitude));//(point.getLatDec()+","+point.getLonDec());
+        $('#init_position_track_').val(
+            dec2gms(convertDMSToDD(latitude),1).valor+" , "+
+            dec2gms(convertDMSToDD(longitude),2).valor
+        );
+        latlng = L.latLng(convertDMSToDD(latitude),convertDMSToDD(longitude));
+    }else{
+
+        $('#init_position_track').val(($('#orientation-phi2_track').val() == "s" ? "-":"")+$('#grade-phi2_track').val()+","+($('#orientation-lambda2_track').val() == "w" ? "-":"")+$('#grade-lambda2_track').val());//(point.getLatDec()+","+point.getLonDec());
+        $('#init_position_track_').val(
+            dec2gms((($('#orientation-phi2_track').val() == "s" ? "-":"")+$('#grade-phi2_track').val()),1).valor+" , "+
+            dec2gms(($('#orientation-lambda2_track').val() == "w" ? "-":"")+$('#grade-lambda2_track').val(),2).valor
+        );
+        latlng = L.latLng(($('#orientation-phi2_track').val() == "s" ? "-":"")+$('#grade-phi2_track').val(),($('#orientation-lambda2_track').val() == "w" ? "-":"")+$('#grade-lambda2_track').val());
+    }
+    console.log(markerTrack);
+    markerTrack = L.marker(latlng).addTo(mapModalTracks);
+    
+}
+
+
+/*mapModalTracks.dragging.disable();
 mapModalTracks.touchZoom.disable();
 mapModalTracks.doubleClickZoom.disable();
-mapModalTracks.scrollWheelZoom.disable();
+mapModalTracks.scrollWheelZoom.disable();*/
 
 /* Map Meterological Phenomenon */
 var mapModalMeterologicalPhenomenon = L.map('map-meterological-phenomenon',
@@ -108,10 +228,40 @@ function onMapModalClickMeterologicalPhenomenon(e) {
     latLng = e.latlng;
 }
 
-mapModalMeterologicalPhenomenon.dragging.disable();
+$('input[type=radio][name=format_coordinates]').change(function() {
+    if($(this).val() == 0){
+        $('#dd').show();
+        $('#dms').hide();
+    }
+    if($(this).val() == 2){
+        $('#dd').hide();
+        $('#dms').show();
+    }
+});
+$('input[type=radio][name=format_coordinates_track]').change(function() {
+    if($(this).val() == 0){
+        $('#dd_track').show();
+        $('#dms_track').hide();
+    }
+    if($(this).val() == 2){
+        $('#dd_track').hide();
+        $('#dms_track').show();
+    }
+});
+
+$('.btn-success').live('click',function(){
+    $(this).removeClass('btn-success').addClass('btn-danger');
+});
+
+$('.btn-danger').live('click',function(){
+    $(this).removeClass('btn-danger').addClass('btn-success');
+});
+$('#dms').hide();
+$('#dms_track').hide();
+/*mapModalMeterologicalPhenomenon.dragging.disable();
 mapModalMeterologicalPhenomenon.touchZoom.disable();
 mapModalMeterologicalPhenomenon.doubleClickZoom.disable();
-mapModalMeterologicalPhenomenon.scrollWheelZoom.disable();
+mapModalMeterologicalPhenomenon.scrollWheelZoom.disable();*/
 
 setTimeout(function(){  
     mapStage.invalidateSize();
@@ -132,6 +282,7 @@ var tracksSelectedsArray = [];
 var computers = [];
 var LIGHTS = ['LUZ DE DIA','LUZ DE BATALLA','SIN LUCES'];
 var isMeterologicalPhenomenon  = false;
+var isConfigureCabin = true;
 
 
 form.validationEngine('attach', {
@@ -159,17 +310,28 @@ function beforeCall(){
     isCreate = true;
     $('#div_for_inputs').append('<input type=hidden name='+itemLast.key+' id='+itemLast.key+' value='+form.serialize()+'&computers='+computers+'&unit_id='+cabinConfigurationTemp.unitId+' />');
     $("#fModal").modal('hide');
+    document.getElementById("form_modal_stage").reset();
+    latLng = null;
+
 }
 
 function beforeCallTrack(){
     isCreate = true;
     $('#div_for_inputs').append('<input type=hidden name=t'+itemTrackLast.key+' id=t'+itemTrackLast.key+' value='+formTrack.serialize()+'&type='+temp.typeId+' />');
     $("#tModal").modal('hide');
+    document.getElementById("form_modal_track").reset();
+    latLng = null;
 }
 
 function beforeCallMeterologicalPhenomenon(){
+    createMeteorologicalPhenomenon($('#init_position_meterological_phenomenon').val(),$('#radio').val());
     $('#div_for_inputs').append('<input type=hidden name=meterological_phenomenon id=meterological_phenomenon value='+formMeterologicalPhenomenon.serialize()+' />');
     $("#mModal").modal('hide');
+}
+
+function createMeteorologicalPhenomenon(coordinate,radius){
+    var latlng = L.latLng(coordinate.split(",")[0],coordinate.split(",")[1]);
+    var circle = L.circle(latlng,(radius*1000)).bindPopup("Fenomeno Meterologico con radio de "+radius+" KM").addTo(mapStage);
 }
 
 $('#button_config').on('click',function(){
@@ -177,7 +339,6 @@ $('#button_config').on('click',function(){
     $.each($("button[name*='computers']"),function(index,button){
         if($(button).hasClass("active")){
             computers.push($(button).val());
-            console.log(button.textContent);
             computersTemp.push(button.textContent); 
         }
     });
@@ -190,11 +351,18 @@ $('#button_config').on('click',function(){
         cabinConfigurationTemp.course = $('#course').val();
         cabinConfigurationTemp.speed = $('#speed').val();
         cabinConfigurationTemp.altitud = $('#altitude').val();
-        cabinConfigurationTemp.lights = LIGHTS[$('input[name*=type_lights').val()];
-        cabinConfigurationTemp.latLng = latLng;
+        cabinConfigurationTemp.lights = LIGHTS[$('input[name=type_lights]:checked').val()];
+        cabinConfigurationTemp.latLng = (latLng) ? latLng : $('#init_position_').val();
         cabinConfigurationTemp.computers = computersTemp;
-
-        var marker = new L.Marker(latLng, {draggable:false});
+        latLng = (latLng) ? latLng : $('#init_position').val();
+        var marker = null;
+        console.log(latLng);
+        console.log(typeof latLng === 'object');
+        if(typeof latLng === 'object'){
+            marker = new L.Marker(latLng,{draggable:false});
+        }else{
+            marker = new L.Marker(L.latLng(latLng.split(",")[0],latLng.split(",")[1]), {draggable:false});
+        }
         mapStage.addLayer(marker);
         marker.bindPopup(messageFormat(cabinConfigurationTemp)).openPopup();
 
@@ -214,6 +382,7 @@ $('#button_config').on('click',function(){
         unit.marker = marker;
         unitsSelectedsArray.push(unit);
     }catch(err) {
+        console.log(err);
     }
     form.submit();
 });
@@ -227,7 +396,7 @@ $('#button_config_track').on('click',function(){
         temp.course = $('#course').val();
         temp.speed = $('#speed').val();
         temp.altitud = $('#altitude').val();
-        temp.latLng = latLng;
+        temp.latLng = (latLng) ? latLng : $('#init_position_track_').val();
 
         var greenIcon = L.icon({
             iconUrl: '/leaflet/dist/images/marker_track.png',
@@ -237,7 +406,21 @@ $('#button_config_track').on('click',function(){
             shadowAnchor: [4, 62],  // the same for the shadow
             popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
         });
-        var marker = new L.Marker(latLng, {draggable:false, icon: greenIcon });
+
+        latLng = (latLng) ? latLng : $('#init_position_track').val();
+        var marker = null;
+        console.log(latLng);
+        console.log(typeof latLng === 'object');
+        if(typeof latLng === 'object'){
+            marker = new L.Marker(latLng,{draggable:false,icon: greenIcon});
+        }else{
+            marker = new L.Marker(L.latLng(latLng.split(",")[0],latLng.split(",")[1]), {draggable:false,icon: greenIcon});
+        }
+        //mapStage.addLayer(marker);
+        //marker.bindPopup(messageFormat(cabinConfigurationTemp)).openPopup();
+
+
+        //var marker = new L.Marker(latLng, {draggable:false, icon: greenIcon });
         mapStage.addLayer(marker);
         marker.bindPopup(messageFormatTrack(temp)).openPopup();
 
@@ -268,13 +451,25 @@ $('.modal').on('hidden.bs.modal',function(){
     try{
         if(!isCreate){
             if(isMeterologicalPhenomenon){
-                $('#ms_stage').multiSelect('deselect', itemLast.key);
-                $('#ms_track').multiSelect('deselect', itemTrackLast.key);
+                if(isConfigureCabin){
+                    $('#ms_stage').multiSelect('deselect', itemLast.key);
+
+                }else{
+                    $('#ms_track').multiSelect('deselect', itemTrackLast.key);
+                }
             }
             form[0].reset();
             formTrack[0].reset();
         }
         formMeterologicalPhenomenon[0].reset();
+        if(markerCabin != null){
+            mapModalStage.removeLayer(markerCabin);
+            mapModalStage.invalidateSize();
+        }
+        if(markerTrack != null){
+            mapModalStage.removeLayer(markerTrack);
+            mapModalStage.invalidateSize();
+        }
     }catch(err){
 
     }
@@ -304,6 +499,13 @@ $.ajaxSetup({
     }
 });
 
+function validateCoordinate(field){
+    var re = /^([-+]?)([\d]{1,2})(((\.)(\d+)(,)))(\s*)(([-+]?)([\d]{1,3})((\.)(\d+))?)$/;
+    if(!re.test(field.val())){
+        return "El formato de la coordenada es invalido";
+    }
+}
+
 
 
 /**
@@ -318,7 +520,8 @@ function getComputers(cabinId){
         data    : { id:cabinId },
         success : function(response) {
             $.each(response.computers,function(index,computer){
-                var button = $("<button name='computers[]' id='computers' value="+computer.id+" class='btn btn-default active' title='Dirección IP :"+computer.ip_address+"\n Etiqueta : "+computer.label_arduino+"'><span class='icosg-screen'></span> "+computer.name+"</button>");
+                var button = $("<button name='computers[]' id='computers' value="+computer.id+" class='btn btn-success active'  title='Dirección IP :"+computer.ip_address+"\n Etiqueta : "+computer.label_arduino+"'><span class='icosg-screen'></span> "+computer.name+"</button>");
+                //var button = $("<div class=checkbox><label><input name='computers[]' id='computers' type=checkbox value="+computer.id+" title='Dirección IP :"+computer.ip_address+"\n Etiqueta : "+computer.label_arduino+"' checked>"+computer.name+"</label></div>"); 
                 $('#container_computers').append(button);
             });
         },
@@ -428,3 +631,24 @@ function dec2gms(valor, tipo){
         'valor'    : grados + "\u00b0 " + minutos + "' "+ segundos +"' " + ((isNaN(direccion)) ? (' ' + direccion) : '')
     };
 }
+
+
+function convertDMSToDD(dms) {
+     let parts = dms.split(/[^\d+(\,\d+)\d+(\.\d+)?\w]+/);
+     let degrees = parseFloat(parts[0]);
+     let minutes = parseFloat(parts[1]);
+     let seconds = parseFloat(parts[2].replace(',','.'));
+     let direction = parts[3];
+
+     console.log('degrees: '+degrees)
+     console.log('minutes: '+minutes)
+     console.log('seconds: '+seconds)
+     console.log('direction: '+direction)
+
+     let dd = degrees + minutes / 60 + seconds / (60 * 60);
+
+     if (direction == 's' || direction == 'w') {
+       dd = dd * -1;
+     } // Don't do anything for N or E
+     return dd;
+   }

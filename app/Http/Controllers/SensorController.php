@@ -4,6 +4,7 @@ namespace SimulatorOperation\Http\Controllers;
 
 use SimulatorOperation\Sensor;
 use Illuminate\Http\Request;
+use Lang;
 
 class SensorController extends Controller
 {

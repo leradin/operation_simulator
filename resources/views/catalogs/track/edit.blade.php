@@ -30,5 +30,6 @@
 @endsection
 @section('js_footer')
     {!! Html::script('symbology_2525/sm-bc.min.js') !!}
+    {!! Html::script('js/track.js') !!}
     {!! Html::script('symbology_2525/custom_track.js') !!}
 @endsection

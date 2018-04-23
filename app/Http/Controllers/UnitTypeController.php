@@ -43,7 +43,7 @@ class UnitTypeController extends Controller
         $unitType = UnitType::create($request->except('_token'));
         if($request->mathematical_model_id){
             $mathematicalModel = MathematicalModel::find($request->mathematical_model_id);
-            $unitType->mathematicalModel->save($mathematicalModel);
+            $unitType->mathematicalModel()->save($mathematicalModel);
         }
         $message['type'] = 'success';
         $message['status'] = Lang::get('messages.success_unit_type');
@@ -84,6 +84,10 @@ class UnitTypeController extends Controller
     {
         $unitType->fill($request->except(['_token']));
         $unitType->save();
+        if($request->mathematical_model_id){
+            $mathematicalModel = MathematicalModel::find($request->mathematical_model_id);
+            $unitType->mathematicalModel()->save($mathematicalModel);
+        }
         $message['type'] = 'success';
         $message['status'] = Lang::get('messages.success_unit_type');
         return redirect($this->menu)->with('message',$message);

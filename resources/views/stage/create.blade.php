@@ -42,7 +42,20 @@
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <span class="top title">@lang('messages.unit')</span>
-                                    {!! Form::select('unit_ids[]',$units,null,array('class' => 'form-control validate[required] text-input','id' => 'unit_ids','data-prompt-position' => "bottomLeft")) !!}
+                                    <select name="unit_ids[]" id="unit_ids" class="form-control validate[required] text-input" data-prompt-position="bottomLeft">
+                                        @foreach ($unitsTypes as $unitType)
+                                        <optgroup label="{{ $unitType->name }}">
+                                            @foreach ($unitType->units()->get() as $unit)
+                                                <option value="{{ $unit->id }}">
+                                                    {{ $unit->name_with_numeral }}
+                                                </option>
+                                            @endforeach
+                                            
+                                        @endforeach
+                                        
+                                        
+                                    <!--{ !! Form::select('unit_ids[]',$units,null,array('class' => 'form-control validate[required] text-input','id' => 'unit_ids','data-prompt-position' => "bottomLeft")) !!}-->
+                                    </select>
                                 </div>
 
                                 <div class="col-md-2">
@@ -69,8 +82,92 @@
                                     <p class="help-block">@lang('messages.required_select_point_on_map')</p>
                                     {!! Form::text('init_position_',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_','placeholder' => __('messages.init_position'),'data-prompt-position' => "bottomLeft",'readonly' => true)) !!}
 
-                                    {!! Form::hidden('init_position',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position','data-prompt-position' => "bottomLeft")) !!}
+                                    {!! Form::text('init_position',null,array('class' => 'form-control validate[required,funcCall[validateCoordinate[2]]] text-input','id' => 'init_position','data-prompt-position' => "bottomLeft")) !!}
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-10">
+                                    <input type="radio"  name="format_coordinates"  value="0" checked />@lang('messages.dd') 
+                                    <!--input type="radio"  name="format_coordinates" value="1" />@ lang('messages.ddm') -->
+                                    <input type="radio"  name="format_coordinates" value="2" />@lang('messages.dms')
+                                </div>
+                                    <div id="dms">
+                                        <div class="col-md-2">@lang('messages.latitude')</div>
+                                        <div class="col-md-2">
+                                                <span class="top title">@lang('messages.grades')</span>
+                                                <input type="number" value="0" id="grade-phi" min="0" max="90" class="form-control validate[required,min[0],max[90] text-input geopoint" data-prompt-position= "bottomLeft">
+                                        </div>
+                                        <div class="col-md-2">
+                                                <span class="top title">@lang('messages.minutes')</span>
+                                                <input type="number" value="0" id="minute-phi" min="0" max="59" class="form-control validate[required,min[0],max[59] text-input geopoint" data-prompt-position= "bottomLeft">
+                                        </div>
+                                        <div class="col-md-3">
+                                                <span class="top title">@lang('messages.seconds')</span>
+                                                <input type="number" value="0" id="second-phi" min="0" max="59" step=".01" class="form-control validate[required,min[0],max[59] text-input geopoint" data-prompt-position= "bottomLeft">                      
+                                        </div>
+                                        <div class="col-md-2 col-md-offset-1">
+                                                <span class="top title">@lang('messages.orientation')</span>
+                                                <select id="orientation-phi" class="form-control geopoint">
+                                                    <option value="n">@lang('messages.north')</option>
+                                                    <option value="s">@lang('messages.south')</option>
+
+                                                </select>                      
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="col-md-2">@lang('messages.longitude')</div>
+                                        <div class="col-md-2">
+                                                <span class="top title">@lang('messages.grades')</span>
+                                                <input type="number" value="0" id="grade-lambda" min="0" max="180" class="form-control validate[required,min[0],max[180] text-input geopoint" data-prompt-position= "bottomLeft">
+                                        </div>
+                                        <div class="col-md-2">
+                                                <span class="top title">@lang('messages.minutes')</span>
+                                                <input type="number" value="0" id="minute-lambda" min="0" max="59" class="form-control validate[required,min[0],max[59] text-input geopoint" data-prompt-position= "bottomLeft">
+                                        </div>
+                                        <div class="col-md-3">
+                                                <span class="top title">@lang('messages.seconds')</span>
+                                                <input type="number" value="0" id="second-lambda" min="0" max="59" step=".01" class="form-control validate[required,min[0],max[59] text-input geopoint" data-prompt-position= "bottomLeft">                      
+                                        </div>
+                                        <div class="col-md-2 col-md-offset-1">
+                                                <span class="top title">@lang('messages.orientation')</span>
+                                                <select id="orientation-lambda" class="form-control geopoint">
+                                                    <option value="e">@lang('messages.east')</option>
+                                                    <option value="w">@lang('messages.west')</option>
+                                                </select>                      
+                                        </div>
+                                    </div>
+
+                                    <div id="dd">
+                                        <div class="col-md-2">@lang('messages.latitude')</div>
+                                        <div class="col-md-4">
+                                                <span class="top title">@lang('messages.grades')</span>
+                                                <input type="number" value="0" id="grade-phi2" min="0" max="90" step=".0001" class="form-control validate[required,min[0],max[90] text-input geopoint" data-prompt-position= "bottomLeft">
+                                        </div>
+                                        
+                                        <div class="col-md-2 col-md-offset-1">
+                                                <span class="top title">@lang('messages.orientation')</span>
+                                                <select id="orientation-phi2" class="form-control geopoint">
+                                                    <option value="n">@lang('messages.north')</option>
+                                                    <option value="s">@lang('messages.south')</option>
+
+                                                </select>                      
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="col-md-2">@lang('messages.longitude')</div>
+                                        <div class="col-md-4">
+                                                <span class="top title">@lang('messages.grades')</span>
+                                                <input type="number" value="0" id="grade-lambda2" min="0" max="180" step=".0001" class="form-control validate[required,min[0],max[180] text-input geopoint" data-prompt-position= "bottomLeft">
+                                        </div>
+                                        
+                                        <div class="col-md-2 col-md-offset-1">
+                                                <span class="top title">@lang('messages.orientation')</span>
+                                                <select id="orientation-lambda2" class="form-control geopoint">
+                                                    <option value="e">@lang('messages.east')</option>
+                                                    <option value="w">@lang('messages.west')</option>
+                                                </select>                      
+                                        </div>
+                                    </div>
+                                    
                             </div>
                             <div class="form-group">
                                 <div class="col-md-2">@lang('messages.computers')</div>
@@ -84,9 +181,9 @@
                             <div class="form-group">
                                 <div class="col-md-2">@lang('messages.lights')</div>
                                 <div class="col-md-10">
-                                    <input type="radio"  name="type_lights" checked="checked" value="0" />@lang('messages.daylight') 
+                                    <input type="radio"  name="type_lights" value="0" checked />@lang('messages.daylight') 
                                     <input type="radio"  name="type_lights" value="1" />@lang('messages.battle_light') 
-                                    <input type="radio"  name="type_lights_" value="3" />@lang('messages.without_lights')
+                                    <input type="radio"  name="type_lights" value="2" />@lang('messages.without_lights')
                                 </div>
                             </div>
                         </form>      
@@ -142,9 +239,10 @@
                                     <p class="help-block">@lang('messages.required_select_point_on_map')</p>
                                     {!! Form::text('init_position_track_',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_track_','placeholder' => __('messages.init_position'),'data-prompt-position' => "bottomLeft",'readonly' => true)) !!}
 
-                                    {!! Form::hidden('init_position_track',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_track','data-prompt-position' => "bottomLeft")) !!}
+                                    {!! Form::text('init_position_track',null,array('class' => 'form-control validate[required,funcCall[validateCoordinate[2]]] text-input','id' => 'init_position_track','data-prompt-position' => "bottomLeft")) !!}
                                 </div>
                             </div>
+                            @include('stage.coordinates_track')
                         </form>      
                     </div>
                 </div>                   
@@ -178,7 +276,7 @@
                                     <div class="col-md-6">
                                         {!! Form::text('init_position_meterological_phenomenon_',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_meterological_phenomenon_','placeholder' => __('messages.init_position'),'data-prompt-position' => "bottomLeft",'readonly' => true)) !!}
 
-                                        {!! Form::hidden('init_position_meterological_phenomenon',null,array('class' => 'form-control validate[required] text-input','id' => 'init_position_meterological_phenomenon','data-prompt-position' => "bottomLeft")) !!}
+                                        {!! Form::text('init_position_meterological_phenomenon',null,array('class' => 'form-control validate[required,funcCall[validateCoordinate[2]]] text-input','id' => 'init_position_meterological_phenomenon','data-prompt-position' => "bottomLeft")) !!}
                                     </div>
                                     <div class="col-md-6">
                                         {!! Form::number('radio',0,array('class' => 'form-control validate[required,min[0],max[1000]] text-input','id' => 'radio','data-prompt-position' => "bottomLeft")) !!}
@@ -199,9 +297,11 @@
     </div>            
 @endsection
 @section('js_footer')
+    {!! Html::script('js/plugins/other/geopoint.js') !!}
     {!! Html::script('leaflet/dist/leaflet.js') !!} 
     {!! Html::script('leaflet/plugins/areaselect/leaflet-areaselect.js') !!}
     {!! Html::script('leaflet/layers.js') !!}
     {!! Html::script('leaflet/custom_stage.js') !!}
     {!! Html::script('js/stage.js') !!}
+
 @endsection

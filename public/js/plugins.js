@@ -136,7 +136,8 @@ $(document).ready(function(){
             },
             afterDeselect: function(value, text){
                 notify('Opcion','Deseleccionada: '+text+'['+value+']');
-            }});
+            }
+            });
 
     if($("#ms_stage").length > 0)
         $("#ms_stage").multiSelect({
@@ -150,6 +151,7 @@ $(document).ready(function(){
                 $(".modal-title").text("Configuración de la cabina "+itemLast.value);
                 getComputers(itemLast.key);
                 isMeterologicalPhenomenon = true;
+                isConfigureCabin = true;
 
             },
             afterDeselect: function(value, text){
@@ -179,6 +181,7 @@ $(document).ready(function(){
                 $(".modal-title").text("Configuración del blanco "+itemTrackLast.value);
                 //getComputers(itemLast.key);
                 isMeterologicalPhenomenon = true;
+                isConfigureCabin = false;
 
             },
             afterDeselect: function(value, text){

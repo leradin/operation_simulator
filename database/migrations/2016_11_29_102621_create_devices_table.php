@@ -20,7 +20,7 @@ class CreateDevicesTable extends Migration
             $table->char('label')->nullable();
             $table->integer('switch_port');
             $table->integer('computer_id')->unsigned()->nullable();
-            $table->foreign('computer_id')->references('id')->on('computers');
+            $table->foreign('computer_id')->references('id')->on('computers')->onDelete('cascade');
             $table->integer('device_type_id')->unsigned();
             $table->foreign('device_type_id')->references('id')->on('device_types');
             $table->timestamps();

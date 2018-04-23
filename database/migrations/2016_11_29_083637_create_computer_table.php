@@ -19,7 +19,7 @@ class CreateComputerTable extends Migration
             $table->macAddress('mac_address')->nullable();
             $table->string('label_arduino',10);
             $table->integer('cabin_id')->unsigned()->nullable();
-            $table->foreign('cabin_id')->references('id')->on('cabins');
+            $table->foreign('cabin_id')->references('id')->on('cabins')->onDelete('cascade');
             $table->integer('computer_type_id')->unsigned();
             $table->foreign('computer_type_id')->references('id')->on('computer_types');
             $table->timestamps();

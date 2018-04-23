@@ -102,6 +102,19 @@ class CabinController extends Controller
     {
         $cabin->fill($request->except(['_token']));
         $cabin->save();
+        
+        $computers = [];
+        foreach ($cabin->computers()->get(['id'])->toArray() as &$computer) {
+            array_push($computers, $computer['id']); 
+        }
+        $result=array_diff($computers,$request->computer_ids);
+
+        foreach ($result as $value) {
+            $computer = Computer::find($value);
+            $computer->cabin_id = null;
+            $computer->save();
+        }
+        
         foreach ($request->computer_ids as $computerId) {
             $computer = Computer::find($computerId);
             $cabin->computers()->save($computer);
