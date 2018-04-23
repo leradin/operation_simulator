@@ -16,7 +16,7 @@ class CreateUnitsTable extends Migration
             $table->increments('id');
             $table->integer('station')->unique();
             $table->string('name',50);
-            $table->char('numeral',10);
+            $table->char('numeral',20);
             $table->char('country',3);           
             $table->char('serial_number',15);
             $table->string('image');

@@ -14,6 +14,12 @@ class UnitTypesTableSeeder extends Seeder
         
         $date = Carbon\Carbon::now();
         $data = array(
+            array(
+            'name' => 'AEREO ALA FIJA',
+            'abbreviation' => 'AAF',
+            'created_at' => $date,
+            'updated_at' => $date
+            ),
     	    array(
             'name' => 'PATRULLA INTERCEPTORA',
         	'abbreviation' => 'PI',
@@ -26,12 +32,13 @@ class UnitTypesTableSeeder extends Seeder
             'created_at' => $date,
             'updated_at' => $date
             ),
-			array(
-            'name' => 'AEREO ALA FIJA',
-        	'abbreviation' => 'AAF',
+            array(
+            'name' => 'MANDO',
+            'abbreviation' => 'MA',
             'created_at' => $date,
             'updated_at' => $date
-            )
+            ),
+			
         );
         
      	foreach($data as $unitType){
