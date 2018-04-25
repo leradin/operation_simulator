@@ -140,12 +140,11 @@ mapModalStage.doubleClickZoom.disable();
 mapModalStage.scrollWheelZoom.disable();*/
 
 /* Map Track */
-var mapModalTracks = L.map('map-tracks',
-{ layers: [Bmarvel3],
-  //crs: L.CRS.EPSG4326,
-  center: [19.2, -96.1],
-  zoom: 6,
-  attributionControl: false,
+var mapModalTracks = new L.Map('map-tracks', {
+    layers: [Bmarvel3],
+    crs: L.CRS.EPSG4326, 
+    center: new L.LatLng(19.2, -96.1), 
+    zoom: 5 
 });
 
 L.control.layers(baseLayersMapModal2, overlaysMapModal2).addTo(mapModalTracks);

@@ -1,14 +1,16 @@
-var map = new L.Map('map', { 
-		//layers: [Bmarvel],
-		crs: L.CRS.EPSG4326, 
-	    center: [19.2, -96.1], 
-	    zoom: 9,
-	    zoomControl:true,
-	    attributionControl: false,
-	    attribution: 'Cesedam'
-	});
-//L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(map);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+var map =  new L.map('map',
+{ //layers: [Bmarvel2],
+  //crs: L.CRS.EPSG4326,
+  //crs: L.CRS.EPSG3857,
+  //center: [19.2, -96.1],
+  //attributionControl: false,
+    layers: [Bmarvel2],
+    crs: L.CRS.EPSG4326, 
+    center: new L.LatLng(19.2, -96.1), 
+    zoom: 5
+});
+L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(map);
+//L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 var trackIcon = L.icon({
     iconUrl: '/leaflet/dist/images/marker_track.png',
