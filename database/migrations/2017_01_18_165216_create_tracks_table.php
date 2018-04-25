@@ -21,6 +21,8 @@ class CreateTracksTable extends Migration
             $table->char('sidc',16);
             $table->timestamps();
         });
+        DB::update("ALTER TABLE tracks AUTO_INCREMENT = 100;");
+
     }
 
     /**

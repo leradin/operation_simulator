@@ -415,7 +415,7 @@ class ExerciseController extends Controller
                                 'name' => $unit->name,
                                 'numeral' => $unit->numeral,
                                 'kinect_model' => $unit->unitType->mathematicalModel->name,
-                                'type' => ($unit->unitType->mathematicalModel->name == 'PI' ? 1: $unit->unitType->mathematicalModel->name == 'PO' ? 2 : $unit->unitType->mathematicalModel->name == 'AF' ? 3 : $unit->unitType->mathematicalModel->name == 'IM' ? 9 :''),
+                                'type' => $this->getType($unit->unitType->mathematicalModel->name),
                                 'properties' =>  $this->getPropertiesUnit($unit,$cabin->pivot->speed));
 
             // Add object unit to cabin
@@ -499,6 +499,18 @@ class ExerciseController extends Controller
                 break;
         }
         return $speedKnot;
+    }
+
+    private function getType($type){
+      if(strpos("PI",$type)){
+        return 1;
+      } else if(strpos("PO",$type)){
+        return 2;
+      } else if(strpos("AF",$type)){
+        return 3;
+      } else if(strpos("IM",$type)){
+        return 9;
+      }
     }
 
 
