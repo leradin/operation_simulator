@@ -403,6 +403,7 @@ class ExerciseController extends Controller
             $dataCabin['unit_id'] = $cabin->pivot->unit_id;
             $dataCabin['cabin_id'] = $cabin->id;
 
+
             // Add object data cabin to stage
             $stageJson['cabins'][$cabin->id] = $dataCabin;
 
@@ -414,6 +415,7 @@ class ExerciseController extends Controller
                                 'name' => $unit->name,
                                 'numeral' => $unit->numeral,
                                 'kinect_model' => $unit->unitType->mathematicalModel->name,
+                                'type' => ($unit->unitType->mathematicalModel->name == 'PI' ? 1: $unit->unitType->mathematicalModel->name == 'PO' ? 2 : $unit->unitType->mathematicalModel->name == 'AF' ? 3 : $unit->unitType->mathematicalModel->name == 'IM' ? 9 :''),
                                 'properties' =>  $this->getPropertiesUnit($unit,$cabin->pivot->speed));
 
             // Add object unit to cabin
