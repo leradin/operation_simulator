@@ -449,7 +449,7 @@ class ExerciseController extends Controller
             
       // Add Lights Type to enable
       array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA': ($cabin->pivot->lights_type == 1) ? 'LUZ COMBATE':'',
-              'ACCION' => ($forOn) ? 'DIGITAL' : 'MANUAL'));
+              'accion' => ($forOn) ? 'DIGITAL' : 'MANUAL'));
 
       // Get computers  
       $computers = $stage->computers()->wherePivot('cabin_id',$cabin->id)->get();

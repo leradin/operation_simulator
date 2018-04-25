@@ -34,7 +34,7 @@ class CabinsTableSeeder extends Seeder
             $date = Carbon::now();
             \DB::table('cabins')->insert(array(
                 'id' => $i,
-                'name' => 'CABINA_OPERATIVA_'.$i,
+                'name' => 'CABINA'.$i,
                 'ip_address_arduino' => $ipArduinos[$i-1],
                 'mac_address_arduino' => 'FF:FC:E3:33:FF:5'.$i,
                 'ip_address_camera' => $ipCameras[$i-1],
@@ -46,7 +46,7 @@ class CabinsTableSeeder extends Seeder
 
         \DB::table('cabins')->insert(array(
                 'id' => 9,
-                'name' => 'CABINA_CC2',
+                'name' => 'CC2',
                 'ip_address_arduino' => '172.16.197.59:90',
                 'mac_address_arduino' => 'FF:FC:E3:33:FF:50',
                 'ip_address_camera' => '172.16.196.110',
@@ -57,7 +57,7 @@ class CabinsTableSeeder extends Seeder
 
         \DB::table('cabins')->insert(array(
                 'id' => 10,
-                'name' => 'CABINA_COISRAM',
+                'name' => 'ISR',
                 'ip_address_arduino' => '172.16.197.50:80',
                 'mac_address_arduino' => 'FF:FC:E3:33:FF:50',
                 'ip_address_camera' => '172.16.196.109',
