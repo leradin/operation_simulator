@@ -1,6 +1,8 @@
 //Direcciones de los servicios de mapas
-var wwserver =  "http://192.168.202.10:2003/wms?";
-var geoserver = "http://192.168.202.10:2000/geoserver/gwc/service/wms?";
+//var wwserver =  "http://172.16.193.65:8000/wms?";
+//var geoserver = "http://172.16.193.65:8080/geoserver/gwc/service/wms?";
+var wwserver =  "http://172.16.193.65:8000/wms?";
+var geoserver = "http://172.16.193.65:8080/geoserver/gwc/service/wms?";
 //Inician la declaracion de capas Base
     var Bmarvel = L.tileLayer.wms(wwserver,  {
         layers: 'bmng200405',
@@ -222,6 +224,7 @@ var geoserver = "http://192.168.202.10:2000/geoserver/gwc/service/wms?";
         version: '1.1',
         attribution: "OSM,MKZ"
     });
+    
     // Capas para mapa venatana emergente
      var Bmarvel2 = L.tileLayer.wms(wwserver,  {
         layers: 'bmng200405',

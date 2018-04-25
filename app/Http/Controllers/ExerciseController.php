@@ -321,7 +321,7 @@ class ExerciseController extends Controller
         if(strpos($numeral,'ANX') !== false || strpos($numeral,'AMP') !== false || strpos($numeral,'AMPH') !== false){
             return array('volante','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']));
         }
-        if(strpos($numeral,'PO') !== false || strpos($numeral,'PC') !== false || strpos($numeral,'PI') !== false  || strpos($numeral,'P') !== false){
+        if(strpos($numeral,'PO') !== false || strpos($numeral,'SEDAM') !== false || strpos($numeral,'PC') !== false || strpos($numeral,'PI') !== false  || strpos($numeral,'P') !== false){
             return array('aguja','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']));
         }
         if(strpos($numeral,'BASE_IM') !== false || strpos($numeral,'VEHICUL') !== false || strpos($numeral,'MOVIL') !== false){

@@ -1,7 +1,6 @@
-    
-var mapStage = new L.Map('mapStage', 
+/*var mapStage = new L.Map('mapStage', 
     { //layers: [Bmarvel],
-      //crs: L.CRS.EPSG4326, 
+      crs: L.CRS.EPSG3857, 
       center: [19.2, -96.1], 
       zoom: 6,
       attribution: 'Cesedam',
@@ -9,7 +8,17 @@ var mapStage = new L.Map('mapStage',
     });
 
 //L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapStage);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapStage);*/
+
+var mapStage = new L.Map('mapStage', {
+    layers: [Bmarvel],
+    crs: L.CRS.EPSG4326, 
+    center: new L.LatLng(19.2, -96.1), 
+    zoom: 5 
+});
+
+L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);              
+
 
 
 // Select area map
@@ -23,15 +32,23 @@ areaSelect.on("change", function() {
 });
 areaSelect.addTo(mapStage);
 /* Map Stage */
-var mapModalStage = L.map('dvMdlMapStage',
+var mapModalStage = new L.map('dvMdlMapStage',
 { //layers: [Bmarvel2],
   //crs: L.CRS.EPSG4326,
-  center: [19.2, -96.1],
-  attributionControl: false,
+  //crs: L.CRS.EPSG3857,
+  //center: [19.2, -96.1],
+  //attributionControl: false,
+    layers: [Bmarvel2],
+    crs: L.CRS.EPSG4326, 
+    center: new L.LatLng(19.2, -96.1), 
+    zoom: 5
 });
-
+console.log(L.CRS);
 //L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalStage);
+//L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalStage);
+L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);              
+
+
 var popupMapModalStage = L.popup();
 mapModalStage.on('click', onMapModalClickStage);
 
@@ -124,15 +141,15 @@ mapModalStage.scrollWheelZoom.disable();*/
 
 /* Map Track */
 var mapModalTracks = L.map('map-tracks',
-{ //layers: [Bmarvel3],
-  crs: L.CRS.EPSG4326,
+{ layers: [Bmarvel3],
+  //crs: L.CRS.EPSG4326,
   center: [19.2, -96.1],
   zoom: 6,
   attributionControl: false,
 });
 
-//L.control.layers(baseLayersMapModal2, overlaysMapModal2).addTo(mapModalTracks);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalTracks);
+L.control.layers(baseLayersMapModal2, overlaysMapModal2).addTo(mapModalTracks);
+//L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalTracks);
 
 var popupMapModalTrack = L.popup();
 mapModalTracks.on('click', onMapModalClickTrack);
@@ -204,15 +221,15 @@ mapModalTracks.scrollWheelZoom.disable();*/
 
 /* Map Meterological Phenomenon */
 var mapModalMeterologicalPhenomenon = L.map('map-meterological-phenomenon',
-{ //layers: [Bmarvel4],
+{ layers: [Bmarvel4],
   crs: L.CRS.EPSG4326,
   center: [19.2, -96.1],
   zoom: 6,
   attributionControl: false,
 });
 
-//L.control.layers(baseLayersMapModal3, overlaysMapModal3).addTo(mapModalMeterologicalPhenomenon);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalMeterologicalPhenomenon);
+L.control.layers(baseLayersMapModal3, overlaysMapModal3).addTo(mapModalMeterologicalPhenomenon);
+//L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalMeterologicalPhenomenon);
 
 
 var popupMapModalMeterologicalPhenomenon = L.popup();

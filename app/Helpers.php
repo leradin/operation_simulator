@@ -3,6 +3,69 @@ use SimulatorOperation\Computer;
 use SimulatorOperation\Stage;
 use Illuminate\Http\Request;
 
+
+// Tracks
+define('IDENTITIES', array(
+    "P" => 'PENDING',
+    "U" => 'UNKNOWN',
+    "A" => 'ASSUMED FRIEND',
+    "F" => 'FRIEND',
+    "N" => 'NEUTRAL',
+    "S" => 'SUSPECT',
+    "H" => 'HOSTILE',
+    "D" => 'EXERCISE FRIEND',
+    "G" => 'EXERCISE PENDING',
+    "W" => 'EXERCISE UNKNOWN',
+    "M" => 'EXERCISE ASSUMED FRIEND D EXERCISE FRIEND',
+    "L" => 'EXERCISE NEUTRAL',
+    "J" => 'JOKER',
+    "K" => 'FAKER'
+));
+
+define('BATTLE_DIMENSIONS',array(
+	'P' => 'SPACE',
+	'A' => 'AIR',
+	'G' => 'GROUND',
+	'S' => 'SEA SURFACE',
+	'U' => 'SEA SUBSURFACE',
+	'F' => 'SOF',
+	'X' => 'OTHER',
+	'Z' => 'UNKNOWN'
+));
+
+define('STATUSS',array(
+	'A' => 'ANTICIPATED/PLANNED',
+	'P' => 'PRESENT ',
+	'C' => 'PRESENT/FULLY CAPABLE',
+	'D' => 'PRESENT/DAMAGED',
+	'X' => 'PRESENT/DESTROYED',
+	'F' => 'PRESENT/FULL TO CAPACITY'
+));
+
+define('IDENTITY',0);
+define('BATTLE_DIMENSION',1);
+define('STATUS',2);
+
+function addValueArraySidc($array,$position){
+	$arrayReturn = array();
+
+	switch ($position) {
+		case IDENTITY:
+			$arrayReturn = IDENTITIES;
+			break;
+		case BATTLE_DIMENSION:
+			$arrayReturn = BATTLE_DIMENSIONS;
+			break;
+		case STATUS:
+			$arrayReturn = STATUSS;
+			break;
+	}
+	foreach ($array as $key => &$value) {
+		$array[$key] = $arrayReturn[$key];
+	}
+	return $array;
+}
+
 /**
 * change plain number to formatted currency
 *

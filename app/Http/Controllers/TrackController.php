@@ -3,8 +3,7 @@
 namespace SimulatorOperation\Http\Controllers;
 
 use SimulatorOperation\Track;
-//use Illuminate\Http\Request;
-use Request;
+use Illuminate\Http\Request;
 use Lang;
 
 class TrackController extends Controller
@@ -29,9 +28,9 @@ class TrackController extends Controller
      */
     public function create()
     {
-        $identities = getEnumValues('tracks','identity');
-        $battleDimensions = getEnumValues('tracks','identity');
-        $statuss = getEnumValues('tracks','status');
+        $identities = addValueArraySidc(getEnumValues('tracks','identity'),IDENTITY);
+        $battleDimensions = addValueArraySidc(getEnumValues('tracks','battle_dimension'),BATTLE_DIMENSION);
+        $statuss = addValueArraySidc(getEnumValues('tracks','status'),STATUS);
         return view('catalogs.track.create',['identities' => $identities,
                                             'battleDimensions' => $battleDimensions,
                                             'statuss' => $statuss]);
@@ -70,9 +69,9 @@ class TrackController extends Controller
      */
     public function edit(Track $track)
     {
-        $identities = getEnumValues('tracks','identity');
-        $battleDimensions = getEnumValues('tracks','identity');
-        $statuss = getEnumValues('tracks','status');
+        $identities = addValueArraySidc(getEnumValues('tracks','identity'),IDENTITY);
+        $battleDimensions = addValueArraySidc(getEnumValues('tracks','battle_dimension'),BATTLE_DIMENSION);
+        $statuss = addValueArraySidc(getEnumValues('tracks','status'),STATUS);
         return view('catalogs.track.edit',['track' => $track,
                                             'identities' => $identities,
                                             'battleDimensions' => $battleDimensions,
@@ -131,7 +130,7 @@ class TrackController extends Controller
             $trackJson ['imageSrc'] = env('APP_URL').'getImage/'.$track->sidc;
             array_push($tracks,$trackJson);
         }
-        if(Request::ajax()){
+        if($request->ajax()){
             return response()->json($tracks);
         }
         return $tracks;

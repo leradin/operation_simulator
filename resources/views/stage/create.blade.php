@@ -212,7 +212,7 @@
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <span class="top title">@lang('messages.type')</span>
-                                    {!! Form::select('types[]',[1 => 'PI',2 => 'PO',3 => 'KING_AIR',4 => 'BOAT(GO FAST)'], null, ['class' => 'form-control validate[required]','data-prompt-position' => "bottomLeft",'id' => 'types']) !!}
+                                    {!! Form::select('types[]',[0 => 'PERSONA MILITAR',1 => 'PI',2 => 'PO',3 => 'KING_AIR',4 => 'BOAT(GO FAST)',5 => 'HELICOPTERO MILITAR', 6 => 'BARCO',7 => 'COCHE',8 => 'AUTOBUS', 9 => 'UNIDAD TERRESTRE'], null, ['class' => 'form-control validate[required]','data-prompt-position' => "bottomLeft",'id' => 'types']) !!}
                                 </div>
 
                                 <div class="col-md-2">

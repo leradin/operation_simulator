@@ -38,7 +38,12 @@ class UnitTypesTableSeeder extends Seeder
             'created_at' => $date,
             'updated_at' => $date
             ),
-			
+            array(
+            'name' => 'INFANTERIA DE MARINA',
+            'abbreviation' => 'IM',
+            'created_at' => $date,
+            'updated_at' => $date
+            )
         );
         
      	foreach($data as $unitType){

@@ -77,12 +77,12 @@ class StageController extends Controller
         if(isset($request->track_ids)){
           foreach ($request->track_ids as $trackId) {
               $parameters = explode("&",$request["t".$trackId]);
-
               $course = explode('=',$parameters[1])[1];
               $speed = explode('=',$parameters[2])[1];
               $altitude = explode('=',$parameters[3])[1];
               $initPosition = str_replace("%2C", ",",explode('=',$parameters[5])[1]);
-              $objectType = explode('=',$parameters[6])[1];
+              $objectType = explode('=',$parameters[7])[1];
+
               $stage->tracks()->attach($trackId,['object_type' => $objectType,
                                                   'course' => $course, 
                                                   'speed' => $speed, 
