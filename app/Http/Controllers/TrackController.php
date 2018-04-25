@@ -4,6 +4,7 @@ namespace SimulatorOperation\Http\Controllers;
 
 use SimulatorOperation\Track;
 use Illuminate\Http\Request;
+//use Request;
 use Lang;
 
 class TrackController extends Controller
@@ -120,7 +121,7 @@ class TrackController extends Controller
         savedFileLocal($file,$this->folderForSymbology.$fileName,true);
     }
 
-    public function getTracks(){
+    public function getTracks($isAjax){
         $tracks = array();
 
         foreach (Track::all() as $track) {
@@ -130,7 +131,7 @@ class TrackController extends Controller
             $trackJson ['imageSrc'] = env('APP_URL').'getImage/'.$track->sidc;
             array_push($tracks,$trackJson);
         }
-        if($request->ajax()){
+        if($isAjax){
             return response()->json($tracks);
         }
         return $tracks;

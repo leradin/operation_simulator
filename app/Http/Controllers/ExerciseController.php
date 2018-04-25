@@ -59,7 +59,7 @@ class ExerciseController extends Controller
         $users = callWs('users');
         $meteorologicalPhenomenons = MeteorologicalPhenomenon::all();
         $track = new TrackController();
-        $tracks = $track->getTracks();
+        $tracks = $track->getTracks(false);
         return view('exercise.create',['stages' => $stages,
                                         'users' => $users,
                                         'meteorologicalPhenomenons' => $meteorologicalPhenomenons,
