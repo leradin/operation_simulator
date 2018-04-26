@@ -156,7 +156,7 @@ class ExerciseController extends Controller
         // Update data exercise
         $configurationFile =  getFormatJson($configurationFileJson);
         $exercise->configuration_file = $configurationFile;
-        $pathConfigurationFile = 'configurationFile/'.$exercise->id.'_'.$exercise->name.'_'.getDateTimeNow().'.json';
+        $pathConfigurationFile = 'configurationFile/'.$exercise->id.'_'.$exercise->name.'_'.date("Ymdhis").'.json';
         $exercise->path_configuration_file = $pathConfigurationFile;
         $exercise->save();
 
@@ -271,7 +271,7 @@ class ExerciseController extends Controller
     private function getPropertiesUnit(Unit $unit,$speed){
         //Declare array's
         $properties = array();
-        $timon = array();
+        $timons = array();
         $motors = array();
 
         // Get number engines of unit
@@ -279,20 +279,22 @@ class ExerciseController extends Controller
 
         // Verify number engines
         if($numberEngines == 1){
-            $motors['type'] = $this->getTypeControlUnit($unit->numeral)[1];
-            $motors['position'] = 'center';
-            $motors['health'] = 1;
-            $motors['maxSpeed'] = $this->getTypeControlUnit($unit->numeral,$speed)[2];
-            $motors['power'] = 0;//$this->getTypeControlUnit($unit->numeral)[2] 
+            $motor['type'] = $this->getTypeControlUnit($unit->numeral)[1];
+            $motor['position'] = 'center';
+            $motor['health'] = 1;
+            $motor['maxSpeed'] = $this->getSpeed($unit->numeral,$speed);//$this->getTypeControlUnit($unit->numeral,$speed)[2];
+            $motor['power'] = 0;//$this->getTypeControlUnit($unit->numeral)[2] 
             $timon['type'] = $this->getTypeControlUnit($unit->numeral)[0];
             $timon['value'] = (object) array('rotation' => 0);
+            array_push($motors,$motor);
+            array_push($timons,$timon);
 
         }else{
             for($i = 0; $i<$numberEngines; $i++){
                 $motor ['type'] = $this->getTypeControlUnit($unit->numeral)[1];
                 $motor ['position'] = ($i) ? 'left' : 'right';
                 $motor ['health'] = 1;
-                $motor ['maxSpeed'] = $this->getTypeControlUnit($unit->numeral,$speed)[2];
+                $motor ['maxSpeed'] = $this->getSpeed($unit->numeral,$speed);//$this->getTypeControlUnit($unit->numeral,$speed)[2];
                 $motor ['power'] =  0;//$this->getTypeControlUnit($unit->numeral)[2];*/
                 /*$motors[$i]['type'] = $this->getTypeControlUnit($unit->numeral)[1];
                 $motors[$i]['position'] = ($i) ? 'left' : 'right';
@@ -303,11 +305,12 @@ class ExerciseController extends Controller
             }
             $timon['type'] = $this->getTypeControlUnit($unit->numeral)[0];
             $timon['value'] = (object) array('rotation' => 0);
+            array_push($timons,$timon);
         }
 
         $properties['motors'] = $motors;
-        $properties['timon'] = $timon;
-        
+        $properties['timon'] = $timons;
+        dd($properties);
         return $properties; 
     }
 
@@ -326,6 +329,22 @@ class ExerciseController extends Controller
         }
         if(strpos($numeral,'BASE_IM') !== false || strpos($numeral,'VEHICUL') !== false || strpos($numeral,'MOVIL') !== false){
             return array('control','control',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']));
+        }
+    }
+    /**
+    * Get speed unit
+    * @param $numeral
+    * @return $speed
+    */
+    private function getSpeed($numeral,$speedKmH){
+      if(strpos($numeral,'ANX') !== false || strpos($numeral,'AMP') !== false || strpos($numeral,'AMPH') !== false){
+            return $this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']);
+        }
+        if(strpos($numeral,'PO') !== false || strpos($numeral,'SEDAM') !== false || strpos($numeral,'PC') !== false || strpos($numeral,'PI') !== false  || strpos($numeral,'P') !== false){
+            return $this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']);
+        }
+        if(strpos($numeral,'BASE_IM') !== false || strpos($numeral,'VEHICUL') !== false || strpos($numeral,'MOVIL') !== false){
+            return $this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']);
         }
     }
 
@@ -502,13 +521,13 @@ class ExerciseController extends Controller
     }
 
     private function getType($type){
-      if(strpos("PI",$type)){
+      if(strpos("PI",$type) !== false){
         return 1;
-      } else if(strpos("PO",$type)){
+      } else if(strpos("PO",$type) !== false){
         return 2;
-      } else if(strpos("AF",$type)){
+      } else if(strpos("AF",$type) !== false){
         return 3;
-      } else if(strpos("IM",$type)){
+      } else if(strpos("IM",$type) !== false){
         return 9;
       }
     }
