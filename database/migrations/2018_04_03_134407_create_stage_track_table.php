@@ -25,6 +25,7 @@ class CreateStageTrackTable extends Migration
             $table->float('speed');
             $table->float('altitude');
             $table->string('init_position',50);
+            $table->string('source',10);
             $table->integer('object_type')->unsigned();
         });
     }

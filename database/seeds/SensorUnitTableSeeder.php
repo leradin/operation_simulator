@@ -11,7 +11,7 @@ class SensorUnitTableSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 1; $i <= 23; $i++){
+        for($i = 1; $i <= 49; $i++){
         	$unit = SimulatorOperation\Unit::find($i);
         	for($j = 1; $j<=7; $j++){
         		$unit->sensors()->attach($j);

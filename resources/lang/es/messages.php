@@ -216,6 +216,7 @@ return [
     'east' => 'E',
     'west' => 'W',
     'orientation' => 'Orientación',
+    'track_source' => 'Sensor Origen',
 
     ///////////////////
    

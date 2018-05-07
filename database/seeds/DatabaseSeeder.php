@@ -17,9 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call(DeviceTypesTableSeeder::class);
         $this->call(DevicesTableSeeder::class);
         $this->call(UnitTypesTableSeeder::class);
+        $this->call(MathematicalModelTableSeeder::class);
         $this->call(SensorsTableSeeder::class);
         $this->call(UnitsTableSeeder::class);
         $this->call(SensorUnitTableSeeder::class);
-        $this->call(TracksTableSeeder::class);
+        //$this->call(TracksTableSeeder::class);
     }
 }

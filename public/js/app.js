@@ -37049,6 +37049,7 @@ $(document).ready(function(){
     $(".tipb").tooltip({placement: 'bottom', trigger: 'hover'});
     $(".tipl").tooltip({placement: 'left', trigger: 'hover'});
     $(".tipr").tooltip({placement: 'right', trigger: 'hover'});
+
     
     if($('#main_calendar').length > 0){
     
@@ -38607,6 +38608,7 @@ function checkHELLO(field, rules, i, options){
   });  
 }
 $(document).ready(function(){
+
 	// General
 	$("a,button,span,select").tooltip({
 		show: {
@@ -38670,4 +38672,4 @@ $(document).ready(function(){
 	$('.datetime').datetimepicker({
 		timeFormat: 'HH:mm:ss'
 	});
-});
+		});

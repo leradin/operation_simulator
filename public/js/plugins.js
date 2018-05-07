@@ -4,6 +4,7 @@ $(document).ready(function(){
     $(".tipb").tooltip({placement: 'bottom', trigger: 'hover'});
     $(".tipl").tooltip({placement: 'left', trigger: 'hover'});
     $(".tipr").tooltip({placement: 'right', trigger: 'hover'});
+
     
     if($('#main_calendar').length > 0){
     

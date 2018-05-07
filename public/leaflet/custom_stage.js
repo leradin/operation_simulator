@@ -1,15 +1,4 @@
-/*var mapStage = new L.Map('mapStage', 
-    { //layers: [Bmarvel],
-      crs: L.CRS.EPSG3857, 
-      center: [19.2, -96.1], 
-      zoom: 6,
-      attribution: 'Cesedam',
-      attributionControl: false,
-    });
-
-//L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapStage);*/
-
+/* Main map */
 var mapStage = new L.Map('mapStage', {
     layers: [Bmarvel],
     crs: L.CRS.EPSG4326, 
@@ -17,46 +6,43 @@ var mapStage = new L.Map('mapStage', {
     zoom: 5 
 });
 
+//Layers main map
 L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);              
 
-
-
-// Select area map
+// Select area main map
 var areaSelect = L.areaSelect({width:200, height:250});
 areaSelect.on("change", function() {
   boundsMapStage = this.getBounds();
   $("#southwest").val(boundsMapStage.getSouthWest().lat + ", " + boundsMapStage.getSouthWest().lng);
   $("#northeast").val(boundsMapStage.getNorthEast().lat + ", " + boundsMapStage.getNorthEast().lng);
-  //$("#southwestP").val(dec2gms(boundsMapStage.getSouthWest().lat,1).valor + ", " + dec2gms(boundsMapStage.getSouthWest().lng,0).valor);
-  //$("#northeastP").val(dec2gms(boundsMapStage.getNorthEast().lat,1).valor + ", " + dec2gms(boundsMapStage.getNorthEast().lng,0).valor);
 });
+//Add select area to main map
 areaSelect.addTo(mapStage);
-/* Map Stage */
+/*** End main map ****/
+
+/* Cabin map */
 var mapModalStage = new L.map('dvMdlMapStage',
-{ //layers: [Bmarvel2],
-  //crs: L.CRS.EPSG4326,
-  //crs: L.CRS.EPSG3857,
-  //center: [19.2, -96.1],
-  //attributionControl: false,
-    layers: [Bmarvel2],
+{   layers: [Bmarvel2],
     crs: L.CRS.EPSG4326, 
     center: new L.LatLng(19.2, -96.1), 
     zoom: 5
 });
-console.log(L.CRS);
-//L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);
-//L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalStage);
+
+//Layers cabin map
 L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);              
 
-
+// popup cabin map
 var popupMapModalStage = L.popup();
 mapModalStage.on('click', onMapModalClickStage);
 
+// Onclick on cabin map
 function onMapModalClickStage(e) {
     popupMapModalStage
         .setLatLng(e.latlng)
         .setContent(e.latlng.toString())
         .openOn(mapModalStage);
+        console.log(e.latlng.lat+","+e.latlng.lng);
+        console.log(dec2gms(e.latlng.lat,1).valor+" , "+dec2gms(e.latlng.lng,2).valor);
     $('#init_position').val(e.latlng.lat+","+e.latlng.lng);
     $('#init_position_').val(dec2gms(e.latlng.lat,1).valor+" , "+dec2gms(e.latlng.lng,2).valor);
     latLng = e.latlng;
@@ -66,33 +52,32 @@ function onMapModalClickStage(e) {
     }
     markerCabin = L.marker(e.latlng).addTo(mapModalStage);
     mapModalStage.invalidateSize();
-    /*var point = new GeoPoint(e.latlng.lng, e.latlng.lat);
-    $('#grade-phi').val(Math.abs(parseInt(point.getLatDeg().split(" ")[0])));
-    $('#minute-phi').val(parseInt(point.getLatDeg().split(" ")[1]));
-    $('#second-phi').val(parseInt(point.getLatDeg().split(" ")[2]));
-    $('#orientation-phi').val((point.getLatDeg().split(" ")[0].startsWith("-")) ? 'S' : 'N').change();
-
-    $('#grade-lambda').val(Math.abs(parseInt(point.getLonDeg().split(" ")[0])));
-    $('#minute-lambda').val(parseInt(point.getLonDeg().split(" ")[1]));
-    $('#second-lambda').val(parseInt(point.getLonDeg().split(" ")[2]));
-    $('#orientation-lambda').val((point.getLonDeg().split(" ")[0].startsWith("-")) ? 'W' : 'E').change();*/
 }
 
-$("#init_position").on("keyup",function(){
-    $("#init_position_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+// format coordinates on keyup input
+$("#init_position,#init_position_track,#init_position_meterological_phenomenon").on("keyup",function(){
+    var id = $(this).attr('id');
+    console.log(id);
+    switch(id){
+        case 'init_position':
+            $("#init_position_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+        break;
+
+        case 'init_position_track':
+            $("#init_position_track_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+        break;
+
+        case 'init_position_meterological_phenomenon':
+            $("#init_position_meterological_phenomenon_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+        break;
+    }
 });
 
-$("#init_position_track").on("keyup",function(){
-    $("#init_position_track_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
+
+$(".geopoint").live("change",function(){
+    buildCoordinate(); 
 });
 
-$("#init_position_meterological_phenomenon").on("keyup",function(){
-    $("#init_position_meterological_phenomenon_").val(dec2gms($(this).val().split(",")[0],1).valor+" , "+dec2gms($(this).val().split(",")[1],2).valor);
-});
-
-$(".geopoint").on("change",function(){
-    buildCoordinate();    
-});
 var markerCabin = null;
 var markerTrack = null;
 function buildCoordinate(){
@@ -111,16 +96,16 @@ function buildCoordinate(){
     var orientationLambda = $('#orientation-lambda').val();
     var longitude = /*(orientationLambda == "w" ? "-":"")+*/gradeLambda+"° "+minuteLambda+"' "+secondLambda+"\" "+orientationLambda;
     var point = new GeoPoint(longitude, latitude);
- 
+    
     var latlng;
-    if($('input[name=format_coordinates]:checked').val() == 2){
+    if($('#format_coordinates').val() == 2){
         $('#init_position').val(convertDMSToDD(latitude)+","+convertDMSToDD(longitude));//(point.getLatDec()+","+point.getLonDec());
         $('#init_position_').val(
             dec2gms(convertDMSToDD(latitude),1).valor+" , "+
             dec2gms(convertDMSToDD(longitude),2).valor
         );
         latlng = L.latLng(convertDMSToDD(latitude),convertDMSToDD(longitude));
-    }else{
+    }else if($('#format_coordinates').val() == 0){
 
         $('#init_position').val(($('#orientation-phi2').val() == "s" ? "-":"")+$('#grade-phi2').val()+","+($('#orientation-lambda2').val() == "w" ? "-":"")+$('#grade-lambda2').val());//(point.getLatDec()+","+point.getLonDec());
         $('#init_position_').val(
@@ -128,6 +113,15 @@ function buildCoordinate(){
             dec2gms(($('#orientation-lambda2').val() == "w" ? "-":"")+$('#grade-lambda2').val(),2).valor
         );
         latlng = L.latLng(($('#orientation-phi2').val() == "s" ? "-":"")+$('#grade-phi2').val(),($('#orientation-lambda2').val() == "w" ? "-":"")+$('#grade-lambda2').val());
+    }else if($('#format_coordinates').val() == 1){ // ddm
+        var latitude = $('#grade-phi3').val()+"° "+$('#minute-phi3').val()+"' "+$('#orientation-phi3').val();
+        var longitude = $('#grade-lambda3').val()+"° "+$('#minute-lambda3').val()+"' "+$('#orientation-lambda3').val();
+        $('#init_position').val(convertDDMToDD(latitude)+","+convertDDMToDD(longitude));//(point.getLatDec()+","+point.getLonDec());
+        $('#init_position_').val(
+            dec2gms(convertDDMToDD(latitude),1).valor+" , "+
+            dec2gms(convertDDMToDD(longitude),2).valor
+        );
+        latlng = L.latLng(convertDDMToDD(latitude),convertDDMToDD(longitude));
     }
     markerCabin = L.marker(latlng).addTo(mapModalStage);
     
@@ -191,21 +185,29 @@ function buildCoordinateTrack(){
     
  
     var latlng;
-    if($('input[name=format_coordinates_track]:checked').val() == 2){
+    if($('#format_coordinates_track').val() == 2){
         $('#init_position_track').val(convertDMSToDD(latitude)+","+convertDMSToDD(longitude));//(point.getLatDec()+","+point.getLonDec());
         $('#init_position_track_').val(
             dec2gms(convertDMSToDD(latitude),1).valor+" , "+
             dec2gms(convertDMSToDD(longitude),2).valor
         );
         latlng = L.latLng(convertDMSToDD(latitude),convertDMSToDD(longitude));
-    }else{
-
+    }else if($('#format_coordinates_track').val() == 0){
         $('#init_position_track').val(($('#orientation-phi2_track').val() == "s" ? "-":"")+$('#grade-phi2_track').val()+","+($('#orientation-lambda2_track').val() == "w" ? "-":"")+$('#grade-lambda2_track').val());//(point.getLatDec()+","+point.getLonDec());
         $('#init_position_track_').val(
             dec2gms((($('#orientation-phi2_track').val() == "s" ? "-":"")+$('#grade-phi2_track').val()),1).valor+" , "+
             dec2gms(($('#orientation-lambda2_track').val() == "w" ? "-":"")+$('#grade-lambda2_track').val(),2).valor
         );
         latlng = L.latLng(($('#orientation-phi2_track').val() == "s" ? "-":"")+$('#grade-phi2_track').val(),($('#orientation-lambda2_track').val() == "w" ? "-":"")+$('#grade-lambda2_track').val());
+    }else if($('#format_coordinates_track').val() == 1){ // ddm
+        var latitude = $('#grade-phi3_track').val()+"° "+$('#minute-phi3_track').val()+"' "+$('#orientation-phi3_track').val();
+        var longitude = $('#grade-lambda3_track').val()+"° "+$('#minute-lambda3_track').val()+"' "+$('#orientation-lambda3_track').val();
+        $('#init_position_track').val(convertDDMToDD(latitude)+","+convertDDMToDD(longitude));//(point.getLatDec()+","+point.getLonDec());
+        $('#init_position_track_').val(
+            dec2gms(convertDDMToDD(latitude),1).valor+" , "+
+            dec2gms(convertDDMToDD(longitude),2).valor
+        );
+        latlng = L.latLng(convertDDMToDD(latitude),convertDDMToDD(longitude));
     }
     console.log(markerTrack);
     markerTrack = L.marker(latlng).addTo(mapModalTracks);
@@ -244,23 +246,38 @@ function onMapModalClickMeterologicalPhenomenon(e) {
     latLng = e.latlng;
 }
 
-$('input[type=radio][name=format_coordinates]').change(function() {
+//$('input[type=radio][name=format_coordinates]').change(function() {
+$('#format_coordinates').change(function() {
     if($(this).val() == 0){
         $('#dd').show();
+        $('#ddm').hide();
+        $('#dms').hide();
+    }
+    if($(this).val() == 1){
+        $('#dd').hide();
+        $('#ddm').show();
         $('#dms').hide();
     }
     if($(this).val() == 2){
         $('#dd').hide();
+        $('#ddm').hide();
         $('#dms').show();
     }
 });
-$('input[type=radio][name=format_coordinates_track]').change(function() {
+$('#format_coordinates_track').change(function() {
     if($(this).val() == 0){
         $('#dd_track').show();
+        $('#ddm_track').hide();
+        $('#dms_track').hide();
+    }
+    if($(this).val() == 1){
+        $('#dd_track').hide();
+        $('#ddm_track').show();
         $('#dms_track').hide();
     }
     if($(this).val() == 2){
         $('#dd_track').hide();
+        $('#ddm_track').hide();
         $('#dms_track').show();
     }
 });
@@ -272,8 +289,12 @@ $('.btn-success').live('click',function(){
 $('.btn-danger').live('click',function(){
     $(this).removeClass('btn-danger').addClass('btn-success');
 });
-$('#dms').hide();
-$('#dms_track').hide();
+$('#dd,#ddm,#dms').hide();
+//$('#ddm').hide();
+//$('#dms').hide();
+$('#dms_track,#dds_track,#dd_track').hide();
+//$('#dds_track').hide();
+//$('#dd_track').hide();
 /*mapModalMeterologicalPhenomenon.dragging.disable();
 mapModalMeterologicalPhenomenon.touchZoom.disable();
 mapModalMeterologicalPhenomenon.doubleClickZoom.disable();
@@ -459,6 +480,19 @@ $('#button_config_track').on('click',function(){
     formTrack.submit();
 });
 
+$('#ms_track').live('change', function() {
+    var selected = $(this).find('option:selected', this);
+    var results = [];
+
+    selected.each(function() {
+        results.push($(this).data('sidc'));
+    });
+    $('#track-sidc').attr('src',appUrl+'storage/symbology2525c/'+results[0]+'.png');
+
+
+    console.log(results);
+});
+
 $('#button_config_meterological_phenomenon').on('click',function(){
     formMeterologicalPhenomenon.submit();
 });
@@ -483,8 +517,8 @@ $('.modal').on('hidden.bs.modal',function(){
             mapModalStage.invalidateSize();
         }
         if(markerTrack != null){
-            mapModalStage.removeLayer(markerTrack);
-            mapModalStage.invalidateSize();
+            mapModalTracks.removeLayer(markerTrack);
+            mapModalTracks.invalidateSize();
         }
     }catch(err){
 
@@ -492,6 +526,9 @@ $('.modal').on('hidden.bs.modal',function(){
 });
 
 $('.modal').on('show.bs.modal',function(){
+    // dispatch event change for format coordinates
+    $("#format_coordinates,#format_coordinates_track").trigger("change");
+
     isCreate = false;
     computers = [];
    
@@ -650,6 +687,7 @@ function dec2gms(valor, tipo){
 
 
 function convertDMSToDD(dms) {
+    console.log("DMS"+dms);
      let parts = dms.split(/[^\d+(\,\d+)\d+(\.\d+)?\w]+/);
      let degrees = parseFloat(parts[0]);
      let minutes = parseFloat(parts[1]);
@@ -667,4 +705,25 @@ function convertDMSToDD(dms) {
        dd = dd * -1;
      } // Don't do anything for N or E
      return dd;
-   }
+}
+
+function convertDDMToDD(ddm) {
+    console.log("DDM"+ddm);
+    let parts = ddm.split(/[^\d+(\,\d+)\d+(\.\d+)?\w]+/);
+    console.log(parts);
+    let degrees = parseFloat(parts[0]);
+    let minutes = parseFloat(parts[1].replace(',','.'));
+    //let seconds = parseFloat(parts[2].replace(',','.'));
+    let direction = parts[2];
+
+     console.log('degrees: '+degrees)
+     console.log('minutes: '+minutes)
+     console.log('direction: '+direction)
+
+     let dd = degrees + minutes / 60;
+
+     if (direction == 's' || direction == 'w') {
+       dd = dd * -1;
+     } // Don't do anything for N or E
+     return dd;
+}

@@ -16,13 +16,12 @@
         <link href="css/ie.css" rel="stylesheet" type="text/css" />
     <![endif]-->       
     <link rel="icon" type="image/ico" href="favicon.ico"/>
-
-    <script src="{{ mix('js/app.js')}}"></script>
+    <script>
+        window.appUrl = '{{ env('APP_URL') }}';
+    </script>
     @yield('css')
     @yield('js') 
-    <script>
-    window.appUrl = '{{ env('APP_URL') }}';
-    </script>
+    
 
 </head>
 <body>    
@@ -52,6 +51,7 @@
     </div> 
 
     @yield('modal')
+    <script src="{{ mix('js/app.js')}}"></script>
     @yield('js_footer')
     
     <script src="http://localhost:35729/livereload.js"></script>

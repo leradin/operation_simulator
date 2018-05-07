@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	// General
 	$("a,button,span,select").tooltip({
 		show: {

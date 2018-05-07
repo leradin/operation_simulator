@@ -9,6 +9,7 @@ use SimulatorOperation\MeteorologicalPhenomenon;
 use SimulatorOperation\User;
 use SimulatorOperation\Track;
 use SimulatorOperation\Cabin;
+use SimulatorOperation\Computer;
 use Illuminate\Http\Request;
 use Lang;
 use Validator;
@@ -74,6 +75,7 @@ class ExerciseController extends Controller
      */
     public function store(Request $request)
     {
+
       $validator = Validator::make(
         $request->all(), 
         ['stage_id' => 'required'],
@@ -310,7 +312,6 @@ class ExerciseController extends Controller
 
         $properties['motors'] = $motors;
         $properties['timon'] = $timons;
-        dd($properties);
         return $properties; 
     }
 
@@ -337,14 +338,18 @@ class ExerciseController extends Controller
     * @return $speed
     */
     private function getSpeed($numeral,$speedKmH){
+
       if(strpos($numeral,'ANX') !== false || strpos($numeral,'AMP') !== false || strpos($numeral,'AMPH') !== false){
-            return $this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']);
+            return 500;//$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']);
         }
-        if(strpos($numeral,'PO') !== false || strpos($numeral,'SEDAM') !== false || strpos($numeral,'PC') !== false || strpos($numeral,'PI') !== false  || strpos($numeral,'P') !== false){
-            return $this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']);
+        if(strpos($numeral,'PO') !== false  || strpos($numeral,'PC') !== false || strpos($numeral,'PI') !== false ){
+            return 40;//$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']);
         }
-        if(strpos($numeral,'BASE_IM') !== false || strpos($numeral,'VEHICUL') !== false || strpos($numeral,'MOVIL') !== false){
-            return $this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']);
+        if(strpos($numeral,'BASE_IM') !== false || strpos($numeral,'SEDAM_VEHICUL') !== false || strpos($numeral,'MOVIL') !== false){
+            return 5;//$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']);
+        }
+        if(strpos($numeral,'SEDAM') !== false){
+            return 0;//$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']);
         }
     }
 
@@ -390,6 +395,7 @@ class ExerciseController extends Controller
           'speed' => $track->pivot->speed,
           'altitude' => $track->pivot->altitude,
           'SIDC' => $track->sidc,
+          'source' => $track->pivot->source,
           'object_type' => $track->pivot->object_type,
           'kinect_model'=> 'standar',
           'battle_dimension' => getDataSidc($track->battle_dimension,1),
@@ -421,7 +427,8 @@ class ExerciseController extends Controller
             $dataCabin['lights_type'] = $cabin->pivot->lights_type;
             $dataCabin['unit_id'] = $cabin->pivot->unit_id;
             $dataCabin['cabin_id'] = $cabin->id;
-
+            $dataCabin['id'] = $cabin->id;
+            $dataCabin['SIDC'] = "SFSP-----------";
 
             // Add object data cabin to stage
             $stageJson['cabins'][$cabin->id] = $dataCabin;
@@ -432,6 +439,7 @@ class ExerciseController extends Controller
             // Add object data unit
             $unitJson = array('id' => $unit->id,
                                 'name' => $unit->name,
+                                'station' => $unit->station,
                                 'numeral' => $unit->numeral,
                                 'kinect_model' => $unit->unitType->mathematicalModel->name,
                                 'type' => $this->getType($unit->unitType->mathematicalModel->name),
@@ -450,6 +458,7 @@ class ExerciseController extends Controller
                 $stageJson['cabins'][$cabin->id]['sensors'][$sensor->name] = (object) array('model' => $sensor->model,
                                                                         'brand' => $sensor->brand);
             }
+            $stageJson['cabins'][$cabin->id]['computers'] = $this->loadComputers($stage,$cabin->id);
             $this->saveDomoticInExercise($stage,$cabin,$stageJson,$forOn);
         }
 
@@ -469,6 +478,9 @@ class ExerciseController extends Controller
       // Add Lights Type to enable
       array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA': ($cabin->pivot->lights_type == 1) ? 'LUZ COMBATE':'',
               'accion' => ($forOn) ? 'DIGITAL' : 'MANUAL'));
+
+      array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA': ($cabin->pivot->lights_type == 1) ? 'LUZ COMBATE':'',
+              'accion' => ($forOn) ? 'ENCENDER' : 'APAGAR'));
 
       // Get computers  
       $computers = $stage->computers()->wherePivot('cabin_id',$cabin->id)->get();
@@ -521,15 +533,41 @@ class ExerciseController extends Controller
     }
 
     private function getType($type){
+
       if(strpos("PI",$type) !== false){
         return 1;
       } else if(strpos("PO",$type) !== false){
         return 2;
-      } else if(strpos("AF",$type) !== false){
+      } else if(strpos("AereoAlaFija",$type) !== false){
         return 3;
-      } else if(strpos("IM",$type) !== false){
+      } else if(strpos("INFANTERIA DE MARINA",$type) !== false){
+        return 0;
+      } else if(strpos("MANDO",$type) !== false){
         return 9;
       }
+
+    }
+
+    private function loadComputers(Stage $stage,$cabinId){
+      $computers = array();
+      foreach ($stage->computers()->get() as $computer) {
+        if($computer->cabin_id == $cabinId){
+          $pc = Computer::find($computer->id);
+          $pc['type'] = "sedam";
+          $computer['info'] = $pc;
+          $computer['devices'] = $this->loadDevices(Computer::find($computer->id));
+          array_push($computers,$computer);
+        }
+      }
+      return $computers;
+    }
+
+    private function loadDevices(Computer $computer){
+      $devices = array();
+      foreach ($computer->devices()->get() as $device) {
+        array_push($devices,$device);
+      }
+      return $devices;
     }
 
 

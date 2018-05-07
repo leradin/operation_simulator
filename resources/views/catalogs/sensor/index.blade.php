@@ -1,9 +1,7 @@
 @extends('layouts.app')
 @section('title',__("messages.menu_sensor"))
 
-@section('js')
-    <script src="{{ asset('js/general.js') }}"></script>
-@endsection
+
 
 @section('breadCrumb')
     <li><a href="{{ url('/') }}">@lang('messages.menu_sensor')</a></li>
@@ -56,4 +54,8 @@
             </div>                         
         </div>
     </div>
+@endsection
+
+@section('js_footer')
+    <!--script src="{ { asset('js/general.js') }}"></script>
 @endsection

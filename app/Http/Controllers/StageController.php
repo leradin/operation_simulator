@@ -51,6 +51,7 @@ class StageController extends Controller
      */
     public function store(Request $request)
     {
+
         $stage = Stage::create($request->except('_token','cabin_ids'));
         foreach ($request->cabin_ids as $cabinId) {
             $parameters = explode("&", $request->$cabinId);
@@ -58,7 +59,7 @@ class StageController extends Controller
             $course = explode('=',$parameters[1])[1];
             $speed = explode('=',$parameters[2])[1];
             $altitude = explode('=',$parameters[3])[1];
-            $initPosition = str_replace("%2C", ",",explode('=',$parameters[5])[1]);
+            $initPosition = str_replace("%2C", ",",explode('=',$parameters[6])[1]);
             $lightsType = explode('=',$parameters[7])[1];
             $computers = explode('=',$parameters[8])[1];
             $computers = explode(',', $computers);
@@ -74,20 +75,24 @@ class StageController extends Controller
             }
         }
 
+
         if(isset($request->track_ids)){
           foreach ($request->track_ids as $trackId) {
               $parameters = explode("&",$request["t".$trackId]);
-              $course = explode('=',$parameters[1])[1];
-              $speed = explode('=',$parameters[2])[1];
-              $altitude = explode('=',$parameters[3])[1];
-              $initPosition = str_replace("%2C", ",",explode('=',$parameters[5])[1]);
+              //dd($parameters);
+              $course = explode('=',$parameters[2])[1];
+              $speed = explode('=',$parameters[3])[1];
+              $altitude = explode('=',$parameters[4])[1];
+              $initPosition = str_replace("%2C", ",",explode('=',$parameters[6])[1]);
               $objectType = explode('=',$parameters[7])[1];
+              $trackSource = explode('=',$parameters[1])[1];
 
               $stage->tracks()->attach($trackId,['object_type' => $objectType,
                                                   'course' => $course, 
                                                   'speed' => $speed, 
                                                   'altitude' => $altitude, 
-                                                  'init_position' => $initPosition]);
+                                                  'init_position' => $initPosition,
+                                                  'source' => $trackSource]);
           }
         }
 

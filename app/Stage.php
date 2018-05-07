@@ -44,7 +44,7 @@ class Stage extends Model
 
     public function tracks(){
         return $this->belongsToMany('SimulatorOperation\Track','stage_track', 'stage_id', 'track_id')
-        ->withPivot('course', 'speed', 'altitude', 'init_position','object_type');
+        ->withPivot('course', 'speed', 'altitude', 'init_position','object_type','source');
     }
 
     public function meteorologicalPhenomenons(){

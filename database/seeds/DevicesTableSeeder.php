@@ -21,30 +21,26 @@ class DevicesTableSeeder extends Seeder
     	foreach ($cabins as $cabin) {
     		$i = 1;
 	        foreach ($cabin->computers()->get() as $computer) {
-	    		/*if($computer != $computerTemp){
-	        		$i = 1;
-	        	}*/
 				foreach ($deviceTypes as $deviceType) {
-		        	$date = Carbon::now();
-
-		        	
-		            \DB::table('devices')->insert(array(
-		                'name' => $computer->name."_".$computer->id."_".$deviceType->abbreviation,
-		                'description' => $deviceType->abbreviation,
-		                'ip_address' => '192.168.214.'.$i,
-		                'computer_id' => $computer->id,
-		                'label' => ($deviceType->abbreviation == "TV" ? "TV".$i : 'LABEL'),
-		                'switch_port' => 15,
-		                'device_type_id' => $deviceType->id,
-		                'created_at' => $date,
-		                'updated_at' => $date
-		            ));
-		        	$computerTemp = $computer;
-		            if($deviceType->abbreviation == "TV"){
-		            	$i++;
+					if($i<6){
+			        	$date = Carbon::now();
+			            \DB::table('devices')->insert(array(
+			                'name' => $computer->name."_".$computer->id."_".$deviceType->abbreviation,
+			                'description' => $deviceType->abbreviation,
+			                'ip_address' => '192.168.214.'.$i,
+			                'computer_id' => $computer->id,
+			                'label' => ($deviceType->abbreviation == "TV" ? "TV".$i : 'LABEL'),
+			                'switch_port' => 15,
+			                'device_type_id' => $deviceType->id,
+			                'created_at' => $date,
+			                'updated_at' => $date
+			            ));
+			        	$computerTemp = $computer;
+			            if($deviceType->abbreviation == "TV"){
+			            	$i++;
+			            }
 		            } 
 		        }
-		        
 		    }
 		}
     }
