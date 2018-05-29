@@ -44,7 +44,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($files['audios'] as $file)
+                                @forelse ($files['audios'] as $file)
                                     <tr>
                                         <td>
                                             <audio controls>
@@ -56,7 +56,9 @@
                                             <a target="_blank" href="ftp://{{ env('FTP_HOST') }}/{{ $file }}" download>{{ $file }}</a>
                                         </td>
                                     </tr>
-                                @endforeach  
+                                @empty
+                                        <p>No users</p>
+                                @endforelse 
                                 @foreach ($files['videos'] as $file)
                                     <tr>
                                         <td>

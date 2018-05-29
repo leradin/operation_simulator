@@ -79,7 +79,6 @@ Route::get('redirect', function () {
         'response_type' => 'code',
         'scope' => '',
     ]);
-
     return redirect(env('MAINTENANCE_SIMULATOR_URL').'oauth/authorize?'.$query);
 })->name('get_token');
 
@@ -101,6 +100,7 @@ Route::get('/callback', function (Request $request) {
     session(['api_token' => $response->getBody()->getContents()]);
     return redirect()->route('home');//json_decode((string) $response->getBody(), true);
 });
+
 
 //Web services
 Route::get('executionExercise/',function(){

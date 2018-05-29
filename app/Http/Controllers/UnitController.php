@@ -109,19 +109,25 @@ class UnitController extends Controller
      */
     public function update(UnitEditRequest $request, Unit $unit)
     {
-        deletedFileLocal($unit->image);
-        $fileName = $this->folderForUnits.$request['name'].'.'.strtolower($request->image->getClientOriginalExtension());
-        if(savedFileLocal($request->file('image'),$fileName)){
-            $unit->fill([
-                'station' => $request->station,
-                'numeral' => $request->numeral,
-                'name' => $request->name,
-                'serial_number' => $request->serial_number,
-                'number_engines' => $request->number_engines,
-                'country' => $request->country,
-                'unit_type_id' => $request->unit_type_id,
-                'image' => 'unitImage/'.$request->name.'.'.strtolower($request->image->getClientOriginalExtension())
-            ]);
+        if($request->hasFile('image')){
+            deletedFileLocal($unit->image);
+            $fileName = $this->folderForUnits.$request['name'].'.'.strtolower($request->image->getClientOriginalExtension());
+        
+            if(savedFileLocal($request->file('image'),$fileName)){
+                $unit->fill([
+                    'station' => $request->station,
+                    'numeral' => $request->numeral,
+                    'name' => $request->name,
+                    'serial_number' => $request->serial_number,
+                    'number_engines' => $request->number_engines,
+                    'country' => $request->country,
+                    'unit_type_id' => $request->unit_type_id,
+                    'image' => 'unitImage/'.$request->name.'.'.strtolower($request->image->getClientOriginalExtension())
+                ]);
+            }
+        }else{
+             $unit->fill($request->all());
+        }
 
             $unitType = UnitType::find($request->unit_type_id);
             $unitType->units()->save($unit);
@@ -134,7 +140,6 @@ class UnitController extends Controller
             $message['type'] = 'success';
             $message['status'] = Lang::get('messages.success_unit');
             return redirect($this->menu)->with('message',$message);
-        } 
     }
 
     /**

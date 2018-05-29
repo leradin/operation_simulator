@@ -68,7 +68,7 @@ class ReportController extends Controller
 
     private function getFilesFromFTP($folder){
         //$data = [];
-        //try{
+        try{
             $data = Storage::disk('nas')->files(env('FTP_PATH_MULTIMEDIA').$folder, true);
             /*foreach($data as $key => $value){
                 $data[$key]= array('url' => str_replace("/","*",$value),
@@ -76,9 +76,9 @@ class ReportController extends Controller
                                 );
             }*/
             
-        //}catch(\Exception $error){
-            
-        //}
+        }catch(\Exception $error){
+            $data = [];
+        }
         return $data;
     }    
 }

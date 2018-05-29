@@ -16,8 +16,16 @@
     <![endif]-->       
     <link rel="icon" type="image/ico" href="favicon.ico"/>
 
-    <script src="{{ mix('js/app.js')}}"></script>
     
+    <script>
+        window.clientId = '{{ env('CLIENT_ID') }}';
+        window.clientSecret = '{{ env('CLIENT_SECRET') }}';
+        setTimeout(function(){ 
+            document.getElementById('clientId').value = window.clientId;
+            document.getElementById("clientSecret").value = window.clientSecret;
+        }, 1000);
+        
+    </script>
     
 </head>
 <body>
@@ -44,6 +52,8 @@
                     <input type="password" name="password" value="{{ old('password') }}"  placeholder="@lang('messages.password')" class="form-control validate[required] text-input" data-prompt-position="bottomRight"/>
 
                 </div>
+                <input type="hidden" value="" name="client_id" id="clientId">
+                <input type="hidden" value="" name="client_secret" id="clientSecret">
                  @if ($errors->has('enrollment'))
                     <span class="help-block">
                         <strong>{{ $errors->first('enrollment') }}</strong>

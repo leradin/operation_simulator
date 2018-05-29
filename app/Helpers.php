@@ -204,9 +204,10 @@ function callWsReport($endPoint){
 }
 
 function callWs($endPoint){
-	$token = json_decode(session('api_token'),true);
+	//dd(session('api_token'));
+	$token =session('api_token');
     $headers = [
-        'Authorization' => 'Bearer ' . $token['access_token'],        
+        'Authorization' => 'Bearer ' . $token,        
         'Accept'        => 'application/json',
     ];
     $client = new \GuzzleHttp\Client([

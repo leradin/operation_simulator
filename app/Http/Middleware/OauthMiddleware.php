@@ -22,7 +22,7 @@ class OauthMiddleware
         }
         
         $route = Route::currentRouteName();
-        return redirect()->route('get_token');
+        return redirect()->route('login');
 
     }
 }

@@ -38,9 +38,38 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function logout(Request $request){        
-        $request->session()->invalidate();
-        $request->session()->flush();
+    public function login(Request $request)
+    {
+        $headers = [
+            'Content-Type'        => 'application/json',
+        ];
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => env('MAINTENANCE_SIMULATOR_URL'),
+            'timeout'  => 2.0,
+            'headers' => $headers
+        ]);
+
+        $response = $client->request('POST','oauth/token',
+        [
+            'form_params' => [
+                'client_id' => $request->client_id, 
+                'client_secret' => $request->client_secret, 
+                'username' => $request->enrollment,
+                'password' => $request->password,
+                'grant_type' => 'password'
+            ]
+        ]);
+       
+        $object = json_decode($response->getBody()->getContents());
+        //dd($object->access_token);
+        session(['api_token' => $object->access_token]);
         return redirect('/');
+    }
+
+    public function logout(Request $request){         
+        session()->forget('api_token');
+        session()->invalidate();
+        session()->flush();
+        return redirect()->route('login');//redirect('/redirect');
     }
 }

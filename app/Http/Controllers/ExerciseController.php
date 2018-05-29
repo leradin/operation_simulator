@@ -322,7 +322,7 @@ class ExerciseController extends Controller
      * @return Array[2] 
      */
     private function getTypeControlUnit($numeral,$speedKmH = 0){
-        $type = explode("_",$numeral);
+        /*$type = explode("_",$numeral);
         if($type[0] == 'ANX'){
             return array('volante','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']));
         }
@@ -334,7 +334,22 @@ class ExerciseController extends Controller
         }
         if($type[1] == 'VEHICUL'){
             return array('control','control',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']));
+        }*/
+        $type = explode("_",$numeral);
+        if($type[0] == 'ANX'){
+             return array('volante','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']));
+         }
+
+        if($type[0] == 'ARM'){
+             return array('aguja','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']));
+         }
+
+        if($type[0] == 'SEDAM' && $type[1] != 'VEHICUL'){
+            return array('aguja','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']));
         }
+        if($type[1] == 'VEHICUL'){
+             return array('control','control',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['terrestre_vehiculo']));
+       }
     }
     /**
     * Get speed unit
