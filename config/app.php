@@ -178,6 +178,7 @@ return [
         // SimulatorOperation\Providers\BroadcastServiceProvider::class,
         SimulatorOperation\Providers\EventServiceProvider::class,
         SimulatorOperation\Providers\RouteServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
 
     ],

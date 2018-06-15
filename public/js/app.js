@@ -38672,4 +38672,4 @@ $(document).ready(function(){
 	$('.datetime').datetimepicker({
 		timeFormat: 'HH:mm:ss'
 	});
-		});
+});

@@ -56,9 +56,9 @@ class StageController extends Controller
         foreach ($request->cabin_ids as $cabinId) {
             $parameters = explode("&", $request->$cabinId);
             $unitId = explode('=',$parameters[9])[1];
-            $course = explode('=',$parameters[1])[1];
-            $speed = explode('=',$parameters[2])[1];
-            $altitude = explode('=',$parameters[3])[1];
+            $course = explode('=',$parameters[2])[1];
+            $speed = explode('=',$parameters[3])[1];
+            $altitude = explode('=',$parameters[4])[1];
             $initPosition = str_replace("%2C", ",",explode('=',$parameters[6])[1]);
             $lightsType = explode('=',$parameters[7])[1];
             $computers = explode('=',$parameters[8])[1];

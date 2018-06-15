@@ -26,7 +26,7 @@ class UnitCreateRequest extends FormRequest
     {
         return [
             'station' => 'required|integer|unique:units',
-            'numeral' => 'required|alpha_num',
+            'numeral' => 'required|alpha_dash',
             'name' => 'required|alpha_dash|max:50',
             'serial_number' => 'required|string|max:15',
             'number_engines' => 'required|integer',
