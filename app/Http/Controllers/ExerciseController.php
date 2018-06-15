@@ -340,7 +340,7 @@ class ExerciseController extends Controller
              return array('volante','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['aereo']));
          }
 
-        if($type[0] == 'ARM'){
+        if($type[0] == 'PI' || $type[0] == 'PO'){
              return array('aguja','telegrafo',$this->convertKmHToKnot($speedKmH,ExerciseController::TYPES_UNIT['superficie']));
          }
 
