@@ -29,7 +29,7 @@ class UnitCreateRequest extends FormRequest
             'numeral' => 'required|alpha_dash',
             'name' => 'required|alpha_dash|max:50',
             'serial_number' => 'required|string|max:15',
-            'number_engines' => 'required|integer',
+            'number_engines' => 'integer',
             'country' => 'required',
             'unit_type_id' => 'required|integer',
             'image' => 'required|image|mimes:jpeg,bmp,png,jpg'
@@ -40,12 +40,27 @@ class UnitCreateRequest extends FormRequest
         return [
             'station' => Lang::get('messages.station'),
             'numeral' => Lang::get('messages.numeral'),
-            'name' => Lang::get('messages.country'),
+            'name' => Lang::get('messages.name'),
             'serial_number' => Lang::get('messages.serial_number'),
             'number_engines' => Lang::get('messages.number_engines'),
             'country' => Lang::get('messages.country'),
             'unit_type_id' => Lang::get('messages.unit_type'),
             'image' => Lang::get('messages.image')
         ];
+    }
+
+    /**
+    * Configure the validator instance.
+    *
+    * @param  \Illuminate\Validation\Validator  $validator
+    * @return void
+    */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($validator->errors()->any()) {
+                $validator->errors()->add('flagNumberEngines', '0');
+            }
+        });
     }
 }
