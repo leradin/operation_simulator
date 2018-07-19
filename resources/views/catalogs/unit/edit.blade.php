@@ -25,3 +25,6 @@
             </div>            
     </div> 
 @endsection
+@section('js_footer')
+        <script src="{{ asset('js/unit.js') }}"></script>
+@endsection

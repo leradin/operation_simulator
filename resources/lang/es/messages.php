@@ -570,6 +570,7 @@ return [
     'required_min_password' => 'Mínimo 6 caracteres',
     'required_max_password' => 'Máximo 25 caracteres',
     'required_confirm_password' => 'Confirmar contraseña',
+    'required_at_least_1_sensor' => 'Seleccione al menos 1 sensor',
     'required_at_least_1_computer' => 'Seleccione al menos 1 computadora',
     'required_at_least_1_device' => 'Seleccione al menos 1 dispositivo',
     'required_at_least_1_cabin' => 'Seleccione al menos 1 cabina',

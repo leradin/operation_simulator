@@ -52,7 +52,7 @@ class UnitController extends Controller
                 'numeral' => $request->numeral,
                 'name' => $request->name,
                 'serial_number' => $request->serial_number,
-                'number_engines' => $request->number_engines,
+                'number_engines' => $request->has('number_engines') ? $request->number_engines: 0,
                 'country' => $request->country,
                 'unit_type_id' => $request->unit_type_id,
                 'image' => $fileName
@@ -119,7 +119,7 @@ class UnitController extends Controller
                     'numeral' => $request->numeral,
                     'name' => $request->name,
                     'serial_number' => $request->serial_number,
-                    'number_engines' => $request->number_engines,
+                    'number_engines' => $request->has('number_engines') ? $request->number_engines: 0,
                     'country' => $request->country,
                     'unit_type_id' => $request->unit_type_id,
                     'image' => 'unitImage/'.$request->name.'.'.strtolower($request->image->getClientOriginalExtension())
