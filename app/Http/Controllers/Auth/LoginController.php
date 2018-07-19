@@ -5,6 +5,7 @@ namespace SimulatorOperation\Http\Controllers\Auth;
 use SimulatorOperation\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Lang;
 
 class LoginController extends Controller
 {
@@ -49,19 +50,24 @@ class LoginController extends Controller
             'headers' => $headers
         ]);
 
-        $response = $client->request('POST','oauth/token',
-        [
-            'form_params' => [
-                'client_id' => $request->client_id, 
-                'client_secret' => $request->client_secret, 
-                'username' => $request->enrollment,
-                'password' => $request->password,
-                'grant_type' => 'password'
-            ]
-        ]);
-       
+        try{
+            $response = $client->request('POST','oauth/token',
+            [
+                'form_params' => [
+                    'client_id' => $request->client_id, 
+                    'client_secret' => $request->client_secret, 
+                    'username' => $request->enrollment,
+                    'password' => $request->password,
+                    'grant_type' => 'password'
+                ]
+            ]);
+        }catch (\GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            return redirect('login')->with('status',Lang::get('messages.error_login'));
+        }
+
         $object = json_decode($response->getBody()->getContents());
-        //dd($object->access_token);
         session(['api_token' => $object->access_token]);
         return redirect('/');
     }

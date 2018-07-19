@@ -33,7 +33,14 @@
     <div class="header">
         <a class="logo centralize"></a>
     </div>
+
     <div class="login" id="login">
+    <!-- Error message in case access credentials no same with system  register -->
+    @if (session('status'))
+        <div class="alert alert-danger">
+            {{ session('status') }}
+        </div>
+    @endif
     @include('layouts.message') 
         <div class="wrap">
             <h1>@lang('messages.app_name')</h1>
@@ -62,11 +69,8 @@
                 <div class="dr"><span></span></div>                                
             </div>                
             <div class="row">
-                <div class="col-md-8 remember">                    
-                    <input type="checkbox" name="remember" id="remember" value="false" /> @lang('messages.remember')                    
-                </div>
-                <div class="col-md-4    TAR">
-                    <input type="submit" class="btn btn-block btn-primary" value="Entrar"/>
+                <div class="col-md-6 col-md-offset-6">
+                    <input type="submit" class="btn btn-block btn-primary TAC" value="@lang('messages.login')"/>
                 </div>
             </div>
             </form>          
