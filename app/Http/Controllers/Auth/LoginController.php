@@ -45,7 +45,7 @@ class LoginController extends Controller
         ];
         $client = new \GuzzleHttp\Client([
             'base_uri' => env('MAINTENANCE_SIMULATOR_URL'),
-            'timeout'  => 2.0,
+            'timeout'  => 10.0,
             'headers' => $headers
         ]);
 

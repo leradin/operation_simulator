@@ -1,15 +1,24 @@
+/* Constants */
+const attribution = ' INIDETAM-SEMAR | CONACYT ';
+
 var map =  new L.map('map',
 { //layers: [Bmarvel2],
   //crs: L.CRS.EPSG4326,
   //crs: L.CRS.EPSG3857,
   //center: [19.2, -96.1],
   //attributionControl: false,
-    layers: [Bmarvel2],
-    crs: L.CRS.EPSG4326, 
+    layers: [
+        new L.TileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: attribution
+            }
+        )
+    ],
     center: new L.LatLng(19.2, -96.1), 
     zoom: 5
 });
-L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(map);
+//L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(map);
 //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 var trackIcon = L.icon({

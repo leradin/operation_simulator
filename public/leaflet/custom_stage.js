@@ -1,13 +1,22 @@
+/* Constants */
+const attribution = ' INIDETAM-SEMAR | CONACYT ';
 /* Main map */
 var mapStage = new L.Map('mapStage', {
-    layers: [Bmarvel],
+    layers: [
+        new L.TileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: attribution
+            }
+        )
+    ],
     crs: L.CRS.EPSG4326, 
     center: new L.LatLng(19.2, -96.1), 
     zoom: 5 
 });
 
 //Layers main map
-L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);              
+//L.control.layers(baseLayersMapStage, overlaysMapStage).addTo(mapStage);              
 
 // Select area main map
 var areaSelect = L.areaSelect({width:200, height:250});
@@ -22,14 +31,20 @@ areaSelect.addTo(mapStage);
 
 /* Cabin map */
 var mapModalStage = new L.map('dvMdlMapStage',
-{   layers: [Bmarvel2],
-    crs: L.CRS.EPSG4326, 
+{   layers: [
+        new L.TileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: attribution
+            }
+        )
+    ], 
     center: new L.LatLng(19.2, -96.1), 
     zoom: 5
 });
 
 //Layers cabin map
-L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);              
+//L.control.layers(baseLayersMapModal, overlaysMapModal).addTo(mapModalStage);              
 
 // popup cabin map
 var popupMapModalStage = L.popup();
@@ -135,13 +150,19 @@ mapModalStage.scrollWheelZoom.disable();*/
 
 /* Map Track */
 var mapModalTracks = new L.Map('map-tracks', {
-    layers: [Bmarvel3],
-    crs: L.CRS.EPSG4326, 
+    layers: [
+        new L.TileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: attribution
+            }
+        )
+    ],
     center: new L.LatLng(19.2, -96.1), 
     zoom: 5 
 });
 
-L.control.layers(baseLayersMapModal2, overlaysMapModal2).addTo(mapModalTracks);
+//L.control.layers(baseLayersMapModal2, overlaysMapModal2).addTo(mapModalTracks);
 //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalTracks);
 
 var popupMapModalTrack = L.popup();
@@ -222,14 +243,21 @@ mapModalTracks.scrollWheelZoom.disable();*/
 
 /* Map Meterological Phenomenon */
 var mapModalMeterologicalPhenomenon = L.map('map-meterological-phenomenon',
-{ layers: [Bmarvel4],
-  crs: L.CRS.EPSG4326,
+{ 
+    layers: [
+        new L.TileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: attribution
+            }
+        )
+    ],
   center: [19.2, -96.1],
   zoom: 6,
   attributionControl: false,
 });
 
-L.control.layers(baseLayersMapModal3, overlaysMapModal3).addTo(mapModalMeterologicalPhenomenon);
+//L.control.layers(baseLayersMapModal3, overlaysMapModal3).addTo(mapModalMeterologicalPhenomenon);
 //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapModalMeterologicalPhenomenon);
 
 
