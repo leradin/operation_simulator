@@ -10,10 +10,9 @@
 
 
 @section('content') 
-    
     <div class="errorContainer">
-        <h1>404</h1>
-        <h2>Not Found</h2>
-        <button class="btn btn-primary btn-lg" onClick="document.location.href = 'index.html';">Back to main</button> <button class="btn btn-lg" onClick="history.back();">Previous page</button>
+        <h1>@lang('messages.error_404')</h1>
+        <h2>@lang('messages.not_found')</h2>
+        <a href="{{ url('/') }}" class="btn btn-primary btn-lg" >@lang('messages.home')</a> <button class="btn btn-lg" onClick="history.back();">@lang('messages.back')</button>
     </div>   
 @endsection
