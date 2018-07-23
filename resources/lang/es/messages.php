@@ -582,10 +582,14 @@ return [
     'enable' => 'Activar',
     'hide_prompts' => 'Ocultar indicaciones',
     'login' => 'Iniciar sesión',
+    'back' => 'Regresar',
+    'home' => 'Inicio',
     // Errors
     'error_enrollment_duplicate' => 'Matrícula ya existe',
     'error_table_duplicate' => 'No se puede repetir números de mesa en el ejercicio',
     'error_user_duplicate' => 'No se puede repetir estudiantes en el ejercicio', 
     'error_delete_stage' => 'No se puede eliminar un escenario que se encuentre relacionado con algún ejercicio',
-    'error_login' => 'Las credenciales de acceso no son validas'   
+    'error_login' => 'Las credenciales de acceso no son validas',
+    'error_404' => '404',
+    'not_found' => 'No encontrado'   
 ];

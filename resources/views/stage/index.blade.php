@@ -83,6 +83,6 @@
 @endsection
 @section('js_footer')
     {!! Html::script('leaflet/dist/leaflet.js') !!} 
-    {!! Html::script('leaflet/layers.js') !!}
+    <!--{ !! Html::script('leaflet/layers.js') !!}-->
     {!! Html::script('leaflet/index_stage.js') !!} 
 @endsection
