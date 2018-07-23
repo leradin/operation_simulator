@@ -137,8 +137,8 @@ Route::get('getImage/{sidc}',function($sidc){
 });
 
 // Report
-Route::get('report','ReportController@index');
+/*Route::get('report','ReportController@index');
 Route::get('mapComments/{idExercise}','ReportController@showMapComments');
 Route::get('videoComments/{idExercise}','ReportController@showVideoComments');
 Route::get('audioVideo/{idExercise}','ReportController@showAudioVideo');
-Route::get('download_file_ftp/{path}','ReportController@download')->name('downloadFTP');
+Route::get('download_file_ftp/{path}','ReportController@download')->name('downloadFTP');*/
