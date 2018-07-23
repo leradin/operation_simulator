@@ -7,7 +7,7 @@
     </style>
 @endsection
 @section('js')
-    <script src="{{ asset('js/general.js') }}"></script>
+    
 @endsection
 
 @section('breadCrumb')
@@ -82,7 +82,8 @@
         </div>       
 @endsection
 @section('js_footer')
+    {!! Html::script('js/general.js') !!} 
     {!! Html::script('leaflet/dist/leaflet.js') !!} 
-    <!--{ !! Html::script('leaflet/layers.js') !!}-->
+    {!! Html::script('leaflet/layers.js') !!}
     {!! Html::script('leaflet/index_stage.js') !!} 
 @endsection
