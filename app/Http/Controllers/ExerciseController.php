@@ -500,10 +500,10 @@ class ExerciseController extends Controller
                                                                  'dispositivos' =>  array());
             
       // Add Lights Type to enable
-      array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA': ($cabin->pivot->lights_type == 1) ? 'LUZ COMBATE':'',
+      array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA':'LUZ COMBATE',
               'accion' => ($forOn) ? 'DIGITAL' : 'MANUAL'));
 
-      array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA': ($cabin->pivot->lights_type == 1) ? 'LUZ COMBATE':'',
+      array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? ' LUZ BLANCA':'LUZ COMBATE',
               'accion' => ($forOn) ? 'ENCENDER' : 'APAGAR'));
 
       // Get computers  

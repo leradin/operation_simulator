@@ -9,8 +9,7 @@ var mapStage = new L.Map('mapStage', {
                 attribution: attribution
             }
         )
-    ],
-    crs: L.CRS.EPSG4326, 
+    ], 
     center: new L.LatLng(19.2, -96.1), 
     zoom: 5 
 });
