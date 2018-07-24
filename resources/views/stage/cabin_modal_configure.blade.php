@@ -80,7 +80,6 @@
                                 <div class="col-md-10">
                                     <input type="radio"  name="type_lights" value="0" checked />@lang('messages.daylight') 
                                     <input type="radio"  name="type_lights" value="1" />@lang('messages.battle_light') 
-                                    <input type="radio"  name="type_lights" value="2" />@lang('messages.without_lights')
                                 </div>
                             </div>
                         </form>      

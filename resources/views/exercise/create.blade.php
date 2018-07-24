@@ -59,6 +59,6 @@
 @section('js_footer')
     {!! Html::script('js/exercise.js') !!} 
     {!! Html::script('leaflet/dist/leaflet.js') !!} 
-    <!--{ !! Html::script('leaflet/layers.js') !!}-->
+    {!! Html::script('leaflet/layers.js') !!}
     {!! Html::script('leaflet/custom_exercise.js') !!}
 @endsection
