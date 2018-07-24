@@ -434,6 +434,9 @@ class ExerciseController extends Controller
       foreach ($stage->cabins as $cabin) {
             // Get lat and lon position 
             $initPosition = explode(',',$cabin->pivot->init_position);
+
+            // Find unit
+            $unit = Unit::with('unitType.mathematicalModel')->find($cabin->pivot->unit_id);
             
             // Add properties for each cabin
             $dataCabin['init_position']['lat'] =  $initPosition[0];
@@ -447,13 +450,15 @@ class ExerciseController extends Controller
             $dataCabin['unit_id'] = $cabin->pivot->unit_id;
             $dataCabin['cabin_id'] = $cabin->id;
             $dataCabin['id'] = $cabin->id;
-            $dataCabin['SIDC'] = "SFSP-----------";
+            // Add Sidc
+            $dataCabin['SIDC'] = $this->loadSidcForUnit($unit->unitType->abbreviation);//"SFSP-----------";
+            
 
             // Add object data cabin to stage
             $stageJson['cabins'][$cabin->id] = $dataCabin;
 
-            // Find unit
-            $unit = Unit::with('unitType.mathematicalModel')->find($cabin->pivot->unit_id);
+            
+
 
             // Add object data unit
             $unitJson = array('id' => $unit->id,
@@ -587,6 +592,35 @@ class ExerciseController extends Controller
         array_push($devices,$device);
       }
       return $devices;
+    }
+
+    private function loadSidcForUnit($unitType){
+
+      switch ($unitType) {
+        case 'AAF':
+            return 'SFAPMF----*****';
+          break;
+
+        case 'IM':
+            return 'SFGPUUM---*****';
+          break;
+
+        case 'MA':
+            return 'SFGPIB----H****';
+          break;
+
+        case 'PI':
+            return 'SFGPIB----H****';
+        break;
+
+        case 'PO':
+            return 'SFGPIB----H****';
+        break;
+          
+        default:
+          return 'SFGPIB----H****';
+          break;
+      }
     }
 
 
