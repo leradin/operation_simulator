@@ -500,10 +500,14 @@ class ExerciseController extends Controller
                                                                  'dispositivos' =>  array());
             
       // Add Lights Type to enable
-      array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? 'LUZ BLANCA':'LUZ COMBATE',
+      array_push(
+        $stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], 
+        array('nombre' => ($cabin->pivot->lights_type == 0) ? 'LUZ BLANCA': 'LUZ COMBATE',
               'accion' => ($forOn) ? 'DIGITAL' : 'MANUAL'));
 
-      array_push($stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], array('nombre' => ($cabin->pivot->lights_type == 0) ? 'LUZ BLANCA':'LUZ COMBATE',
+      array_push(
+        $stageJson['cabins'][$cabin->id]['domotic']['dispositivos'], 
+        array('nombre' => ($cabin->pivot->lights_type == 0) ? 'LUZ BLANCA':'LUZ COMBATE',
               'accion' => ($forOn) ? 'ENCENDER' : 'APAGAR'));
 
       // Get computers  
@@ -598,23 +602,23 @@ class ExerciseController extends Controller
 
       switch ($unitType) {
         case 'AAF':
-            return 'SFAPMF----*****';
+            return 'SFAPMFP-----MXA';
           break;
 
         case 'IM':
-            return 'SFGPUUM---*****';
+            return 'SFGPEV------MXN';
           break;
 
         case 'MA':
-            return 'SFGPIB----H****';
+            return 'SFGPUCIN----MXN';
           break;
 
         case 'PI':
-            return 'SFGPIB----H****';
+            return 'SFSPC-------MXN';
         break;
 
         case 'PO':
-            return 'SFGPIB----H****';
+            return 'SFSPCL------MXN';
         break;
           
         default:
